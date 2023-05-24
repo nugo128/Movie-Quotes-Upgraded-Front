@@ -1,9 +1,10 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
+import MainCard from './Components/MainCard.vue'
 </script>
 
 <template>
-  <header>
+  <main-card>
     <RouterView></RouterView>
-  </header>
+  </main-card>
 </template>
