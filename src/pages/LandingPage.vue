@@ -14,8 +14,8 @@
     <div class="flex flex-col items-center">
       <h2
         :class="`text-[#DDCCAA] text-[60px] ${
-          this.$i18n.locale === 'en' ? 'w-[600px]' : 'w-[1000px]'
-        } text-center`"
+          this.$i18n.locale === 'en' ? 'w-[800px]' : 'w-[1200px]'
+        } text-center font-light`"
       >
         {{ $t('main_text.find_any_quote') }}
       </h2>
