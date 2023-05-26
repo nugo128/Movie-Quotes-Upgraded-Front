@@ -24,6 +24,7 @@
 behind to go forward”"
     movie="Interstellar,2014"
     :scroll="scroll"
+    width="w-[760px]"
   >
   </landing-quote>
   <landing-quote
@@ -33,6 +34,7 @@ behind to go forward”"
   and leave it that"
     movie="The Royal Tenenbaums,2001 "
     :scroll="scroll"
+    width="w-[850px]"
   >
   </landing-quote>
   <landing-quote
@@ -42,8 +44,12 @@ behind to go forward”"
   and leave it that"
     movie="The Royal Tenenbaums,2001 "
     :scroll="scroll"
+    width="w-[850px]"
   >
   </landing-quote>
+  <div class="bg-black p-2">
+    <h2 class="ml-20 text-[#DDCCAA]">© 2022 movie quotes. All rights reserved.</h2>
+  </div>
 </template>
 
 <script setup>
@@ -52,12 +58,10 @@ import { ref } from 'vue'
 let scroll = ref(false)
 
 window.addEventListener('scroll', () => {
-  if (window.innerHeight * 0.75 <= window.scrollY) {
+  if (window.innerHeight * 0.78 <= window.scrollY) {
     scroll.value = true
   } else {
     scroll.value = false
   }
 })
 </script>
-
-<style></style>
