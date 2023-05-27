@@ -7,8 +7,10 @@
   </div>
 </template>
 <script setup>
+import { setLocale } from '@vee-validate/i18n'
 const localeChangeHandler = (event) => {
   localStorage.setItem('lang', event.target.value)
+  setLocale(localStorage.getItem('lang'))
 }
 </script>
 <style scoped>

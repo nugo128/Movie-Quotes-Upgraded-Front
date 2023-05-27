@@ -1,5 +1,9 @@
 <template>
-  <Form @submit.prevent="" class="flex flex-col gap-2 bg-[#222030] px-20 py-16 rounded z-[100]">
+  <Form
+    @submit.prevent=""
+    v-slot="{ meta }"
+    class="flex flex-col gap-2 bg-[#222030] px-20 py-16 rounded z-[100]"
+  >
     <div class="flex flex-col justify-center items-center">
       <h2 class="text-white text-3xl">{{ $t('create_account') }}</h2>
       <p class="text-[#6C757D]">{{ $t('start_journey') }}</p>
@@ -10,6 +14,7 @@
       :label="$t('form.name_label')"
       require="*"
       :placeholder="$t('form.name_placeholder')"
+      rule="required|min:3|max:15|lowercase_num"
     />
     <AuthInput
       name="email"
@@ -17,6 +22,7 @@
       :label="$t('form.email_label')"
       require="*"
       :placeholder="$t('form.email_placeholder')"
+      rule="required|email"
     />
     <AuthInput
       name="password"
@@ -24,15 +30,21 @@
       :label="$t('form.password_label')"
       require="*"
       :placeholder="$t('form.password_placeholder')"
+      rule="required|min:8|max:15|lowercase_num"
     />
     <AuthInput
-      name="confirm-password"
+      name="confirmation"
       type="text"
       :label="$t('form.confirm_password_label')"
       require="*"
       :placeholder="$t('form.confirm_password_placeholder')"
+      rule="required|confirmed:@password"
     />
-    <button class="bg-[#E31221] py-2 mt-3 mb-1">
+    <button
+      class="bg-[#E31221] py-2 mt-3 mb-1"
+      :class="{ ['pointer-events-none']: !meta.valid }"
+      @click="a"
+    >
       <p class="text-white">{{ $t('get_started') }}</p>
     </button>
     <button class="border-[1px] rounded flex items-center justify-center">
@@ -52,4 +64,7 @@
 <script setup>
 import { Field, Form, ErrorMessage } from 'vee-validate'
 import AuthInput from './AuthInput.vue'
+const a = () => {
+  console.log(22)
+}
 </script>

@@ -7,8 +7,9 @@
     :type="type"
     class="w-[400px] h-10 bg-[#CED4DA] p-4 rounded-md"
     :placeholder="placeholder"
+    :rules="rule"
   />
-  <ErrorMessage class="text-red-400 text-sm px-5" :name="name" />
+  <ErrorMessage class="text-red-400 text-sm px-5 w-[400px]" :name="name" />
 </template>
 
 <script setup>
@@ -18,6 +19,7 @@ const props = defineProps({
   type: { type: String, required: true },
   label: { type: String, required: true },
   placeholder: { type: String, required: true },
+  rule: { type: String, required: true },
   require: { type: String, required: false }
 })
 </script>
