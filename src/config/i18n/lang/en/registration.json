@@ -1,0 +1,19 @@
+{
+    "create_account":"Create an account",
+    "start_journey":"Start your journey",
+    "form":{
+        "name_label":"Name",
+        "name_placeholder":"At least 3 & max.15 lower case characters",
+        "email_label": "Email",
+        "email_placeholder" : "Enter your email",
+        "password_label": "Password",
+        "password_placeholder": "At least 8 & max.15 lower case characters",
+        "confirm_password_label" : "Confirm password",
+        "confirm_password_placeholder": "Confirm password"
+    },
+    "get_started": "Get Started",
+    "sign_up_google": "Sign up with Google",
+    "have_account": "Already have an account?",
+    "log_in": "Log in"
+
+}

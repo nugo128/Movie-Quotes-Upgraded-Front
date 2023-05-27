@@ -1,40 +1,49 @@
 <template>
-  <Form class="flex flex-col gap-2 bg-[#222030] px-20 py-16 rounded">
+  <Form @submit.prevent="" class="flex flex-col gap-2 bg-[#222030] px-20 py-16 rounded z-[100]">
     <div class="flex flex-col justify-center items-center">
-      <h2 class="text-white text-3xl">Create an account</h2>
-      <p class="text-[#6C757D]">Start your journey</p>
+      <h2 class="text-white text-3xl">{{ $t('create_account') }}</h2>
+      <p class="text-[#6C757D]">{{ $t('start_journey') }}</p>
     </div>
     <AuthInput
       name="name"
       type="text"
-      label="Name"
+      :label="$t('form.name_label')"
       require="*"
-      placeholder="At least 3 & max.15 lower case characters"
+      :placeholder="$t('form.name_placeholder')"
     />
-    <AuthInput name="email" type="text" label="Email *" placeholder="Enter your email" />
+    <AuthInput
+      name="email"
+      type="email"
+      :label="$t('form.email_label')"
+      require="*"
+      :placeholder="$t('form.email_placeholder')"
+    />
     <AuthInput
       name="password"
       type="text"
-      label="Password"
+      :label="$t('form.password_label')"
       require="*"
-      placeholder="At least 8 & max.15 lower case characters"
+      :placeholder="$t('form.password_placeholder')"
     />
     <AuthInput
       name="confirm-password"
       type="text"
-      label="Confirm password"
+      :label="$t('form.confirm_password_label')"
       require="*"
-      placeholder="Confirm password"
+      :placeholder="$t('form.confirm_password_placeholder')"
     />
-    <button class="bg-[#E31221] py-2 mt-3 mb-1"><p class="text-white">Get Started</p></button>
+    <button class="bg-[#E31221] py-2 mt-3 mb-1">
+      <p class="text-white">{{ $t('get_started') }}</p>
+    </button>
     <button class="border-[1px] rounded flex items-center justify-center">
       <img src="@/assets/images/google-icon.png" alt="google icon" class="w-10 p-2" />
-      <p class="text-white">Sign up with Google</p>
+      <p class="text-white">{{ $t('sign_up_google') }}</p>
     </button>
 
     <div class="flex justify-center mt-5">
       <h2 class="text-[#6C757D]">
-        Already have an account? <span class="underline text-[#0D6EFD] cursor-pointer">Log in</span>
+        {{ $t('have_account') }}
+        <span class="underline text-[#0D6EFD] cursor-pointer">{{ $t('log_in') }}</span>
       </h2>
     </div>
   </Form>

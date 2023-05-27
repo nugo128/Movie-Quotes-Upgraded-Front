@@ -1,11 +1,11 @@
 <template>
-  <label class="w-full font-bold text-lg text-white" :for="name"
+  <label class="w-full text-lg text-white font-normal" :for="name"
     >{{ label }} <span class="text-red-500">{{ require }}</span></label
   >
   <Field
     :name="name"
     :type="type"
-    class="w-[360px] h-10 bg-[#CED4DA] p-4 rounded-md"
+    class="w-[400px] h-10 bg-[#CED4DA] p-4 rounded-md"
     :placeholder="placeholder"
   />
   <ErrorMessage class="text-red-400 text-sm px-5" :name="name" />
