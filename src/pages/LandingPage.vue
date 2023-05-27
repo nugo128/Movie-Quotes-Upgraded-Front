@@ -1,4 +1,7 @@
 <template>
+  <div class="fixed w-full h-screen flex justify-center items-center z-[60]">
+    <registration />
+  </div>
   <div class="bg-black flex flex-col gap-64 pb-[180px]">
     <div class="flex justify-between px-8 py-4">
       <h3 class="text-[#DDCCAA]">{{ $t('header.movie_quotes') }}</h3>
@@ -54,6 +57,7 @@
 </template>
 
 <script setup>
+import Registration from '../Components/Registration.vue'
 import LanguageSelect from '../Components/LanguageSelect.vue'
 import LandingQuote from '../Components/LandingQuote.vue'
 import { ref } from 'vue'
