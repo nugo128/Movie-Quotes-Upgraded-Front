@@ -1,6 +1,6 @@
 <template>
   <Form
-    @submit.prevent=""
+    @submit="submit"
     v-slot="{ meta }"
     class="flex flex-col gap-2 bg-[#222030] px-20 py-16 rounded z-[100]"
   >
@@ -62,9 +62,18 @@
 </template>
 
 <script setup>
-import { Field, Form, ErrorMessage } from 'vee-validate'
+import { Form } from 'vee-validate'
+import axios from '@/config/axios/index.js'
 import AuthInput from './AuthInput.vue'
-const a = () => {
-  console.log(22)
+const submit = async (value, actions) => {
+  value['password_confirmation'] = value.confirmation
+  await axios
+    .post('/register', value)
+    .then((response) => {
+      console.log(response)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 }
 </script>
