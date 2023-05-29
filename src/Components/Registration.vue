@@ -65,12 +65,16 @@
 import { Form } from 'vee-validate'
 import axios from '@/config/axios/index.js'
 import AuthInput from './AuthInput.vue'
+import { defineEmits } from 'vue'
+const emits = defineEmits(['registered'])
+
 const submit = async (value, actions) => {
   value['password_confirmation'] = value.confirmation
   await axios
     .post('/register', value)
     .then((response) => {
       console.log(response)
+      emits('registered', true)
     })
     .catch((error) => {
       console.log(error)

@@ -3,8 +3,12 @@
     v-if="showRegistration"
     class="fixed w-full h-screen flex justify-center items-center z-[60]"
   >
-    <registration />
+    <registration @registered="emailIsSent" />
     <div class="bg-black bg-opacity-60 absolute w-full h-full" @click="registrationHandler"></div>
+  </div>
+  <div v-if="showEmailSent" class="fixed w-full h-screen flex justify-center items-center z-[60]">
+    <email-sent />
+    <div class="bg-black bg-opacity-60 absolute w-full h-full" @click="emailSentHandler"></div>
   </div>
   <div class="bg-black flex flex-col gap-64 pb-[180px]">
     <div class="flex justify-between px-8 py-4">
@@ -64,11 +68,20 @@
 import Registration from '../Components/Registration.vue'
 import LanguageSelect from '../Components/LanguageSelect.vue'
 import LandingQuote from '../Components/LandingQuote.vue'
+import EmailSent from '../Components/EmailSent.vue'
 import { ref } from 'vue'
 let scroll = ref(false)
 let showRegistration = ref(false)
+let showEmailSent = ref(false)
 const registrationHandler = () => {
   showRegistration.value = !showRegistration.value
+}
+const emailSentHandler = () => {
+  showEmailSent.value = !showEmailSent.value
+}
+const emailIsSent = (showRegistrationModal) => {
+  showRegistration.value = !showRegistrationModal
+  showEmailSent.value = showRegistration
 }
 
 window.addEventListener('scroll', () => {
