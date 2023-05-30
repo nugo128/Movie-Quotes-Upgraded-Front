@@ -40,11 +40,7 @@
       :placeholder="$t('form.confirm_password_placeholder')"
       rule="required|confirmed:@password"
     />
-    <button
-      class="bg-[#E31221] py-2 mt-3 mb-1"
-      :class="{ ['pointer-events-none']: !meta.valid }"
-      @click="a"
-    >
+    <button class="bg-[#E31221] py-2 mt-3 mb-1" :class="{ ['pointer-events-none']: !meta.valid }">
       <p class="text-white">{{ $t('get_started') }}</p>
     </button>
     <button class="border-[1px] rounded flex items-center justify-center">
@@ -70,14 +66,14 @@ const emits = defineEmits(['registered'])
 
 const submit = async (value, actions) => {
   value['password_confirmation'] = value.confirmation
-  await axios
-    .post('/register', value)
-    .then((response) => {
-      console.log(response)
-      emits('registered', true)
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+  emits('registered', true)
+  // await axios
+  //   .post('/register', value)
+  //   .then((response) => {
+  //     console.log(response)
+  //   })
+  //   .catch((error) => {
+  //     console.log(error)
+  //   })
 }
 </script>

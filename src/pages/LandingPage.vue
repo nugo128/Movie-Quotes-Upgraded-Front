@@ -3,7 +3,12 @@
     <registration @registered="emailIsSent" />
   </modal-window>
   <modal-window v-if="showEmailSent" :click="emailSentHandler">
-    <email-sent />
+    <email-sent
+      sent="Thank you"
+      check="Please check your email and follow the instructions to
+activate your account."
+      visitEmail="Go to my email"
+    />
   </modal-window>
 
   <div class="bg-black flex flex-col gap-64 pb-[180px]">
