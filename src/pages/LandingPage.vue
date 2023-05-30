@@ -1,15 +1,11 @@
 <template>
-  <div
-    v-if="showRegistration"
-    class="fixed w-full h-screen flex justify-center items-center z-[60]"
-  >
+  <modal-window :click="registrationHandler" v-if="showRegistration">
     <registration @registered="emailIsSent" />
-    <div class="bg-black bg-opacity-60 absolute w-full h-full" @click="registrationHandler"></div>
-  </div>
-  <div v-if="showEmailSent" class="fixed w-full h-screen flex justify-center items-center z-[60]">
+  </modal-window>
+  <modal-window v-if="showEmailSent" :click="emailSentHandler">
     <email-sent />
-    <div class="bg-black bg-opacity-60 absolute w-full h-full" @click="emailSentHandler"></div>
-  </div>
+  </modal-window>
+
   <div class="bg-black flex flex-col gap-64 pb-[180px]">
     <div class="flex justify-between px-8 py-4">
       <h3 class="text-[#DDCCAA]">{{ $t('header.movie_quotes') }}</h3>
@@ -69,6 +65,7 @@ import Registration from '../Components/Registration.vue'
 import LanguageSelect from '../Components/LanguageSelect.vue'
 import LandingQuote from '../Components/LandingQuote.vue'
 import EmailSent from '../Components/EmailSent.vue'
+import ModalWindow from '../Components/ModalWindow.vue'
 import { ref } from 'vue'
 let scroll = ref(false)
 let showRegistration = ref(false)
