@@ -10,6 +10,14 @@ activate your account."
       visitEmail="Go to my email"
     />
   </modal-window>
+  <modal-window v-if="false">
+    <success-modal
+      mainText="Thank you"
+      secondaryText="your acc activated"
+      linkText="go to newsfeed"
+      link="https://mail.google.com/"
+    ></success-modal>
+  </modal-window>
 
   <div class="bg-black flex flex-col gap-64 pb-[180px]">
     <div class="flex justify-between px-8 py-4">
@@ -71,6 +79,7 @@ import LanguageSelect from '../Components/LanguageSelect.vue'
 import LandingQuote from '../Components/LandingQuote.vue'
 import EmailSent from '../Components/EmailSent.vue'
 import ModalWindow from '../Components/ModalWindow.vue'
+import SuccessModal from '../Components/SuccessModal.vue'
 import { ref } from 'vue'
 let scroll = ref(false)
 let showRegistration = ref(false)

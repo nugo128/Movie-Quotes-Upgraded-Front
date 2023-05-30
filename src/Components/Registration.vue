@@ -66,14 +66,14 @@ const emits = defineEmits(['registered'])
 
 const submit = async (value, actions) => {
   value['password_confirmation'] = value.confirmation
-  emits('registered', true)
-  // await axios
-  //   .post('/register', value)
-  //   .then((response) => {
-  //     console.log(response)
-  //   })
-  //   .catch((error) => {
-  //     console.log(error)
-  //   })
+  await axios
+    .post('/register', value)
+    .then((response) => {
+      emits('registered', true)
+      console.log(response)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 }
 </script>
