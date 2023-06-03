@@ -10,12 +10,11 @@ activate your account."
       visitEmail="Go to my email"
     />
   </modal-window>
-  <modal-window v-if="false">
+  <modal-window v-if="showSuccess" :click="successModalHandler">
     <success-modal
       mainText="Thank you"
       secondaryText="your acc activated"
       linkText="go to newsfeed"
-      link="https://mail.google.com/"
     ></success-modal>
   </modal-window>
 
@@ -80,15 +79,37 @@ import LandingQuote from '../Components/LandingQuote.vue'
 import EmailSent from '../Components/EmailSent.vue'
 import ModalWindow from '../Components/ModalWindow.vue'
 import SuccessModal from '../Components/SuccessModal.vue'
+import axios from '@/config/axios/index.js'
+import { useRoute } from 'vue-router'
 import { ref } from 'vue'
 let scroll = ref(false)
 let showRegistration = ref(false)
 let showEmailSent = ref(false)
+const route = useRoute()
+let token = ref(route.params.token?.length === 64)
+let showSuccess = ref(false)
+
+if (token.value) {
+  await axios.get('/sanctum/csrf-cookie')
+  axios
+    .get(`/api/verify/${route.params.token}`)
+    .then((response) => {
+      showSuccess.value = true
+      console.log(response)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+
 const registrationHandler = () => {
   showRegistration.value = !showRegistration.value
 }
 const emailSentHandler = () => {
   showEmailSent.value = !showEmailSent.value
+}
+const successModalHandler = () => {
+  showSuccess.value = !showSuccess.value
 }
 const emailIsSent = (showRegistrationModal) => {
   showRegistration.value = !showRegistrationModal

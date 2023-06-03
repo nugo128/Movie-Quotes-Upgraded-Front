@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LandingPage from '../pages/LandingPage.vue'
+import NewsFeed from '../pages/NewsFeed.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,7 +8,13 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: LandingPage
+      component: LandingPage,
+      children: [{ path: ':token', component: LandingPage }]
+    },
+    {
+      path: '/newsfeed',
+      name: 'news_feed',
+      component: NewsFeed
     }
   ]
 })

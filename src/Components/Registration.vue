@@ -63,11 +63,10 @@ import axios from '@/config/axios/index.js'
 import AuthInput from './AuthInput.vue'
 import { defineEmits } from 'vue'
 const emits = defineEmits(['registered'])
-
 const submit = async (value, actions) => {
   value['password_confirmation'] = value.confirmation
   await axios
-    .post('/register', value)
+    .post('api/register', value)
     .then((response) => {
       emits('registered', true)
       console.log(response)
