@@ -90,7 +90,7 @@ let token = ref(route.params.token?.length === 64)
 let showSuccess = ref(false)
 
 if (token.value) {
-  await axios.get('/sanctum/csrf-cookie')
+  axios.get('/sanctum/csrf-cookie')
   axios
     .get(`/api/verify/${route.params.token}`)
     .then((response) => {

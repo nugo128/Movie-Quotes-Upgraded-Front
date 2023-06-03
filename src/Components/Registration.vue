@@ -43,7 +43,7 @@
     <button class="bg-[#E31221] py-2 mt-3 mb-1" :class="{ ['pointer-events-none']: !meta.valid }">
       <p class="text-white">{{ $t('get_started') }}</p>
     </button>
-    <button class="border-[1px] rounded flex items-center justify-center">
+    <button class="border-[1px] rounded flex items-center justify-center" type="button">
       <img src="@/assets/images/google-icon.png" alt="google icon" class="w-10 p-2" />
       <p class="text-white">{{ $t('sign_up_google') }}</p>
     </button>
