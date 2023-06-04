@@ -12,7 +12,7 @@
           'border-2 border-red-500': !!errors?.length,
           'border-2 border-green-500': !errors?.length && value?.length > 0
         }"
-        :type="type"
+        :type="type !== 'password' ? type : inputType"
         :placeholder="placeholder"
       />
       <img
@@ -27,6 +27,13 @@
         alt="validation failed"
         class="w-6 absolute right-3"
       />
+      <img
+        v-if="type === 'password'"
+        src="../assets/images/eye.svg"
+        alt="show-hide icon"
+        class="w-6 absolute right-8 cursor-pointer"
+        @click="showPasswordHandler"
+      />
     </div>
   </Field>
   <ErrorMessage class="text-red-400 text-sm px-5 w-[400px]" :name="name" />
@@ -34,6 +41,7 @@
 
 <script setup>
 import { Field, ErrorMessage } from 'vee-validate'
+import { ref } from 'vue'
 const props = defineProps({
   name: { type: String, required: true },
   type: { type: String, required: true },
@@ -42,4 +50,9 @@ const props = defineProps({
   rule: { type: String, required: true },
   require: { type: String, required: false }
 })
+const inputType = ref(props.type)
+const showPasswordHandler = () => {
+  inputType.value === 'password' ? (inputType.value = 'text') : (inputType.value = 'password')
+  console.log(inputType.value)
+}
 </script>

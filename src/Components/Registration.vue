@@ -26,7 +26,7 @@
     />
     <AuthInput
       name="password"
-      type="text"
+      type="password"
       :label="$t('form.password_label')"
       require="*"
       :placeholder="$t('form.password_placeholder')"
@@ -34,7 +34,7 @@
     />
     <AuthInput
       name="confirmation"
-      type="text"
+      type="password"
       :label="$t('form.confirm_password_label')"
       require="*"
       :placeholder="$t('form.confirm_password_placeholder')"
@@ -65,6 +65,7 @@ import { defineEmits } from 'vue'
 const emits = defineEmits(['registered'])
 const submit = async (value, actions) => {
   value['password_confirmation'] = value.confirmation
+  await axios.get('/sanctum/csrf-cookie')
   await axios
     .post('api/register', value)
     .then((response) => {
