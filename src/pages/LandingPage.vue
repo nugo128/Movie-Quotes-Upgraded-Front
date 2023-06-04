@@ -4,17 +4,16 @@
   </modal-window>
   <modal-window v-if="showEmailSent" :click="emailSentHandler">
     <email-sent
-      sent="Thank you"
-      check="Please check your email and follow the instructions to
-activate your account."
-      visitEmail="Go to my email"
+      :sent="$t('thank_you')"
+      :check="$t('check_email')"
+      :visitEmail="$t('go_to_email')"
     />
   </modal-window>
   <modal-window v-if="showSuccess" :click="successModalHandler">
     <success-modal
-      mainText="Thank you"
-      secondaryText="your acc activated"
-      linkText="go to newsfeed"
+      :mainText="$t('thank_you')"
+      :secondaryText="$t('activated')"
+      :linkText="$t('go_to_newsfeed')"
     ></success-modal>
   </modal-window>
 
