@@ -1,0 +1,17 @@
+{
+    "login":"Log in to your account",
+    "welcome_back":"Welcome back! Please enter your details.",
+    "loginform":{
+        "username_label":"Name or Email",
+        "name_placeholder":"Enter your name or email",
+        "password_label": "Password",
+        "login_password_placeholder": "Password",
+        "remember_me" : "Remember me"
+    },
+    "forgot_password": "Forgot password",
+    "sign_in_google": "Sign up with Google",
+    "dont_have_account": "Don't have an account?",
+    "sign_up": "Sign up",
+    "sign_in": "Sign in"
+
+}
