@@ -53,12 +53,24 @@
 <script setup>
 import { Form, Field } from 'vee-validate'
 import AuthInput from './AuthInput.vue'
+import { useRouter } from 'vue-router'
 import { defineEmits } from 'vue'
+import axios from '@/config/axios/index.js'
+const router = useRouter()
 const emits = defineEmits(['showRegistration'])
 const toggleRegistration = () => {
   emits('showRegistration', true)
 }
 const submit = async (value, actions) => {
-  console.log(value, actions)
+  await axios.get('/sanctum/csrf-cookie')
+  await axios
+    .post('/api/login', value)
+    .then((response) => {
+      console.log(response)
+      router.replace({ name: 'news_feed' })
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 }
 </script>
