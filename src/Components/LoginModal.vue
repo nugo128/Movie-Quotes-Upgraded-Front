@@ -42,7 +42,9 @@
     <div class="flex justify-center mt-5">
       <h2 class="text-[#6C757D]">
         {{ $t('dont_have_account') }}
-        <span class="underline text-[#0D6EFD] cursor-pointer">{{ $t('sign_up') }}</span>
+        <span class="underline text-[#0D6EFD] cursor-pointer" @click="toggleRegistration">{{
+          $t('sign_up')
+        }}</span>
       </h2>
     </div>
   </Form>
@@ -52,7 +54,10 @@
 import { Form, Field } from 'vee-validate'
 import AuthInput from './AuthInput.vue'
 import { defineEmits } from 'vue'
-const emits = defineEmits(['registered'])
+const emits = defineEmits(['showRegistration'])
+const toggleRegistration = () => {
+  emits('showRegistration', true)
+}
 const submit = async (value, actions) => {
   console.log(value, actions)
 }

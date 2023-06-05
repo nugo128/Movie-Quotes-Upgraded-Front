@@ -1,6 +1,6 @@
 <template>
   <modal-window :click="registrationHandler" v-if="showRegistration">
-    <registration @registered="emailIsSent" />
+    <registration @registered="emailIsSent" @showLogin="toggleLogin" />
   </modal-window>
   <modal-window v-if="showEmailSent" :click="emailSentHandler">
     <email-sent
@@ -17,7 +17,7 @@
     ></success-modal>
   </modal-window>
   <modal-window v-if="showLogin" :click="loginModalHandler">
-    <login-modal></login-modal>
+    <login-modal @showRegistration="toggleRegistration"></login-modal>
   </modal-window>
 
   <div class="bg-black flex flex-col gap-64 pb-[180px]">
@@ -122,6 +122,14 @@ const successModalHandler = () => {
 const emailIsSent = (showRegistrationModal) => {
   showRegistration.value = !showRegistrationModal
   showEmailSent.value = showRegistration
+}
+const toggleLogin = (login) => {
+  showRegistration.value = !login
+  showLogin.value = login
+}
+const toggleRegistration = (registration) => {
+  showRegistration.value = registration
+  showLogin.value = !registration
 }
 
 window.addEventListener('scroll', () => {

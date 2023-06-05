@@ -51,7 +51,9 @@
     <div class="flex justify-center mt-5">
       <h2 class="text-[#6C757D]">
         {{ $t('have_account') }}
-        <span class="underline text-[#0D6EFD] cursor-pointer">{{ $t('log_in') }}</span>
+        <span class="underline text-[#0D6EFD] cursor-pointer" @click="toggleLogin">{{
+          $t('log_in')
+        }}</span>
       </h2>
     </div>
   </Form>
@@ -62,7 +64,10 @@ import { Form } from 'vee-validate'
 import axios from '@/config/axios/index.js'
 import AuthInput from './AuthInput.vue'
 import { defineEmits } from 'vue'
-const emits = defineEmits(['registered'])
+const emits = defineEmits(['registered', 'showLogin'])
+const toggleLogin = () => {
+  emits('showLogin', true)
+}
 const submit = async (value, actions) => {
   value['password_confirmation'] = value.confirmation
   await axios.get('/sanctum/csrf-cookie')
