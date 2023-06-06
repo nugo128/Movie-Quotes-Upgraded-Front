@@ -19,6 +19,9 @@
   <modal-window v-if="showLogin" :click="loginModalHandler">
     <login-modal @showRegistration="toggleRegistration"></login-modal>
   </modal-window>
+  <modal-window>
+    <password-reset></password-reset>
+  </modal-window>
 
   <div class="bg-black flex flex-col gap-64 pb-[180px]">
     <div class="flex justify-between px-8 py-4">
@@ -84,6 +87,7 @@ import EmailSent from '../Components/EmailSent.vue'
 import ModalWindow from '../Components/ModalWindow.vue'
 import SuccessModal from '../Components/SuccessModal.vue'
 import LoginModal from '../Components/LoginModal.vue'
+import PasswordReset from '../Components/PasswordReset.vue'
 import axios from '@/config/axios/index.js'
 import { useRoute } from 'vue-router'
 import { ref } from 'vue'
