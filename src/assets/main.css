@@ -1,1 +1,24 @@
 @import './base.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@font-face {
+  font-family: 'FontEn';
+  src: url('./fonts/Helvetica-Neue-Font/Helvetica-Medium.ttf') format('truetype');
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'FontEn';
+  src: url('./fonts/Helvetica-Neue-Font/Helvetica-Bold.ttf') format('truetype');
+  font-weight: bold;
+}
+@font-face {
+  font-family: 'FontKa';
+  src: url('./fonts/Helvetica.Georgian/Helvetica-Medium.ttf') format('truetype');
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'FontKa';
+  src: url('./fonts/Helvetica.Georgian/Helvetica-Bold.ttf') format('truetype');
+  font-weight: bold;
+}
