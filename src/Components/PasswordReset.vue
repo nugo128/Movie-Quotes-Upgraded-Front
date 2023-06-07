@@ -22,7 +22,9 @@
 import { Form } from 'vee-validate'
 import { defineEmits, defineProps } from 'vue'
 import axios from '@/config/axios/index.js'
-
+import { useRoute, useRouter } from 'vue-router'
+const route = useRoute()
+const router = useRouter()
 const props = defineProps({
   header: {
     type: String,
@@ -43,13 +45,26 @@ const toggleLogin = () => {
 }
 const submit = async (value, actions) => {
   console.log(value)
-  emits('showSuccess', true)
   if (value.email) {
-    console.log(value.email)
     await axios
       .post('/api/forgot-password', value)
       .then((response) => {
         emits('showEmail', true)
+        console.log(response)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+  if (value.password) {
+    value['password_confirmation'] = value.confirmation
+    value['token'] = route.query.token
+    console.log(value)
+    await axios
+      .post('/api/reset-password', value)
+      .then((response) => {
+        router.push({ name: 'home' })
+        emits('showSuccess', true)
         console.log(response)
       })
       .catch((error) => {

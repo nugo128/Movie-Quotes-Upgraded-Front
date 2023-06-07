@@ -163,7 +163,7 @@ const showResetEmailSent = ref(false)
 const showPasswordResetForm = ref(false)
 const showSuccessPassword = ref(false)
 
-if (route.path === '/verify') {
+if (route.path === '/verify' && route.query.token.length === 128) {
   axios
     .get(`/api/verify/${route.query.token}`)
     .then((response) => {
@@ -173,6 +173,9 @@ if (route.path === '/verify') {
     .catch((error) => {
       console.log(error)
     })
+}
+if (route.path === '/reset' && route.query.token.length === 128) {
+  showPasswordResetForm.value = true
 }
 const togglePasswordResetEmail = (reset) => {
   showPasswordResetEmail.value = reset
@@ -193,7 +196,8 @@ const emailSentHandler = () => {
   showResetEmailSent.value = false
 }
 const successModalHandler = () => {
-  showSuccess.value = !showSuccess.value
+  showSuccess.value = false
+  showSuccessPassword.value = false
 }
 const emailIsSent = (showEmail) => {
   showPasswordResetEmail.value
