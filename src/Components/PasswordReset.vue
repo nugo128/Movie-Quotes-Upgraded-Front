@@ -29,11 +29,12 @@
 import { Form } from 'vee-validate'
 import AuthInput from './AuthInput.vue'
 import { defineEmits } from 'vue'
-const emits = defineEmits(['showLogin'])
+const emits = defineEmits(['showLogin', 'showEmail'])
 const toggleLogin = () => {
   emits('showLogin', true)
 }
 const submit = async (value, actions) => {
   console.log(value)
+  emits('showEmail', true)
 }
 </script>

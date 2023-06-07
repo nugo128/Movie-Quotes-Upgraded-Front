@@ -23,7 +23,16 @@
     ></login-modal>
   </modal-window>
   <modal-window v-if="showPasswordResetEmail" :click="resetModalHandler">
-    <password-reset @showLogin="toggleLogin"></password-reset>
+    <password-reset @showLogin="toggleLogin" @showEmail="emailIsSent"></password-reset>
+  </modal-window>
+  <modal-window v-if="showResetEmailSent" :click="emailSentHandler">
+    <email-sent
+      :sent="$t('email_success.check')"
+      :check="$t('email_success.send_instructions')"
+      :visitEmail="$t('email_success.go_to_email')"
+      :skip="$t('email_success.skip')"
+      @skip="emailSentHandler"
+    />
   </modal-window>
 
   <div class="bg-black flex flex-col gap-64 pb-[180px]">
@@ -94,14 +103,15 @@ import PasswordReset from '../Components/PasswordReset.vue'
 import axios from '@/config/axios/index.js'
 import { useRoute } from 'vue-router'
 import { ref } from 'vue'
-let scroll = ref(false)
-let showRegistration = ref(false)
-let showEmailSent = ref(false)
+const scroll = ref(false)
+const showRegistration = ref(false)
+const showEmailSent = ref(false)
 const route = useRoute()
-let token = ref(route.params.token?.length === 64)
-let showSuccess = ref(false)
-let showLogin = ref(false)
-let showPasswordResetEmail = ref(false)
+const token = ref(route.params.token?.length === 64)
+const showSuccess = ref(false)
+const showLogin = ref(false)
+const showPasswordResetEmail = ref(false)
+const showResetEmailSent = ref(false)
 
 if (token.value) {
   axios
@@ -128,14 +138,19 @@ const registrationHandler = () => {
   showRegistration.value = !showRegistration.value
 }
 const emailSentHandler = () => {
-  showEmailSent.value = !showEmailSent.value
+  showEmailSent.value = false
+  showResetEmailSent.value = false
 }
 const successModalHandler = () => {
   showSuccess.value = !showSuccess.value
 }
-const emailIsSent = (showRegistrationModal) => {
-  showRegistration.value = !showRegistrationModal
-  showEmailSent.value = showRegistration
+const emailIsSent = (showEmail) => {
+  showPasswordResetEmail.value
+    ? (showResetEmailSent.value = showEmail)
+    : (showResetEmailSent.value = false)
+  showRegistration.value ? (showEmailSent.value = showEmail) : (showEmailSent.value = false)
+  showRegistration.value = false
+  showPasswordResetEmail.value = false
 }
 const toggleLogin = (login) => {
   showRegistration.value === true
