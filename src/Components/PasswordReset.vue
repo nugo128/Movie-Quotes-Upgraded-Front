@@ -18,7 +18,7 @@
       <p class="text-white">{{ $t('send_email.send') }}</p>
     </button>
 
-    <div class="flex justify-center mt-5 gap-2 cursor-pointer">
+    <div class="flex justify-center mt-5 gap-2 cursor-pointer" @click="toggleLogin">
       <img src="@/assets/images/back.svg" alt="" />
       <p class="text-[#6C757D]">{{ $t('send_email.back') }}</p>
     </div>
@@ -28,7 +28,11 @@
 <script setup>
 import { Form } from 'vee-validate'
 import AuthInput from './AuthInput.vue'
-
+import { defineEmits } from 'vue'
+const emits = defineEmits(['showLogin'])
+const toggleLogin = () => {
+  emits('showLogin', true)
+}
 const submit = async (value, actions) => {
   console.log(value)
 }

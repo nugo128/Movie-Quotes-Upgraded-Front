@@ -17,10 +17,13 @@
     ></success-modal>
   </modal-window>
   <modal-window v-if="showLogin" :click="loginModalHandler">
-    <login-modal @showRegistration="toggleRegistration"></login-modal>
+    <login-modal
+      @showRegistration="toggleRegistration"
+      @showReset="togglePasswordResetEmail"
+    ></login-modal>
   </modal-window>
-  <modal-window>
-    <password-reset></password-reset>
+  <modal-window v-if="showPasswordResetEmail" :click="resetModalHandler">
+    <password-reset @showLogin="toggleLogin"></password-reset>
   </modal-window>
 
   <div class="bg-black flex flex-col gap-64 pb-[180px]">
@@ -98,6 +101,7 @@ const route = useRoute()
 let token = ref(route.params.token?.length === 64)
 let showSuccess = ref(false)
 let showLogin = ref(false)
+let showPasswordResetEmail = ref(false)
 
 if (token.value) {
   axios
@@ -110,9 +114,15 @@ if (token.value) {
       console.log(error)
     })
 }
-
+const togglePasswordResetEmail = (reset) => {
+  showPasswordResetEmail.value = reset
+  showLogin.value = !reset
+}
 const loginModalHandler = () => {
   showLogin.value = !showLogin.value
+}
+const resetModalHandler = () => {
+  showPasswordResetEmail.value = !showPasswordResetEmail.value
 }
 const registrationHandler = () => {
   showRegistration.value = !showRegistration.value
@@ -128,7 +138,12 @@ const emailIsSent = (showRegistrationModal) => {
   showEmailSent.value = showRegistration
 }
 const toggleLogin = (login) => {
-  showRegistration.value = !login
+  showRegistration.value === true
+    ? (showRegistration.value = !login)
+    : (showRegistration.value = false)
+  showPasswordResetEmail.value === true
+    ? (showPasswordResetEmail.value = !login)
+    : (showPasswordResetEmail.value = false)
   showLogin.value = login
 }
 const toggleRegistration = (registration) => {

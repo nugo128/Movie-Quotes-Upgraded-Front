@@ -25,7 +25,9 @@
         <Field name="remember_me" type="checkbox" value="true"></Field>
         <label for="remember_me" class="text-white">{{ $t('loginform.remember_me') }}</label>
       </div>
-      <h3 class="underline text-[#0D6EFD] cursor-pointer">{{ $t('forgot_password') }}</h3>
+      <h3 class="underline text-[#0D6EFD] cursor-pointer" @click="toggleReset">
+        {{ $t('forgot_password') }}
+      </h3>
     </div>
     <button class="bg-[#E31221] py-2 mt-3 mb-1" :class="{ ['pointer-events-none']: !meta.valid }">
       <p class="text-white">{{ $t('sign_in') }}</p>
@@ -53,9 +55,12 @@ import { useRouter } from 'vue-router'
 import { defineEmits } from 'vue'
 import axios from '@/config/axios/index.js'
 const router = useRouter()
-const emits = defineEmits(['showRegistration'])
+const emits = defineEmits(['showRegistration', 'showReset'])
 const toggleRegistration = () => {
   emits('showRegistration', true)
+}
+const toggleReset = () => {
+  emits('showReset', true)
 }
 const submit = async (value, actions) => {
   await axios.get('/sanctum/csrf-cookie')
