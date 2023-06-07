@@ -36,12 +36,13 @@ const props = defineProps({
     required: true
   }
 })
-const emits = defineEmits(['showLogin', 'showEmail'])
+const emits = defineEmits(['showLogin', 'showEmail', 'showSuccess'])
 const toggleLogin = () => {
   emits('showLogin', true)
 }
-const submit = async (value, actions) => {
+const submit = (value, actions) => {
   console.log(value)
+  emits('showSuccess', true)
   emits('showEmail', true)
 }
 </script>
