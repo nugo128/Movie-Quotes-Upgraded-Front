@@ -1,21 +1,14 @@
 <template>
   <Form @submit="submit" v-slot="{ meta }" class="flex flex-col gap-3 px-20 rounded z-[100]">
     <div class="flex flex-col justify-center items-center">
-      <h2 class="text-white text-3xl">{{ $t('send_email.forgot_password') }}</h2>
+      <h2 class="text-white text-3xl">{{ header }}</h2>
       <p class="text-[#6C757D] max-w-[400px] text-center">
-        {{ $t('send_email.forgot_password_description') }}
+        {{ secondaryText }}
       </p>
     </div>
-    <AuthInput
-      name="email"
-      type="email"
-      :label="$t('send_email.email_label')"
-      :placeholder="$t('send_email.email_placeholder')"
-      rule="required|email"
-    />
-
+    <slot></slot>
     <button class="bg-[#E31221] py-2 mt-3 mb-1" :class="{ ['pointer-events-none']: !meta.valid }">
-      <p class="text-white">{{ $t('send_email.send') }}</p>
+      <p class="text-white">{{ buttonText }}</p>
     </button>
 
     <div class="flex justify-center mt-5 gap-2 cursor-pointer" @click="toggleLogin">
@@ -27,8 +20,22 @@
 
 <script setup>
 import { Form } from 'vee-validate'
-import AuthInput from './AuthInput.vue'
-import { defineEmits } from 'vue'
+import { defineEmits, defineProps } from 'vue'
+
+const props = defineProps({
+  header: {
+    type: String,
+    required: true
+  },
+  secondaryText: {
+    type: String,
+    required: true
+  },
+  buttonText: {
+    type: String,
+    required: true
+  }
+})
 const emits = defineEmits(['showLogin', 'showEmail'])
 const toggleLogin = () => {
   emits('showLogin', true)

@@ -23,7 +23,47 @@
     ></login-modal>
   </modal-window>
   <modal-window v-if="showPasswordResetEmail" :click="resetModalHandler">
-    <password-reset @showLogin="toggleLogin" @showEmail="emailIsSent"></password-reset>
+    <password-reset
+      @showLogin="toggleLogin"
+      @showEmail="emailIsSent"
+      :button-text="$t('send_email.send')"
+      :header="$t('send_email.forgot_password')"
+      :secondary-text="$t('send_email.forgot_password_description')"
+    >
+      <AuthInput
+        name="email"
+        type="email"
+        :label="$t('send_email.email_label')"
+        :placeholder="$t('send_email.email_placeholder')"
+        rule="required|email"
+      />
+    </password-reset>
+  </modal-window>
+  <modal-window v-if="true" :click="resetModalHandler">
+    <password-reset
+      @showLogin="toggleLogin"
+      @showEmail="emailIsSent"
+      :header="$t('create_password.create')"
+      :secondary-text="$t('create_password.password_instructions')"
+      :button-text="$t('create_password.reset')"
+    >
+      <AuthInput
+        name="password"
+        type="password"
+        :label="$t('form.password_label')"
+        require="*"
+        :placeholder="$t('form.password_placeholder')"
+        rule="required|min:8|max:15|lowercase_num"
+      />
+      <AuthInput
+        name="confirmation"
+        type="password"
+        :label="$t('form.confirm_password_label')"
+        require="*"
+        :placeholder="$t('form.confirm_password_placeholder')"
+        rule="required|confirmed:@password"
+      />
+    </password-reset>
   </modal-window>
   <modal-window v-if="showResetEmailSent" :click="emailSentHandler">
     <email-sent
@@ -96,6 +136,7 @@ import Registration from '../Components/Registration.vue'
 import LanguageSelect from '../Components/LanguageSelect.vue'
 import LandingQuote from '../Components/LandingQuote.vue'
 import EmailSent from '../Components/EmailSent.vue'
+import AuthInput from '../Components/AuthInput.vue'
 import ModalWindow from '../Components/ModalWindow.vue'
 import SuccessModal from '../Components/SuccessModal.vue'
 import LoginModal from '../Components/LoginModal.vue'
