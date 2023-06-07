@@ -1,10 +1,28 @@
 <template>
+  <modal-window :click="registrationHandler" v-if="showRegistration">
+    <registration @registered="emailIsSent" />
+  </modal-window>
+  <modal-window v-if="showEmailSent" :click="emailSentHandler">
+    <email-sent
+      :sent="$t('thank_you')"
+      :check="$t('check_email')"
+      :visitEmail="$t('go_to_email')"
+    />
+  </modal-window>
+  <modal-window v-if="showSuccess" :click="successModalHandler">
+    <success-modal
+      :mainText="$t('thank_you')"
+      :secondaryText="$t('activated')"
+      :linkText="$t('go_to_newsfeed')"
+    ></success-modal>
+  </modal-window>
+
   <div class="bg-black flex flex-col gap-64 pb-[180px]">
     <div class="flex justify-between px-8 py-4">
       <h3 class="text-[#DDCCAA]">{{ $t('header.movie_quotes') }}</h3>
       <div class="flex gap-6">
         <language-select></language-select>
-        <button class="bg-[#E31221] text-white px-7 py-1 rounded">
+        <button class="bg-[#E31221] text-white px-7 py-1 rounded" @click="registrationHandler">
           {{ $t('header.sign_up') }}
         </button>
         <button class="text-white px-7 py-1 border-[1px]">{{ $t('header.log_in') }}</button>
@@ -19,7 +37,7 @@
       >
         {{ $t('main_text.find_any_quote') }}
       </h2>
-      <button class="bg-[#E31221] text-white p-3 rounded mt-5">
+      <button class="bg-[#E31221] text-white p-3 rounded mt-5" @click="registrationHandler">
         {{ $t('main_text.get_started') }}
       </button>
     </div>
@@ -54,10 +72,47 @@
 </template>
 
 <script setup>
+import Registration from '../Components/Registration.vue'
 import LanguageSelect from '../Components/LanguageSelect.vue'
 import LandingQuote from '../Components/LandingQuote.vue'
+import EmailSent from '../Components/EmailSent.vue'
+import ModalWindow from '../Components/ModalWindow.vue'
+import SuccessModal from '../Components/SuccessModal.vue'
+import axios from '@/config/axios/index.js'
+import { useRoute } from 'vue-router'
 import { ref } from 'vue'
 let scroll = ref(false)
+let showRegistration = ref(false)
+let showEmailSent = ref(false)
+const route = useRoute()
+let token = ref(route.params.token?.length === 64)
+let showSuccess = ref(false)
+
+if (token.value) {
+  axios
+    .get(`/api/verify/${route.params.token}`)
+    .then((response) => {
+      showSuccess.value = true
+      console.log(response)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+
+const registrationHandler = () => {
+  showRegistration.value = !showRegistration.value
+}
+const emailSentHandler = () => {
+  showEmailSent.value = !showEmailSent.value
+}
+const successModalHandler = () => {
+  showSuccess.value = !showSuccess.value
+}
+const emailIsSent = (showRegistrationModal) => {
+  showRegistration.value = !showRegistrationModal
+  showEmailSent.value = showRegistration
+}
 
 window.addEventListener('scroll', () => {
   if (window.innerHeight * 0.78 <= window.scrollY) {

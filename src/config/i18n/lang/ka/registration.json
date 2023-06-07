@@ -1,0 +1,25 @@
+{
+    "create_account":"შექმენით ანგარიში",
+    "start_journey":"დაიწყეთ თქვენი მოგზაურობა",
+    "form":{
+        "name_label":"სახელი",
+        "name_placeholder":"მინიმუმ 3 და მაქსიმუმ 15 სიმბოლო",
+        "email_label": "ელ-ფოსტა",
+        "email_placeholder" : "შეიყვანეთ ელ-ფოსტა",
+        "password_label": "პაროლი",
+        "password_placeholder": "მინიმუმ 8 და მაქსიმუმ 15 სიმბოლო",
+        "confirm_password_label" : "პაროლის დადასტურება",
+        "confirm_password_placeholder": "პაროლის დადასტურება"
+    },
+    "get_started": "დაწყება",
+    "sign_up_google": "რეგისტრაცია Google-ით ",
+    "have_account": "უკვე გაქვთ ანგარიში?",
+    "log_in": "შესვლა",
+    "thank_you" : "გმადლობთ",
+    "check_email": "გთხოვთ, შეამოწმოთ თქვენი ელ-ფოსტა და მყევუთ ინსტრუქციას თქვენი ანგარიშის გასააქტიურებლად.",
+    "go_to_email": "ელ-ფოსტის ნახვა",
+    "activated": "თქვენი ანგარიში გააქტიურებულია",
+    "go_to_newsfeed": "სიახლეების ველზე გადასვლა"
+
+
+}
