@@ -156,7 +156,6 @@ const scroll = ref(false)
 const showRegistration = ref(false)
 const showEmailSent = ref(false)
 const route = useRoute()
-const token = ref(route.params.token?.length === 64)
 const showSuccess = ref(false)
 const showLogin = ref(false)
 const showPasswordResetEmail = ref(false)
@@ -164,9 +163,9 @@ const showResetEmailSent = ref(false)
 const showPasswordResetForm = ref(false)
 const showSuccessPassword = ref(false)
 
-if (token.value) {
+if (route.path === '/verify') {
   axios
-    .get(`/api/verify/${route.params.token}`)
+    .get(`/api/verify/${route.query.token}`)
     .then((response) => {
       showSuccess.value = true
       console.log(response)

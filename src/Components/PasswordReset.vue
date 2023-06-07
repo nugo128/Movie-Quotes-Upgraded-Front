@@ -21,6 +21,7 @@
 <script setup>
 import { Form } from 'vee-validate'
 import { defineEmits, defineProps } from 'vue'
+import axios from '@/config/axios/index.js'
 
 const props = defineProps({
   header: {
@@ -40,9 +41,20 @@ const emits = defineEmits(['showLogin', 'showEmail', 'showSuccess'])
 const toggleLogin = () => {
   emits('showLogin', true)
 }
-const submit = (value, actions) => {
+const submit = async (value, actions) => {
   console.log(value)
   emits('showSuccess', true)
-  emits('showEmail', true)
+  if (value.email) {
+    console.log(value.email)
+    await axios
+      .post('/api/forgot-password', value)
+      .then((response) => {
+        emits('showEmail', true)
+        console.log(response)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
 }
 </script>
