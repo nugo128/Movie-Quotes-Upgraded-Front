@@ -1,9 +1,10 @@
 <template>
-  <div class="locale-changer">
-    <select v-model="$i18n.locale" name="locale" @change="localeChangeHandler">
+  <div class="w-14 flex items-center justify-between relative">
+    <select v-model="$i18n.locale" name="locale" @change="localeChangeHandler" class="z-50 w-14">
       <option class="text-black" value="en">Eng</option>
       <option class="text-black" value="ka">ქარ</option>
     </select>
+    <img src="../assets/images/arrow-down.svg" alt="" class="absolute z-10 left-10" />
   </div>
 </template>
 <script setup>
@@ -15,7 +16,10 @@ const localeChangeHandler = (event) => {
 </script>
 <style scoped>
 select {
-  width: 200px;
-  font-size: 26px;
+  color: white;
+  border: 0;
+  background: none;
+  appearance: none;
+  -webkit-appearance: none;
 }
 </style>
