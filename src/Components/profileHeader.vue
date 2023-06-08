@@ -1,5 +1,5 @@
 <template>
-  <div class="px-16 py-8 bg-[#24222F] flex justify-between">
+  <header class="px-16 py-8 bg-[#24222F] flex justify-between">
     <h2 class="text-[#DDCCAA]">MOVIE QUOTES</h2>
 
     <div class="flex gap-10 items-center">
@@ -13,7 +13,7 @@
       <language-select></language-select>
       <button class="text-white text-sm border border-white py-2 px-3 rounded-md">Log out</button>
     </div>
-  </div>
+  </header>
 </template>
 
 <script setup>
