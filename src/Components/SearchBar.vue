@@ -10,7 +10,7 @@
         <input
           type="text"
           placeholder="Enter @ to search movies, Enter # to search quotes"
-          class="w-[550px] bg-black placeholder-white text-white"
+          class="w-[550px] bg-black placeholder-white text-white outline-none"
         />
       </form>
     </div>
