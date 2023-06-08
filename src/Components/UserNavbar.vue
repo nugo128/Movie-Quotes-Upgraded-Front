@@ -1,5 +1,5 @@
 <template>
-  <nav class="px-[70px] pt-8 flex flex-col gap-11">
+  <nav class="px-[70px] flex flex-col gap-11">
     <div class="flex gap-6 items-center">
       <img src="../assets/images/profile.png" alt="" class="w-[60px]" />
       <div>

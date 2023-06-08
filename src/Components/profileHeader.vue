@@ -1,5 +1,5 @@
 <template>
-  <header class="px-16 py-8 bg-[#24222F] flex justify-between">
+  <header class="px-16 pt-8 pb-4 bg-[#24222F] flex justify-between">
     <h2 class="text-[#DDCCAA]">MOVIE QUOTES</h2>
 
     <div class="flex gap-10 items-center">
