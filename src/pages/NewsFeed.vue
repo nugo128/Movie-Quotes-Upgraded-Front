@@ -4,7 +4,7 @@ import axios from '@/config/axios/index.js'
 import { onBeforeMount } from 'vue'
 axios.get('/')
 onBeforeMount(async () => {
-  //   await axios.get('/sanctum/csrf-cookie')
+  await axios.get('/sanctum/csrf-cookie')
   await axios
     .get('/api/user')
     .then((response) => {

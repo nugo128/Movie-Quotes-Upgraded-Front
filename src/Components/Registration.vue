@@ -69,6 +69,7 @@ const toggleLogin = () => {
   emits('showLogin', true)
 }
 const googleSignup = async () => {
+  await axios.get('/sanctum/csrf-cookie')
   await axios
     .get('/api/auth/google')
     .then((response) => {
