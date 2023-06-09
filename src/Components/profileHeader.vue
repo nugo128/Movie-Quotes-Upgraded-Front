@@ -11,7 +11,9 @@
         >
       </div>
       <language-select></language-select>
-      <button class="text-white text-sm border border-white py-2 px-3 rounded-md">Log out</button>
+      <button class="text-white text-sm border border-white py-2 px-3 rounded-md">
+        {{ $t('newsfeed.logout') }}
+      </button>
     </div>
   </header>
 </template>

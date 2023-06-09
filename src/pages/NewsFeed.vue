@@ -7,7 +7,7 @@
         <div class="flex justify-between gap-10 w-full mb-11">
           <div class="flex gap-3">
             <img src="../assets/images/new-quote.svg" class="w-5" alt="" />
-            <h2 class="text-white w-[180px]">Write new quote</h2>
+            <h2 class="text-white w-[180px]">{{ $t('newsfeed.new_quote') }}</h2>
           </div>
           <search-bar />
         </div>

@@ -26,7 +26,7 @@
       <form action="POST" class="w-full">
         <input
           type="text"
-          placeholder="Write a comment"
+          :placeholder="$t('newsfeed.comment')"
           class="bg-[#24222F] w-full h-14 p-7 outline-none"
         />
       </form>

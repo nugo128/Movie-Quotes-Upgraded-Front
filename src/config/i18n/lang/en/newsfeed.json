@@ -1,0 +1,13 @@
+{
+    "newsfeed":{
+        "news_feed": "News feed",
+        "movies_list": "List of movies",
+        "edit": "Edit your profile",
+        "new_quote": "Write new quote",
+        "search_placeholder": "Enter @ to search movies, Enter # to search quotes",
+        "search": "search by",
+        "logout": "Log out",
+        "comment": "Write a comment"
+
+    }
+}

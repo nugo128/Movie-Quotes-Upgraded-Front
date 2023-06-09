@@ -3,13 +3,13 @@
     <div class="flex gap-4">
       <div @click="appearSearch" class="flex gap-4 cursor-pointer">
         <img src="../assets/images/search.svg" alt="" />
-        <h2 class="text-white" v-if="!search">search by</h2>
+        <h2 class="text-white" v-if="!search">{{ $t('newsfeed.search') }}</h2>
       </div>
 
       <form action="POST" v-if="search">
         <input
           type="text"
-          placeholder="Enter @ to search movies, Enter # to search quotes"
+          :placeholder="$t('newsfeed.search_placeholder')"
           class="w-[550px] bg-black placeholder-white text-white outline-none"
         />
       </form>
