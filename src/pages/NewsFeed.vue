@@ -11,26 +11,31 @@
           </div>
           <search-bar />
         </div>
-        <user-post />
+        <div v-for="post in postData">
+          <user-post
+            :username="post.user.name"
+            :profilePicture="post.user.profile_picture"
+            :movie="post.movie.title"
+            :quote="post.quote"
+            :year="post.movie.year"
+            :thumbnail="post.thumbnail"
+          />
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script setup>
-import axios from '@/config/axios/index.js'
 import profileHeader from '../Components/profileHeader.vue'
 import UserNavbar from '../Components/UserNavbar.vue'
 import SearchBar from '../Components/SearchBar.vue'
 import UserPost from '../Components/UserPost.vue'
-import { onBeforeMount } from 'vue'
-onBeforeMount(async () => {
-  // await axios
-  //   .get('/api/user')
-  //   .then((response) => {
-  //     console.log(response)
-  //   })
-  //   .catch((error) => {
-  //     console.log(error)
-  //   })
+import { usePostsStore } from '../stores/post'
+import { onBeforeMount, ref } from 'vue'
+const store = usePostsStore()
+const postData = ref(store.posts)
+console.log(postData.value)
+onBeforeMount(() => {
+  store.getPosts()
 })
 </script>

@@ -1,14 +1,16 @@
 <template>
   <div class="mb-10">
     <div class="flex items-center gap-5 mb-4">
-      <img src="../assets/images/profile.png" alt="profile picture" class="w-[52px]" />
-      <h2 class="text-white text-lg">Nugo Rostiashvili</h2>
+      <img :src="profilePicture" alt="profile picture" class="w-[52px]" />
+      <h2 class="text-white text-lg">{{ username }}</h2>
     </div>
     <h2 class="text-white mb-7">
-      <span>“Follow your dream.”</span>
-      <span class="text-[#DDCCAA]">Billy Elliot. (2000)</span>
+      <span>“{{ quote }}”</span>
+      <span class="text-[#DDCCAA]"
+        >{{ movie }} <span>({{ year }})</span></span
+      >
     </h2>
-    <img src="../assets/images/LOTR.png" alt="quote picture" />
+    <img :src="thumbnail" alt="quote picture" class="w-full" />
     <div class="flex gap-5 mt-6">
       <div class="flex gap-2 items-center">
         <span class="text-white">3</span>
@@ -36,4 +38,31 @@
 
 <script setup>
 import UserComment from './UserComment.vue'
+import { defineProps } from 'vue'
+const props = defineProps({
+  username: {
+    type: String,
+    required: true
+  },
+  profilePicture: {
+    type: String,
+    required: true
+  },
+  movie: {
+    type: String,
+    required: true
+  },
+  quote: {
+    type: String,
+    required: true
+  },
+  year: {
+    type: String,
+    required: true
+  },
+  thumbnail: {
+    type: String,
+    required: true
+  }
+})
 </script>
