@@ -19,6 +19,8 @@
             :quote="post.quote"
             :year="post.movie.year"
             :thumbnail="post.thumbnail"
+            :comment="post.comment"
+            :numOfLikes="post.like.length"
           />
         </div>
       </div>
