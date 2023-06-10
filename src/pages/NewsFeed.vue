@@ -21,6 +21,7 @@
             :thumbnail="post.thumbnail"
             :comment="post.comment"
             :numOfLikes="post.like.length"
+            :quoteID="post.id"
           />
         </div>
       </div>

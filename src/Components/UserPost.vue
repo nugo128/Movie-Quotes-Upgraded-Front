@@ -17,8 +17,8 @@
         <img src="../assets/images/comment.svg" alt="comment icon" class="cursor-pointer" />
       </div>
       <div class="flex gap-2 items-center">
-        <span class="text-white">{{ numOfLikes }}</span>
-        <img src="../assets/images/like.svg" alt="like icon" class="cursor-pointer" />
+        <span class="text-white">{{ likeCount }}</span>
+        <LikeButton :color="liked ? 'red' : 'white'" @click="like" />
       </div>
     </div>
     <div class="w-full h-[1px] bg-[#EFEFEF4D] my-6"></div>
@@ -44,7 +44,9 @@
 
 <script setup>
 import UserComment from './UserComment.vue'
-import { defineProps } from 'vue'
+import LikeButton from './LikeButton.vue'
+import { defineProps, ref, onBeforeMount } from 'vue'
+import axios from '@/config/axios/index.js'
 const props = defineProps({
   username: {
     type: String,
@@ -77,6 +79,46 @@ const props = defineProps({
   numOfLikes: {
     type: Number,
     required: true
+  },
+  quoteID: {
+    type: Number,
+    required: true
   }
 })
+const liked = ref(false)
+const likeCount = ref(props.numOfLikes)
+
+onBeforeMount(async () => {
+  const data = {
+    quote_id: String(props.quoteID)
+  }
+  const response = await axios.post('/api/get-likes', data)
+  if (response.status === 200) {
+    liked.value = true
+  } else {
+    liked.value = false
+  }
+})
+
+const like = async () => {
+  const data = {
+    quote_id: String(props.quoteID)
+  }
+  if (!liked.value) {
+    await axios
+      .post('/api/like', data)
+      .then((response) => {
+        console.log(response)
+        liked.value = true
+        likeCount.value++
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+  } else {
+    await axios.post('/api/remove-like', data)
+    liked.value = false
+    likeCount.value--
+  }
+}
 </script>
