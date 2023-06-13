@@ -19,7 +19,7 @@
       </div>
       <div class="flex gap-2 items-center">
         <span class="text-white">{{ likeCount }}</span>
-        <LikeButton :color="liked ? 'red' : 'white'" @click="like" />
+        <LikeButton :color="liked ? 'red' : 'white'" @click="newLike" />
       </div>
     </div>
     <div class="w-full h-[1px] bg-[#EFEFEF4D] my-6"></div>
@@ -42,10 +42,12 @@
           <input
             id="comment"
             v-bind="field"
+            :value="input"
             :class="{
               'border-2 border-red-500': !!errors?.length,
               'border-2 border-green-500': !errors?.length && value?.length > 0
             }"
+            @input="changeInput"
             type="text"
             :placeholder="$t('newsfeed.comment')"
             class="bg-[#24222F] w-full h-14 p-7 outline-none"
@@ -60,11 +62,18 @@
 import UserComment from './UserComment.vue'
 import LikeButton from './LikeButton.vue'
 import { defineProps, ref, onBeforeMount } from 'vue'
-import axios from '@/config/axios/index.js'
 import { Form, Field } from 'vee-validate'
 import AuthInput from './AuthInput.vue'
 import { useUsersStore } from '../stores/user'
 import { defineEmits } from 'vue'
+import { like, removeLike, getLikes, comment } from '../services/postRequest'
+const liked = ref(false)
+const likeCount = ref(props.numOfLikes)
+const commentCount = ref(props.comment.length)
+const allComments = ref([...props.comment])
+const store = useUsersStore()
+const user = ref(store.authUser)
+const input = ref('')
 const props = defineProps({
   username: {
     type: String,
@@ -103,45 +112,42 @@ const props = defineProps({
     required: true
   }
 })
-const liked = ref(false)
-const likeCount = ref(props.numOfLikes)
-const commentCount = ref(props.comment.length)
-const allComments = ref([...props.comment])
-const store = useUsersStore()
-const user = ref(store.authUser)
 
-const emits = defineEmits(['commented'])
-
+const changeInput = (e) => {
+  input.value = e.target.value
+}
 onBeforeMount(async () => {
   const data = {
     quote_id: String(props.quoteID)
   }
-  const response = await axios.post('/api/get-likes', data)
-  if (response.status === 200) {
+  const response = await getLikes(data)
+  if (response) {
     liked.value = true
   } else {
     liked.value = false
   }
 })
 
-const like = async () => {
+const newLike = async () => {
   const data = {
     quote_id: String(props.quoteID)
   }
   if (!liked.value) {
-    await axios
-      .post('/api/like', data)
-      .then((response) => {
-        liked.value = true
-        likeCount.value++
-      })
-      .catch((e) => {
-        console.log(e)
-      })
+    try {
+      await like(data)
+      liked.value = true
+      likeCount.value++
+    } catch (error) {
+      console.error(error)
+    }
   } else {
-    await axios.post('/api/remove-like', data)
-    liked.value = false
-    likeCount.value--
+    try {
+      await removeLike(data)
+      liked.value = false
+      likeCount.value--
+    } catch (error) {
+      console.error(error)
+    }
   }
 }
 const submit = async (value, actions) => {
@@ -151,21 +157,21 @@ const submit = async (value, actions) => {
   }
   store.getAuthUser()
   const userData = store.authUser
-  await axios
-    .post('api/comment', data)
-    .then((response) => {
-      store.getAuthUser()
-      allComments.value.push({
-        comments: data.comment,
-        user: {
-          name: userData[0].name,
-          profile_picture: userData[0].profile_picture
-        }
-      })
-      commentCount.value++
+
+  try {
+    await comment(data)
+    store.getAuthUser()
+    allComments.value.push({
+      comments: data.comment,
+      user: {
+        name: userData[0].name,
+        profile_picture: userData[0].profile_picture
+      }
     })
-    .catch((error) => {
-      console.log(error)
-    })
+    commentCount.value++
+    input.value = ''
+  } catch (error) {
+    console.error(error)
+  }
 }
 </script>

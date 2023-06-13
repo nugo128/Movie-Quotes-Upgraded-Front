@@ -61,36 +61,28 @@
 
 <script setup>
 import { Form } from 'vee-validate'
-import axios from '@/config/axios/index.js'
 import AuthInput from './AuthInput.vue'
 import { defineEmits } from 'vue'
+import { register, googleLogin } from '../services/registerRequest'
 const emits = defineEmits(['registered', 'showLogin'])
 const toggleLogin = () => {
   emits('showLogin', true)
 }
 const googleSignup = async () => {
-  await axios.get('/sanctum/csrf-cookie')
-  await axios
-    .get('/api/auth/google')
-    .then((response) => {
-      window.location.href = response.data.message
-      console.log(response.data.message)
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+  try {
+    const response = await googleLogin()
+    window.location.href = response.data.message
+  } catch (error) {
+    console.error(error)
+  }
 }
 const submit = async (value, actions) => {
   value['password_confirmation'] = value.confirmation
-  await axios.get('/sanctum/csrf-cookie')
-  await axios
-    .post('api/register', value)
-    .then((response) => {
-      emits('registered', true)
-      console.log(response)
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+  try {
+    await register(value)
+    emits('registered', true)
+  } catch (error) {
+    console.error(error)
+  }
 }
 </script>
