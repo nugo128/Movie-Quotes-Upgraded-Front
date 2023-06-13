@@ -41,7 +41,4 @@ console.log(postData.value)
 onBeforeMount(() => {
   store.getPosts()
 })
-// const newComment = () => {
-//   store.getPosts()
-// }
 </script>

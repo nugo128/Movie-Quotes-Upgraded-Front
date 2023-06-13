@@ -11,7 +11,10 @@
         >
       </div>
       <language-select></language-select>
-      <button class="text-white text-sm border border-white py-2 px-3 rounded-md">
+      <button
+        class="text-white text-sm border border-white py-2 px-3 rounded-md"
+        @click="logoutHandler"
+      >
         {{ $t('newsfeed.logout') }}
       </button>
     </div>
@@ -20,4 +23,16 @@
 
 <script setup>
 import LanguageSelect from './LanguageSelect.vue'
+import axios from '@/config/axios/index.js'
+import { useRouter } from 'vue-router'
+import { userLogOut } from '../services/loginRequest'
+const router = useRouter()
+const logoutHandler = async () => {
+  try {
+    await userLogOut()
+    router.replace({ name: 'home' })
+  } catch (error) {
+    console.error(error)
+  }
+}
 </script>

@@ -7,5 +7,13 @@ export async function userLogin(data) {
     return true
   }
 
-  return false
+  return response
+}
+export async function userLogOut() {
+  const response = await axios.get('/api/logout')
+  if (response.statusText === 'OK') {
+    return true
+  }
+
+  return response
 }

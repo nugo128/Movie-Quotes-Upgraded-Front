@@ -6,7 +6,7 @@ export async function resetPassword(data) {
     return true
   }
 
-  return false
+  return response
 }
 
 export async function newPassword(data) {
@@ -15,5 +15,5 @@ export async function newPassword(data) {
     return true
   }
 
-  return false
+  return response
 }
