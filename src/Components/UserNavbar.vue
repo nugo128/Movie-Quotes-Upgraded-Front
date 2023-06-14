@@ -1,9 +1,9 @@
 <template>
-  <nav class="pl-[70px] pr-12 flex flex-col gap-11">
+  <nav class="pl-[70px] mt-24 flex flex-col gap-11 fixed">
     <div class="flex gap-6 items-center">
-      <img src="../assets/images/profile.png" alt="" class="w-[60px]" />
+      <img :src="userStore.authUser[0].profile_picture" alt="" class="w-[60px]" />
       <div>
-        <h2 class="text-white mb-1 font-bold">Nugo Rostiashvili</h2>
+        <h2 class="text-white mb-1 font-bold">{{ userStore.authUser[0].name }}</h2>
         <p class="text-white text-sm font-normal cursor-pointer">{{ $t('newsfeed.edit') }}</p>
       </div>
     </div>
@@ -18,3 +18,9 @@
     </div>
   </nav>
 </template>
+
+<script setup>
+import { useUsersStore } from '../stores/user'
+const userStore = useUsersStore()
+userStore.getAuthUser()
+</script>

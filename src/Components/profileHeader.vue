@@ -1,5 +1,5 @@
 <template>
-  <header class="px-16 pt-8 pb-4 bg-[#24222F] flex justify-between">
+  <header class="px-16 pt-8 pb-4 bg-[#24222F] flex justify-between fixed right-0 w-full z-[999]">
     <h2 class="text-[#DDCCAA]">MOVIE QUOTES</h2>
 
     <div class="flex gap-10 items-center">
@@ -23,7 +23,6 @@
 
 <script setup>
 import LanguageSelect from './LanguageSelect.vue'
-import axios from '@/config/axios/index.js'
 import { useRouter } from 'vue-router'
 import { userLogOut } from '../services/loginRequest'
 const router = useRouter()
