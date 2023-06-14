@@ -1,0 +1,17 @@
+{
+    "login":"შედით თქვენს ანგარიშზე",
+    "welcome_back":"კეთილი იყოს თქვენი დაბრუნება! გთხოვთ შეიყვანოთ თქვენი მონაცემები.",
+    "loginform":{
+        "username_label":"სახელი ან მეილი",
+        "name_placeholder":"შეიყვანეთ სახელი ან მეილი",
+        "password_label": "პაროლი",
+        "login_password_placeholder": "პაროლი",
+        "remember_me" : "დამახსოვრება"
+    },
+    "forgot_password": "პაროლი დამავიწყდა",
+    "sign_in_google": "შესვლა Google-ით",
+    "dont_have_account": "არ გაქვთ ანგარიში?",
+    "sign_up": "რეგისტრაცია",
+    "sign_in": "შესვლა"
+
+}

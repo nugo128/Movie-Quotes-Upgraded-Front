@@ -1,6 +1,6 @@
 <template>
   <modal-window :click="registrationHandler" v-if="showRegistration">
-    <registration @registered="emailIsSent" />
+    <registration @registered="emailIsSent" @showLogin="toggleLogin" />
   </modal-window>
   <modal-window v-if="showEmailSent" :click="emailSentHandler">
     <email-sent
@@ -16,6 +16,9 @@
       :linkText="$t('go_to_newsfeed')"
     ></success-modal>
   </modal-window>
+  <modal-window v-if="showLogin" :click="loginModalHandler">
+    <login-modal @showRegistration="toggleRegistration"></login-modal>
+  </modal-window>
 
   <div class="bg-black flex flex-col gap-64 pb-[180px]">
     <div class="flex justify-between px-8 py-4">
@@ -25,7 +28,9 @@
         <button class="bg-[#E31221] text-white px-7 py-1 rounded" @click="registrationHandler">
           {{ $t('header.sign_up') }}
         </button>
-        <button class="text-white px-7 py-1 border-[1px]">{{ $t('header.log_in') }}</button>
+        <button class="text-white px-7 py-1 border-[1px]" @click="loginModalHandler">
+          {{ $t('header.log_in') }}
+        </button>
       </div>
     </div>
 
@@ -78,6 +83,7 @@ import LandingQuote from '../Components/LandingQuote.vue'
 import EmailSent from '../Components/EmailSent.vue'
 import ModalWindow from '../Components/ModalWindow.vue'
 import SuccessModal from '../Components/SuccessModal.vue'
+import LoginModal from '../Components/LoginModal.vue'
 import axios from '@/config/axios/index.js'
 import { useRoute } from 'vue-router'
 import { ref } from 'vue'
@@ -87,6 +93,7 @@ let showEmailSent = ref(false)
 const route = useRoute()
 let token = ref(route.params.token?.length === 64)
 let showSuccess = ref(false)
+let showLogin = ref(false)
 
 if (token.value) {
   axios
@@ -100,6 +107,9 @@ if (token.value) {
     })
 }
 
+const loginModalHandler = () => {
+  showLogin.value = !showLogin.value
+}
 const registrationHandler = () => {
   showRegistration.value = !showRegistration.value
 }
@@ -112,6 +122,14 @@ const successModalHandler = () => {
 const emailIsSent = (showRegistrationModal) => {
   showRegistration.value = !showRegistrationModal
   showEmailSent.value = showRegistration
+}
+const toggleLogin = (login) => {
+  showRegistration.value = !login
+  showLogin.value = login
+}
+const toggleRegistration = (registration) => {
+  showRegistration.value = registration
+  showLogin.value = !registration
 }
 
 window.addEventListener('scroll', () => {
