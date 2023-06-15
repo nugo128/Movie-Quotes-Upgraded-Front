@@ -25,6 +25,7 @@
             :comment="post.comment"
             :numOfLikes="post.like.length"
             :quoteID="post.id"
+            :loggedInUser="loggedInUser"
           />
         </div>
       </div>
@@ -40,18 +41,25 @@ import UserPost from '../Components/UserPost.vue'
 import { usePostsStore } from '../stores/post'
 import { onBeforeMount, ref } from 'vue'
 import NewitemModal from '../Components/NewitemModal.vue'
+import axios from '@/config/axios/index.js'
+const store = usePostsStore()
+const postData = ref(store.posts)
+const loggedInUser = ref([])
+onBeforeMount(async () => {
+  const response = await axios.get('/api/user')
+  loggedInUser.value = response.data
+  store.getPosts()
+  postData.value = store.posts
+})
 
 const addNewPost = ref(false)
 const newPostHandler = () => {
   addNewPost.value = !addNewPost.value
 }
-const store = usePostsStore()
-const postData = ref(store.posts)
 const updatePosts = async () => {
-  addNewPost.value = !addNewPost.value
-  window.location.reload()
-}
-onBeforeMount(() => {
+  store.clear()
   store.getPosts()
-})
+  addNewPost.value = !addNewPost.value
+  postData.value = store.posts
+}
 </script>

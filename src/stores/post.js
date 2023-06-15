@@ -15,5 +15,8 @@ export const usePostsStore = defineStore('post', () => {
         console.log(error)
       })
   }
-  return { posts, getPosts }
+  const clear = () => {
+    posts.value = []
+  }
+  return { posts, getPosts, clear }
 })

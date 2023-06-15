@@ -63,12 +63,11 @@ const submit = async (val) => {
   emits('posted')
 }
 const movieStore = useMovieStore()
-movieStore.getMovie()
 
 const user = ref([])
 onBeforeMount(async () => {
   const response = await axios.get('/api/user')
-
+  movieStore.getMovie()
   user.value = response.data
 })
 </script>

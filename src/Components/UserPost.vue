@@ -66,8 +66,6 @@ import { Form, Field } from 'vee-validate'
 import { useUsersStore } from '../stores/user'
 import { useLocaleStore } from '../stores/locale'
 import { like, removeLike, getLikes, comment } from '../services/postRequest'
-import axios from '@/config/axios/index.js'
-// const lang = ref(JSON.parse(props.quote)['en'])
 const localeStore = useLocaleStore()
 const link = import.meta.env.VITE_IMAGE_BASE_URL
 const liked = ref(false)
@@ -113,6 +111,10 @@ const props = defineProps({
   quoteID: {
     type: Number,
     required: true
+  },
+  loggedInUser: {
+    type: Object,
+    required: true
   }
 })
 
@@ -129,9 +131,7 @@ const changeInput = (e) => {
 }
 const aUser = ref([])
 onBeforeMount(async () => {
-  const userData = await axios.get('/api/user')
-
-  aUser.value = userData.data
+  aUser.value = props.loggedInUser
   const data = {
     quote_id: String(props.quoteID)
   }
