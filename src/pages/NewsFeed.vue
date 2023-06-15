@@ -1,7 +1,9 @@
 <template>
   <div class="bg-[#0D0B14] h-max">
     <profile-header></profile-header>
-    <newitem-modal v-if="newPost" :click="newPostHandler"><new-post /> </newitem-modal>
+    <newitem-modal v-if="addNewPost" :click="newPostHandler"
+      ><new-post @posted="updatePosts" />
+    </newitem-modal>
     <div class="pt-8">
       <user-navbar></user-navbar>
       <div class="w-[900px] ml-[503px] mt-28">
@@ -31,7 +33,6 @@
 </template>
 <script setup>
 import NewPost from '../Components/NewPost.vue'
-import ModalWindow from '../Components/ModalWindow.vue'
 import profileHeader from '../Components/profileHeader.vue'
 import UserNavbar from '../Components/UserNavbar.vue'
 import SearchBar from '../Components/SearchBar.vue'
@@ -40,13 +41,16 @@ import { usePostsStore } from '../stores/post'
 import { onBeforeMount, ref } from 'vue'
 import NewitemModal from '../Components/NewitemModal.vue'
 
-const newPost = ref(false)
+const addNewPost = ref(false)
 const newPostHandler = () => {
-  newPost.value = !newPost.value
+  addNewPost.value = !addNewPost.value
 }
 const store = usePostsStore()
 const postData = ref(store.posts)
-console.log(postData.value)
+const updatePosts = async () => {
+  addNewPost.value = !addNewPost.value
+  window.location.reload()
+}
 onBeforeMount(() => {
   store.getPosts()
 })

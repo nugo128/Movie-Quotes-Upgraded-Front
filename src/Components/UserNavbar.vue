@@ -1,9 +1,9 @@
 <template>
   <nav class="pl-[70px] mt-24 flex flex-col gap-11 fixed">
     <div class="flex gap-6 items-center">
-      <img :src="userStore.authUser[0].profile_picture" alt="" class="w-[60px]" />
+      <img :src="user.profile_picture" alt="" class="w-[60px] rounded-full" />
       <div>
-        <h2 class="text-white mb-1 font-bold">{{ userStore.authUser[0].name }}</h2>
+        <h2 class="text-white mb-1 font-bold">{{ user.name }}</h2>
         <p class="text-white text-sm font-normal cursor-pointer">{{ $t('newsfeed.edit') }}</p>
       </div>
     </div>
@@ -20,7 +20,12 @@
 </template>
 
 <script setup>
-import { useUsersStore } from '../stores/user'
-const userStore = useUsersStore()
-userStore.getAuthUser()
+import { onBeforeMount, ref } from 'vue'
+import axios from '@/config/axios/index.js'
+const user = ref([])
+onBeforeMount(async () => {
+  const response = await axios.get('/api/user')
+
+  user.value = response.data
+})
 </script>

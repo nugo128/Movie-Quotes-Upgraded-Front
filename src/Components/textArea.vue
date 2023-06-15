@@ -24,6 +24,10 @@ const props = defineProps({
   language: {
     type: String,
     required: true
+  },
+  rule: {
+    type: String,
+    required: true
   }
 })
 </script>

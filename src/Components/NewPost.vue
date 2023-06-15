@@ -5,16 +5,23 @@
   </div>
   <div class="flex flex-col gap-6 px-8">
     <div class="flex gap-5 items-center">
-      <img
-        :src="userStore.authUser[0].profile_picture"
-        alt="user profile picture"
-        class="w-14 rounded"
-      />
-      <h2>{{ userStore.authUser[0].name }}</h2>
+      <img :src="user.profile_picture" alt="user profile picture" class="w-14 rounded" />
+      <h2>{{ user.name }}</h2>
     </div>
-    <Form>
-      <text-area name="quote_en" placeholder="Start create new quote" language="eng"></text-area>
-      <text-area name="quote_en" placeholder="ახალი ციტატა" language="ქარ"></text-area>
+    <img alt="" />
+    <Form @submit="submit">
+      <text-area
+        name="quote_en"
+        placeholder="Start create new quote"
+        language="eng"
+        rule="required"
+      ></text-area>
+      <text-area
+        name="quote_ka"
+        placeholder="ახალი ციტატა"
+        language="ქარ"
+        rule="required"
+      ></text-area>
       <photo-upload></photo-upload>
       <div class="flex pl-3">
         <img src="../assets/images/movieCamera.svg" class="absolute z-0 mt-4" alt="" />
@@ -39,20 +46,31 @@
 import { Form, Field } from 'vee-validate'
 import textArea from './textArea.vue'
 import PhotoUpload from './PhotoUpload.vue'
-import { ref, defineEmits } from 'vue'
 import { useMovieStore } from '../stores/movie'
-import { useUsersStore } from '../stores/user'
+import { usePostsStore } from '../stores/post'
+import { onBeforeMount, ref, defineEmits } from 'vue'
+import axios from '@/config/axios/index.js'
+const emits = defineEmits(['posted'])
 const formData = new FormData()
-
-const submit = () => {
-  if (movieStore.file) {
-    formData.set('image', movieStore.file)
+const postStore = usePostsStore()
+const submit = async (val) => {
+  for (let value in val) {
+    formData.set(value, val[value])
   }
+  movieStore.addFile(val.image)
+  formData.set('thumbnail', movieStore.file)
+  await axios.post('/api/newPost', formData)
+  emits('posted')
 }
-const userStore = useUsersStore()
-userStore.getAuthUser()
 const movieStore = useMovieStore()
 movieStore.getMovie()
+
+const user = ref([])
+onBeforeMount(async () => {
+  const response = await axios.get('/api/user')
+
+  user.value = response.data
+})
 </script>
 <style scoped>
 .select {

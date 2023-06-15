@@ -1,16 +1,16 @@
 <template>
   <div class="mb-10">
     <div class="flex items-center gap-5 mb-4">
-      <img :src="profilePicture" alt="profile picture" class="w-[52px]" />
+      <img :src="profilePicture" :alt="profilePicture" class="w-[52px] rounded-full" />
       <h2 class="text-white text-lg">{{ username }}</h2>
     </div>
     <h2 class="text-white mb-7">
-      <span>“{{ quote }}”</span>
+      <span>“{{ JSON.parse(props.quote)[localeStore.lang] }}”</span>
       <span class="text-[#DDCCAA]"
         >{{ movie }} <span>({{ year }})</span></span
       >
     </h2>
-    <img :src="thumbnail" alt="quote picture" class="w-full" />
+    <img :src="imageUrl" alt="quote picture" class="w-full" />
     <div class="flex gap-5 mt-6">
       <div class="flex gap-2 items-center">
         <span class="text-white">{{ commentCount }}</span>
@@ -31,7 +31,7 @@
       ></user-comment>
     </div>
     <div class="flex gap-6">
-      <img src="../assets/images/profile.png" alt="" class="w-[52px]" />
+      <img :src="aUser.profile_picture" alt="" class="w-[52px] rounded-full" />
       <Form class="w-full" @submit="submit">
         <Field
           v-slot="{ field, errors, value }"
@@ -61,12 +61,15 @@
 <script setup>
 import UserComment from './UserComment.vue'
 import LikeButton from './LikeButton.vue'
-import { defineProps, ref, onBeforeMount } from 'vue'
+import { defineProps, ref, onBeforeMount, computed } from 'vue'
 import { Form, Field } from 'vee-validate'
-import AuthInput from './AuthInput.vue'
 import { useUsersStore } from '../stores/user'
-import { defineEmits } from 'vue'
+import { useLocaleStore } from '../stores/locale'
 import { like, removeLike, getLikes, comment } from '../services/postRequest'
+import axios from '@/config/axios/index.js'
+// const lang = ref(JSON.parse(props.quote)['en'])
+const localeStore = useLocaleStore()
+const link = import.meta.env.VITE_IMAGE_BASE_URL
 const liked = ref(false)
 const likeCount = ref(props.numOfLikes)
 const commentCount = ref(props.comment.length)
@@ -113,10 +116,22 @@ const props = defineProps({
   }
 })
 
+const imageUrl = computed(() => {
+  if (props.thumbnail.substring(0, 5) === 'https') {
+    return props.thumbnail
+  } else {
+    return link + props.thumbnail
+  }
+})
+
 const changeInput = (e) => {
   input.value = e.target.value
 }
+const aUser = ref([])
 onBeforeMount(async () => {
+  const userData = await axios.get('/api/user')
+
+  aUser.value = userData.data
   const data = {
     quote_id: String(props.quoteID)
   }
