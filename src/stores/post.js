@@ -18,5 +18,10 @@ export const usePostsStore = defineStore('post', () => {
   const clear = () => {
     posts.value = []
   }
-  return { posts, getPosts, clear }
+  const searchedPosts = (val) => {
+    clear()
+    posts.value.push(...val)
+    console.log(posts.value)
+  }
+  return { posts, getPosts, clear, searchedPosts }
 })

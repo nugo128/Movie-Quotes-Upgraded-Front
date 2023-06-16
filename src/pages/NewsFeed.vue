@@ -12,7 +12,7 @@
             <img src="../assets/images/new-quote.svg" class="w-5" alt="" />
             <h2 class="text-white w-[180px]">{{ $t('newsfeed.new_quote') }}</h2>
           </div>
-          <search-bar />
+          <search-bar @searched="searchPosts" />
         </div>
         <div v-for="post in postData">
           <user-post
@@ -60,6 +60,9 @@ const updatePosts = async () => {
   store.clear()
   store.getPosts()
   addNewPost.value = !addNewPost.value
+  postData.value = store.posts
+}
+const searchPosts = () => {
   postData.value = store.posts
 }
 </script>

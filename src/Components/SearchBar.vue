@@ -13,6 +13,7 @@
             v-bind="field"
             class="w-[550px] bg-black placeholder-white text-white outline-none"
             type="text"
+            @input="submit"
             :placeholder="$t('newsfeed.search_placeholder')"
           />
         </Field>
@@ -23,9 +24,23 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, defineEmits } from 'vue'
 import { Form, Field } from 'vee-validate'
+import axios from '@/config/axios/index.js'
+import { usePostsStore } from '../stores/post'
+const store = usePostsStore()
 const search = ref(false)
+const emits = defineEmits(['searched'])
+const submit = async (e) => {
+  const resp = await axios.get('/api/search-post', {
+    params: {
+      search: e.target.value
+    }
+  })
+  console.log(resp.data)
+  store.searchedPosts(resp.data)
+  emits('searched')
+}
 const appearSearch = () => {
   search.value = !search.value
 }
