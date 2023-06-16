@@ -32,14 +32,18 @@ const store = usePostsStore()
 const search = ref(false)
 const emits = defineEmits(['searched'])
 const submit = async (e) => {
-  const resp = await axios.get('/api/search-post', {
-    params: {
-      search: e.target.value
-    }
-  })
-  console.log(resp.data)
-  store.searchedPosts(resp.data)
-  emits('searched')
+  if (e.target.value.length > 0) {
+    const resp = await axios.get('/api/search-post', {
+      params: {
+        search: e.target.value
+      }
+    })
+    console.log(resp.data)
+    store.searchedPosts(resp.data)
+    emits('searched')
+  } else {
+    store.getPosts()
+  }
 }
 const appearSearch = () => {
   search.value = !search.value

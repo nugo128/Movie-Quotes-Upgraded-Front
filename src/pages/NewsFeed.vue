@@ -22,8 +22,8 @@
             :quote="post.quote"
             :year="post.movie.year"
             :thumbnail="post.thumbnail"
-            :comment="post.comment"
-            :numOfLikes="post.like.length"
+            :comment="post.comments"
+            :numOfLikes="post.likes.length"
             :quoteID="post.id"
             :loggedInUser="loggedInUser"
           />

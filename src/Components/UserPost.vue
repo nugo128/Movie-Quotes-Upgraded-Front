@@ -25,7 +25,7 @@
     <div class="w-full h-[1px] bg-[#EFEFEF4D] my-6"></div>
     <div v-for="comments in allComments">
       <user-comment
-        :comment="comments.comments"
+        :comment="comments.comment"
         :commentAuthor="comments.user.name"
         :profilePicture="comments.user.profile_picture"
       ></user-comment>
@@ -177,7 +177,7 @@ const submit = async (value, actions) => {
     await comment(data)
     store.getAuthUser()
     allComments.value.push({
-      comments: data.comment,
+      comment: data.comment,
       user: {
         name: userData[0].name,
         profile_picture: userData[0].profile_picture
