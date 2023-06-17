@@ -1,7 +1,7 @@
 <template>
   <div class="fixed w-full h-screen flex justify-center z-[60]">
     <div
-      class="relative w-[900px] mt-24 bg-[#11101A] h-max z-[999] flex flex-col justify-center text-white gap-6"
+      class="relative w-900 mt-24 bg-[#11101A] h-max z-[999] flex flex-col justify-center text-white gap-6"
     >
       <img
         class="absolute right-2 top-8 cursor-pointer"
