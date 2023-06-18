@@ -3,8 +3,10 @@
     <div class="flex gap-6 items-center">
       <img
         :src="
-          newPicture[0]?.profile_picture
-            ? store.getUrl(newPicture[0]?.profile_picture)
+          profilePic
+            ? store.getUrl(profilePic)
+            : editedUser[0]?.profile_picture
+            ? store.getUrl(editedUser[0]?.profile_picture)
             : user.profile_picture
         "
         alt=""
@@ -12,7 +14,9 @@
         :class="path === '/user-profile' ? 'border-red-600 border-4' : ''"
       />
       <div>
-        <h2 class="text-white mb-1 font-bold">{{ user.name }}</h2>
+        <h2 class="text-white mb-1 font-bold">
+          {{ username ? username : editedUser[0]?.name ? editedUser[0]?.name : user.name }}
+        </h2>
         <router-link to="user-profile" class="text-white text-sm font-normal cursor-pointer"
           >{{ $t('newsfeed.edit') }}
         </router-link>
@@ -33,16 +37,27 @@
 </template>
 
 <script setup>
-import { onBeforeMount, ref, defineEmits } from 'vue'
+import { onBeforeMount, ref, defineEmits, defineProps } from 'vue'
 import axios from '@/config/axios/index.js'
 import HomeButton from './HomeButton.vue'
 import { useRoute } from 'vue-router'
 import { useUsersStore } from '../stores/user'
+
+const props = defineProps({
+  username: {
+    type: String,
+    required: false
+  },
+  profilePic: {
+    type: String,
+    required: false
+  }
+})
 const emits = defineEmits(['edit'])
 const store = useUsersStore()
 const route = useRoute()
 const path = ref(route.path)
-const newPicture = ref(store.authUser)
+const editedUser = ref(store.authUser)
 const user = ref([])
 onBeforeMount(async () => {
   const response = await axios.get('/api/user')

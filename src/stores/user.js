@@ -3,6 +3,9 @@ import { defineStore } from 'pinia'
 import axios from '@/config/axios/index.js'
 export const useUsersStore = defineStore('user', () => {
   const authUser = ref([])
+  const clearUser = () => {
+    authUser.value = []
+  }
   const link = import.meta.env.VITE_IMAGE_BASE_URL
   const getAuthUser = async () => {
     await axios
@@ -22,5 +25,5 @@ export const useUsersStore = defineStore('user', () => {
       return url
     }
   }
-  return { authUser, getAuthUser, getUrl }
+  return { authUser, getAuthUser, getUrl, clearUser }
 })

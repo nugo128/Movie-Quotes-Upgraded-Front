@@ -2,7 +2,12 @@
   <div>
     <profile-header></profile-header>
     <div class="pt-8">
-      <user-navbar></user-navbar>
+      <user-navbar
+        :username="userInfo[0]?.name ? userInfo[0]?.name : user?.name"
+        :profilePic="
+          userInfo[0]?.profile_picture ? userInfo[0]?.profile_picture : user?.profile_picture
+        "
+      ></user-navbar>
       <Form
         @submit="submit"
         v-slot="{ meta }"
@@ -34,7 +39,7 @@
             <fake-input
               name="Username"
               type="text"
-              :value="user?.name"
+              :value="userInfo[0]?.name ? userInfo[0]?.name : user?.name"
               :edit="showEditUsernameField"
             ></fake-input>
 
@@ -44,7 +49,7 @@
                 type="text"
                 label="Username"
                 placeholder="Enter new usergame"
-                rule="required|min:8|max:15|lowercase_num"
+                rule="required|min:3|max:15|lowercase_num"
                 width="600"
               />
             </div>
@@ -144,6 +149,7 @@ const editPassword = ref(false)
 const moreThan8 = ref(false)
 const lessThanLowercase15 = ref(false)
 const profilePicture = ref('')
+const userInfo = ref(store.authUser)
 const showUpload = ref(false)
 const uploadImage = () => {
   showUpload.value = true
@@ -166,7 +172,9 @@ const cancel = () => {
   editPassword.value = false
   editUsername.value = false
   editEmail.value = false
-  user.value.profile_picture = profilePicture
+  user.value.profile_picture = userInfo.value[0]?.profile_picture
+    ? store.getUrl(userInfo.value[0]?.profile_picture)
+    : profilePicture
   showUpload.value = false
 }
 const formData = new FormData()
@@ -176,7 +184,15 @@ const submit = async (val) => {
     formData.set(value, val[value])
   }
   await axios.post('/api/editProfile', formData)
+  store.clearUser()
+  console.log(userInfo.value)
   store.getAuthUser()
+  userInfo.value = store.authUser
+  editPassword.value = false
+  editUsername.value = false
+  editEmail.value = false
+  showUpload.value = false
+  console.log(userInfo.value)
 }
 const showEditPasswordField = () => {
   editPassword.value = true
