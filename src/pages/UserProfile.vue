@@ -13,10 +13,19 @@
           <div class="flex flex-col items-center gap-2 mb-24 mr-10">
             <img :src="user.profile_picture" alt="profile picture" class="w-48 rounded-full" />
 
-            <Field id="file" type="file" class="hidden" name="image" @input="changePhoto" />
+            <Field
+              id="file"
+              type="file"
+              class="hidden"
+              name="image"
+              rules="image|required"
+              @input="changePhoto"
+              v-if="showUpload"
+            />
             <label
               class="text-lg rounded px-3 py-1 cursor-pointer text-center ml-2 text-white"
               for="file"
+              @click="uploadImage"
               >Upload new photo</label
             >
           </div>
@@ -102,8 +111,14 @@
           </div>
         </div>
         <div class="text-white ml-auto mt-16 flex gap-4">
-          <button type="button" class="px-4 py-2 cursor-pointer text-[#CED4DA]">Cancel</button>
-          <button type="submit" class="bg-[#E31221] px-4 py-2 rounded cursor-pointer">
+          <button type="button" class="px-4 py-2 cursor-pointer text-[#CED4DA]" @click="cancel">
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="bg-[#E31221] px-4 py-2 rounded cursor-pointer"
+            :class="meta.dirty && meta.valid ? 'bg-[#E31221]' : 'bg-[#EC4C57] pointer-events-none'"
+          >
             Save changes
           </button>
         </div>
@@ -120,12 +135,19 @@ import { onBeforeMount, ref } from 'vue'
 import axios from '@/config/axios/index.js'
 import AuthInput from '../Components/AuthInput.vue'
 import FakeInput from '../Components/FakeInput.vue'
+import { useUsersStore } from '../stores/user'
+const store = useUsersStore()
 const user = ref([])
 const editEmail = ref(false)
 const editUsername = ref(false)
 const editPassword = ref(false)
 const moreThan8 = ref(false)
 const lessThanLowercase15 = ref(false)
+const profilePicture = ref('')
+const showUpload = ref(false)
+const uploadImage = () => {
+  showUpload.value = true
+}
 
 const handleInput = (e) => {
   const lowercaseCheck = /^[a-z0-9]+$/
@@ -140,8 +162,21 @@ const handleInput = (e) => {
     moreThan8.value = false
   }
 }
-const submit = (e) => {
-  console.log(e)
+const cancel = () => {
+  editPassword.value = false
+  editUsername.value = false
+  editEmail.value = false
+  user.value.profile_picture = profilePicture
+  showUpload.value = false
+}
+const formData = new FormData()
+
+const submit = async (val) => {
+  for (let value in val) {
+    formData.set(value, val[value])
+  }
+  await axios.post('/api/editProfile', formData)
+  store.getAuthUser()
 }
 const showEditPasswordField = () => {
   editPassword.value = true
@@ -164,7 +199,8 @@ const changePhoto = (event) => {
 }
 onBeforeMount(async () => {
   const response = await axios.get('/api/user')
-
   user.value = response.data
+  user.value.profile_picture = store.getUrl(response.data.profile_picture)
+  profilePicture.value = store.getUrl(response.data.profile_picture)
 })
 </script>

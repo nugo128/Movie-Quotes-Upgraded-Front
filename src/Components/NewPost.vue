@@ -47,12 +47,13 @@ import { Form, Field } from 'vee-validate'
 import textArea from './textArea.vue'
 import PhotoUpload from './PhotoUpload.vue'
 import { useMovieStore } from '../stores/movie'
-import { usePostsStore } from '../stores/post'
+import { useUsersStore } from '../stores/user'
 import { onBeforeMount, ref, defineEmits } from 'vue'
 import axios from '@/config/axios/index.js'
 const emits = defineEmits(['posted'])
 const formData = new FormData()
-const postStore = usePostsStore()
+const userStore = useUsersStore()
+
 const submit = async (val) => {
   for (let value in val) {
     formData.set(value, val[value])
@@ -69,6 +70,7 @@ onBeforeMount(async () => {
   const response = await axios.get('/api/user')
   movieStore.getMovie()
   user.value = response.data
+  user.value.profile_picture = userStore.getUrl(response.data.profile_picture)
 })
 </script>
 <style scoped>
