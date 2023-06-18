@@ -1,7 +1,13 @@
 <template>
   <div class="mb-10">
     <div class="flex items-center gap-5 mb-4">
-      <img :src="profileUrl" :alt="profilePicture" class="w-[52px] rounded-full" />
+      <img
+        :src="
+          newPicture[0]?.profile_picture ? store.getUrl(newPicture[0]?.profile_picture) : profileUrl
+        "
+        :alt="profilePicture"
+        class="w-[52px] rounded-full"
+      />
       <h2 class="text-white text-lg">{{ username }}</h2>
     </div>
     <h2 class="text-white mb-7">
@@ -74,6 +80,7 @@ const allComments = ref([...props.comment])
 const store = useUsersStore()
 const user = ref(store.authUser)
 const input = ref('')
+const newPicture = ref(store.authUser)
 const props = defineProps({
   username: {
     type: String,

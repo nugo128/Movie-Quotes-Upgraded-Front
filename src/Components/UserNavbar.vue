@@ -29,7 +29,6 @@
       <img src="../assets/images/movie.svg" alt="" />
       <h2 class="text-white text-xl mb-1">{{ $t('newsfeed.movies_list') }}</h2>
     </div>
-    <p class="text-white">{{ Boolean() }}</p>
   </nav>
 </template>
 
