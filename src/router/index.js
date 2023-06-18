@@ -9,7 +9,10 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: LandingPage,
-      children: [{ path: ':token', component: LandingPage }]
+      children: [
+        { path: '/verify', component: LandingPage },
+        { path: '/reset', component: LandingPage }
+      ]
     },
     {
       path: '/newsfeed',

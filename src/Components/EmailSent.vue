@@ -10,9 +10,15 @@
     class="bg-[#E31221] w-full text-center py-2"
     >{{ visitEmail }}</a
   >
+  <h3 v-if="skip" @click="skipReset" class="cursor-pointer text-[#6C757D]">{{ skip }}</h3>
 </template>
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, defineEmits } from 'vue'
+const emits = defineEmits(['skip'])
+const skipReset = () => {
+  emits('skip')
+}
+
 const props = defineProps({
   sent: {
     type: String,

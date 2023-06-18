@@ -17,7 +17,70 @@
     ></success-modal>
   </modal-window>
   <modal-window v-if="showLogin" :click="loginModalHandler">
-    <login-modal @showRegistration="toggleRegistration"></login-modal>
+    <login-modal
+      @showRegistration="toggleRegistration"
+      @showReset="togglePasswordResetEmail"
+    ></login-modal>
+  </modal-window>
+  <modal-window v-if="showPasswordResetEmail" :click="resetModalHandler">
+    <password-reset
+      @showLogin="toggleLogin"
+      @showEmail="emailIsSent"
+      :button-text="$t('send_email.send')"
+      :header="$t('send_email.forgot_password')"
+      :secondary-text="$t('send_email.forgot_password_description')"
+    >
+      <AuthInput
+        name="email"
+        type="email"
+        :label="$t('send_email.email_label')"
+        :placeholder="$t('send_email.email_placeholder')"
+        rule="required|email"
+      />
+    </password-reset>
+  </modal-window>
+  <modal-window v-if="showPasswordResetForm" :click="resetModalHandler">
+    <password-reset
+      @showLogin="toggleLogin"
+      @showSuccess="resetSuccessfull"
+      :header="$t('create_password.create')"
+      :secondary-text="$t('create_password.password_instructions')"
+      :button-text="$t('create_password.reset')"
+    >
+      <AuthInput
+        name="password"
+        type="password"
+        :label="$t('form.password_label')"
+        require="*"
+        :placeholder="$t('form.password_placeholder')"
+        rule="required|min:8|max:15|lowercase_num"
+      />
+      <AuthInput
+        name="confirmation"
+        type="password"
+        :label="$t('form.confirm_password_label')"
+        require="*"
+        :placeholder="$t('form.confirm_password_placeholder')"
+        rule="required|confirmed:@password"
+      />
+    </password-reset>
+  </modal-window>
+  <modal-window v-if="showResetEmailSent" :click="emailSentHandler">
+    <email-sent
+      :sent="$t('email_success.check')"
+      :check="$t('email_success.send_instructions')"
+      :visitEmail="$t('email_success.go_to_email')"
+      :skip="$t('email_success.skip')"
+      @skip="emailSentHandler"
+    />
+  </modal-window>
+  <modal-window v-if="showSuccessPassword" :click="successModalHandler">
+    <success-modal
+      :mainText="$t('success.success')"
+      :secondaryText="$t('success.password_changed')"
+      :login="$t('success.login')"
+      @show-login="toggleLogin"
+    ></success-modal>
   </modal-window>
 
   <div class="bg-black flex flex-col gap-64 pb-[180px]">
@@ -81,23 +144,28 @@ import Registration from '../Components/Registration.vue'
 import LanguageSelect from '../Components/LanguageSelect.vue'
 import LandingQuote from '../Components/LandingQuote.vue'
 import EmailSent from '../Components/EmailSent.vue'
+import AuthInput from '../Components/AuthInput.vue'
 import ModalWindow from '../Components/ModalWindow.vue'
 import SuccessModal from '../Components/SuccessModal.vue'
 import LoginModal from '../Components/LoginModal.vue'
+import PasswordReset from '../Components/PasswordReset.vue'
 import axios from '@/config/axios/index.js'
 import { useRoute } from 'vue-router'
 import { ref } from 'vue'
-let scroll = ref(false)
-let showRegistration = ref(false)
-let showEmailSent = ref(false)
+const scroll = ref(false)
+const showRegistration = ref(false)
+const showEmailSent = ref(false)
 const route = useRoute()
-let token = ref(route.params.token?.length === 64)
-let showSuccess = ref(false)
-let showLogin = ref(false)
+const showSuccess = ref(false)
+const showLogin = ref(false)
+const showPasswordResetEmail = ref(false)
+const showResetEmailSent = ref(false)
+const showPasswordResetForm = ref(false)
+const showSuccessPassword = ref(false)
 
-if (token.value) {
+if (route.path === '/verify' && route.query.token.length === 128) {
   axios
-    .get(`/api/verify/${route.params.token}`)
+    .get(`/api/verify/${route.query.token}`)
     .then((response) => {
       showSuccess.value = true
       console.log(response)
@@ -106,25 +174,49 @@ if (token.value) {
       console.log(error)
     })
 }
-
+if (route.path === '/reset' && route.query.token.length === 128) {
+  showPasswordResetForm.value = true
+}
+const togglePasswordResetEmail = (reset) => {
+  showPasswordResetEmail.value = reset
+  showLogin.value = !reset
+}
 const loginModalHandler = () => {
   showLogin.value = !showLogin.value
+}
+const resetModalHandler = () => {
+  showPasswordResetEmail.value = false
+  showPasswordResetForm.value = false
 }
 const registrationHandler = () => {
   showRegistration.value = !showRegistration.value
 }
 const emailSentHandler = () => {
-  showEmailSent.value = !showEmailSent.value
+  showEmailSent.value = false
+  showResetEmailSent.value = false
 }
 const successModalHandler = () => {
-  showSuccess.value = !showSuccess.value
+  showSuccess.value = false
+  showSuccessPassword.value = false
 }
-const emailIsSent = (showRegistrationModal) => {
-  showRegistration.value = !showRegistrationModal
-  showEmailSent.value = showRegistration
+const emailIsSent = (showEmail) => {
+  showPasswordResetEmail.value
+    ? (showResetEmailSent.value = showEmail)
+    : (showResetEmailSent.value = false)
+  showRegistration.value ? (showEmailSent.value = showEmail) : (showEmailSent.value = false)
+  showRegistration.value = false
+  showPasswordResetEmail.value = false
+}
+const resetSuccessfull = () => {
+  showSuccessPassword.value = true
+  showPasswordResetForm.value = false
 }
 const toggleLogin = (login) => {
-  showRegistration.value = !login
+  showRegistration.value = false
+  showPasswordResetEmail.value = false
+  showPasswordResetForm.value = false
+  showSuccessPassword.value = false
+
   showLogin.value = login
 }
 const toggleRegistration = (registration) => {
