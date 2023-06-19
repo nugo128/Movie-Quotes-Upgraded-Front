@@ -39,7 +39,11 @@
     <button class="bg-[#E31221] py-2 mt-3 mb-1" :class="{ ['pointer-events-none']: !meta.valid }">
       <p class="text-white">{{ $t('get_started') }}</p>
     </button>
-    <button class="border-[1px] rounded flex items-center justify-center" type="button">
+    <button
+      class="border-[1px] rounded flex items-center justify-center"
+      type="button"
+      @click="googleSignup"
+    >
       <img src="@/assets/images/google-icon.png" alt="google icon" class="w-10 p-2" />
       <p class="text-white">{{ $t('sign_up_google') }}</p>
     </button>
@@ -63,6 +67,18 @@ import { defineEmits } from 'vue'
 const emits = defineEmits(['registered', 'showLogin'])
 const toggleLogin = () => {
   emits('showLogin', true)
+}
+const googleSignup = async () => {
+  await axios.get('/sanctum/csrf-cookie')
+  await axios
+    .get('/api/auth/google')
+    .then((response) => {
+      window.location.href = response.data.message
+      console.log(response.data.message)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 }
 const submit = async (value, actions) => {
   value['password_confirmation'] = value.confirmation
