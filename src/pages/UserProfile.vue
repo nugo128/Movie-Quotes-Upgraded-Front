@@ -6,6 +6,18 @@
       :visitEmail="$t('go_to_email')"
     />
   </modal-window>
+  <div v-if="showSuccess" class="fixed w-full h-screen flex justify-center items-start z-[60]">
+    <div
+      class="w-600 ml-2 mt-48 p-6 bg-[#BADBCC] z-[100] flex items-center justify-between text-white gap-10"
+    >
+      <div class="flex gap-4">
+        <img src="../assets/images/check.svg" alt="" />
+        <p class="text-[#0F5132] text-lg">changes updated successfully</p>
+      </div>
+      <img src="../assets/images/X.svg" alt="" class="w-8 cursor-pointer" @click="toggleSuccess" />
+    </div>
+    <div class="bg-black bg-opacity-60 absolute w-full h-full" @click="toggleSuccess"></div>
+  </div>
   <div>
     <profile-header></profile-header>
     <div class="pt-8">
@@ -23,7 +35,7 @@
         <h2 class="text-white text-lg">My profile</h2>
         <div class="flex flex-col pl-40">
           <div class="flex flex-col items-center gap-2 mb-24 mr-10">
-            <img :src="user.profile_picture" alt="profile picture" class="w-48 rounded-full" />
+            <img :src="user.profile_picture" alt="profile picture" class="w-48 h-48 rounded-full" />
 
             <Field
               id="file"
@@ -166,6 +178,10 @@ const post = usePostsStore()
 const showConfirmation = ref(false)
 const route = useRoute()
 const router = useRouter()
+const showSuccess = ref(false)
+const toggleSuccess = () => {
+  showSuccess.value = false
+}
 const toggleConfirmation = () => {
   showConfirmation.value = false
 }
@@ -178,6 +194,7 @@ if (route.path === '/user-profile' && route?.query?.token?.length === 128) {
     .then((response) => {
       console.log(response)
       router.replace('/user-profile')
+      showSuccess.value = true
     })
     .catch((error) => {
       console.log(error)
@@ -221,7 +238,9 @@ const submit = async (val) => {
   editUsername.value = false
   editEmail.value = false
   showUpload.value = false
+  showSuccess.value = true
   if (formData.get('email')) {
+    showSuccess.value = false
     showConfirmation.value = true
   }
 }

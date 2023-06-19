@@ -1,7 +1,7 @@
 <template>
   <div class="mb-10">
     <div class="flex items-center gap-5 mb-4">
-      <img :src="profileUrl" :alt="profilePicture" class="w-[52px] rounded-full" />
+      <img :src="profileUrl" :alt="profilePicture" class="w-13 h-13 rounded-full" />
       <h2 class="text-white text-lg">{{ username }}</h2>
     </div>
     <h2 class="text-white mb-7">
@@ -31,7 +31,7 @@
       ></user-comment>
     </div>
     <div class="flex gap-6">
-      <img :src="loggedInUser.profile_picture" alt="" class="w-[52px] rounded-full" />
+      <img :src="loggedInUser.profile_picture" alt="" class="w-13 h-13 rounded-full" />
       <Form class="w-full" @submit="submit">
         <Field
           v-slot="{ field, errors, value }"

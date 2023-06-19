@@ -5,7 +5,7 @@
   </div>
   <div class="flex flex-col gap-6 px-8">
     <div class="flex gap-5 items-center">
-      <img :src="user.profile_picture" alt="user profile picture" class="w-14 rounded" />
+      <img :src="user.profile_picture" alt="user profile picture" class="w-15 h-15 rounded-full" />
       <h2>{{ user.name }}</h2>
     </div>
     <img alt="" />

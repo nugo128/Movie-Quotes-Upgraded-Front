@@ -10,7 +10,7 @@
             : user.profile_picture
         "
         alt=""
-        class="w-[60px] rounded-full"
+        class="w-15 h-15 rounded-full"
         :class="path === '/user-profile' ? 'border-red-600 border-4' : ''"
       />
       <div>
