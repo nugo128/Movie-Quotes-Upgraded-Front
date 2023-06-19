@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="ml-[74px]">
-      <p class="text-white">
+      <p class="text-white break-words">
         {{ comment }}
       </p>
       <div class="w-full h-[1px] bg-[#EFEFEF4D] my-6"></div>
