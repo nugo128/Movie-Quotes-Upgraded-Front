@@ -7,7 +7,7 @@
       </div>
 
       <Form v-if="search">
-        <Field name="search" v-slot="{ field, errors, value }">
+        <Field name="search" v-slot="{ field }">
           <input
             id="search"
             v-bind="field"

@@ -17,7 +17,7 @@
 <script setup>
 import { defineProps } from 'vue'
 
-const props = defineProps({
+defineProps({
   color: {
     type: String,
     required: true

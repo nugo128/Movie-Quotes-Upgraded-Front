@@ -14,7 +14,7 @@
           </div>
           <search-bar @searched="searchPosts" />
         </div>
-        <div v-for="post in postData">
+        <div v-for="post in postData" :key="post.id">
           <user-post
             :username="post.user.name"
             :profilePicture="post.user.profile_picture"

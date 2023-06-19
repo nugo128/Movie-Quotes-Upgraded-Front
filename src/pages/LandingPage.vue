@@ -1,6 +1,6 @@
 <template>
   <modal-window :click="registrationHandler" v-if="showRegistration">
-    <registration @registered="emailIsSent" @showLogin="toggleLogin" />
+    <registration-modal @registered="emailIsSent" @showLogin="toggleLogin" />
   </modal-window>
   <modal-window v-if="showEmailSent" :click="emailSentHandler">
     <email-sent
@@ -140,7 +140,7 @@
 </template>
 
 <script setup>
-import Registration from '../Components/Registration.vue'
+import RegistrationModal from '../Components/RegistrationModal.vue'
 import LanguageSelect from '../Components/LanguageSelect.vue'
 import LandingQuote from '../Components/LandingQuote.vue'
 import EmailSent from '../Components/EmailSent.vue'

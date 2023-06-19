@@ -59,7 +59,6 @@ import { useRouter } from 'vue-router'
 import { defineEmits } from 'vue'
 import { googleLogin } from '../services/registerRequest'
 import { userLogin } from '../services/loginRequest'
-import axios from '@/config/axios/index.js'
 const router = useRouter()
 const emits = defineEmits(['showRegistration', 'showReset'])
 const toggleRegistration = () => {
@@ -76,7 +75,7 @@ const googleAuth = async () => {
     console.error(error)
   }
 }
-const submit = async (value, actions) => {
+const submit = async (value) => {
   try {
     await userLogin(value)
     router.replace({ name: 'news_feed' })

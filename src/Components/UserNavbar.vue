@@ -37,13 +37,13 @@
 </template>
 
 <script setup>
-import { onBeforeMount, ref, defineEmits, defineProps } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import axios from '@/config/axios/index.js'
 import HomeButton from './HomeButton.vue'
 import { useRoute } from 'vue-router'
 import { useUsersStore } from '../stores/user'
 
-const props = defineProps({
+defineProps({
   username: {
     type: String,
     required: false
@@ -53,7 +53,6 @@ const props = defineProps({
     required: false
   }
 })
-const emits = defineEmits(['edit'])
 const store = useUsersStore()
 const route = useRoute()
 const path = ref(route.path)

@@ -21,7 +21,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useUsersStore } from '../stores/user'
-const props = defineProps({
+defineProps({
   name: { type: String, required: true },
   type: { type: String, required: true },
   value: { type: String, required: false },

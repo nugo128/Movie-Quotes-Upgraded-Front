@@ -24,7 +24,7 @@ export async function getLikes(data) {
 
   return false
 }
-export async function comment(data) {
+export async function comments(data) {
   const response = await axios.post('api/comment', data)
   if (response.statusText === 'OK') {
     return true

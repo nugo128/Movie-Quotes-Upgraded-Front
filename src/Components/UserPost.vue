@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="w-full h-[1px] bg-[#EFEFEF4D] my-6"></div>
-    <div v-for="comments in allComments">
+    <div v-for="comments in allComments" :key="comments.id">
       <user-comment
         :comment="comments.comment"
         :commentAuthor="comments.user.name"
@@ -61,11 +61,11 @@
 <script setup>
 import UserComment from './UserComment.vue'
 import LikeButton from './LikeButton.vue'
-import { defineProps, ref, onBeforeMount, computed } from 'vue'
+import { defineProps, ref, onBeforeMount } from 'vue'
 import { Form, Field } from 'vee-validate'
 import { useUsersStore } from '../stores/user'
 import { useLocaleStore } from '../stores/locale'
-import { like, removeLike, getLikes, comment } from '../services/postRequest'
+import { like, removeLike, getLikes, comments } from '../services/postRequest'
 const localeStore = useLocaleStore()
 const liked = ref(false)
 const likeCount = ref(props.numOfLikes)
@@ -74,7 +74,6 @@ const allComments = ref([...props.comment])
 const store = useUsersStore()
 const user = ref(store.authUser)
 const input = ref('')
-const newPicture = ref(store.authUser)
 const props = defineProps({
   username: {
     type: String,
@@ -161,7 +160,7 @@ const newLike = async () => {
     }
   }
 }
-const submit = async (value, actions) => {
+const submit = async (value) => {
   const data = {
     quote_id: String(props.quoteID),
     comment: value['comment']
@@ -170,7 +169,7 @@ const submit = async (value, actions) => {
   const userData = store.authUser
 
   try {
-    await comment(data)
+    await comments(data)
     store.getAuthUser()
     allComments.value.push({
       comment: data.comment,

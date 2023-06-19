@@ -33,6 +33,5 @@ const props = defineProps({
   }
 })
 const store = useUsersStore()
-const newPicture = ref(store.authUser)
 const picture = ref(store.getUrl(props.profilePicture))
 </script>

@@ -22,8 +22,7 @@
 </template>
 
 <script setup>
-import { Field, ErrorMessage } from 'vee-validate'
+import { Field } from 'vee-validate'
 import { useMovieStore } from '../stores/movie'
-import { ref } from 'vue'
 const movieStore = useMovieStore()
 </script>

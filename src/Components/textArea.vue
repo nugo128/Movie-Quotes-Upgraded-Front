@@ -1,5 +1,5 @@
 <template>
-  <Field v-slot="{ field, errors, value }" :name="name" :rules="rule" :validate-on-input="true">
+  <Field v-slot="{ field }" :name="name" :rules="rule" :validate-on-input="true">
     <textarea
       v-bind="field"
       :name="name"
@@ -12,7 +12,7 @@
 <script setup>
 import { Field } from 'vee-validate'
 import { defineProps } from 'vue'
-const props = defineProps({
+defineProps({
   name: {
     type: String,
     required: true
