@@ -1,13 +1,7 @@
 <template>
   <div>
     <div class="flex items-center gap-6">
-      <img
-        :src="
-          newPicture[0]?.profile_picture ? store.getUrl(newPicture[0]?.profile_picture) : picture
-        "
-        alt="profile"
-        class="w-12 rounded-full"
-      />
+      <img :src="picture" alt="profile" class="w-12 rounded-full" />
       <div>
         <h2 class="text-white">{{ commentAuthor }}</h2>
       </div>

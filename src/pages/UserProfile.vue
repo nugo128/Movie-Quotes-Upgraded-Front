@@ -1,4 +1,11 @@
 <template>
+  <modal-window v-if="showConfirmation" :click="toggleConfirmation">
+    <email-sent
+      :sent="$t('thank_you')"
+      :check="$t('check_email')"
+      :visitEmail="$t('go_to_email')"
+    />
+  </modal-window>
   <div>
     <profile-header></profile-header>
     <div class="pt-8">
@@ -133,6 +140,8 @@
 </template>
 
 <script setup>
+import ModalWindow from '../Components/ModalWindow.vue'
+import EmailSent from '../Components/EmailSent.vue'
 import profileHeader from '../Components/profileHeader.vue'
 import UserNavbar from '../Components/UserNavbar.vue'
 import { Form, Field } from 'vee-validate'
@@ -141,6 +150,8 @@ import axios from '@/config/axios/index.js'
 import AuthInput from '../Components/AuthInput.vue'
 import FakeInput from '../Components/FakeInput.vue'
 import { useUsersStore } from '../stores/user'
+import { usePostsStore } from '../stores/post'
+import { useRoute, useRouter } from 'vue-router'
 const store = useUsersStore()
 const user = ref([])
 const editEmail = ref(false)
@@ -151,8 +162,26 @@ const lessThanLowercase15 = ref(false)
 const profilePicture = ref('')
 const userInfo = ref(store.authUser)
 const showUpload = ref(false)
+const post = usePostsStore()
+const showConfirmation = ref(false)
+const route = useRoute()
+const router = useRouter()
+const toggleConfirmation = () => {
+  showConfirmation.value = false
+}
 const uploadImage = () => {
   showUpload.value = true
+}
+if (route.path === '/user-profile' && route?.query?.token?.length === 128) {
+  axios
+    .get(`/api/verify-new-email/${route.query.token}`)
+    .then((response) => {
+      console.log(response)
+      router.replace('/user-profile')
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 }
 
 const handleInput = (e) => {
@@ -180,19 +209,21 @@ const cancel = () => {
 const formData = new FormData()
 
 const submit = async (val) => {
+  post.clear()
   for (let value in val) {
     formData.set(value, val[value])
   }
   await axios.post('/api/editProfile', formData)
   store.clearUser()
-  console.log(userInfo.value)
   store.getAuthUser()
   userInfo.value = store.authUser
   editPassword.value = false
   editUsername.value = false
   editEmail.value = false
   showUpload.value = false
-  console.log(userInfo.value)
+  if (formData.get('email')) {
+    showConfirmation.value = true
+  }
 }
 const showEditPasswordField = () => {
   editPassword.value = true
