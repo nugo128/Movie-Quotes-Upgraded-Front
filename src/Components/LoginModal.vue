@@ -35,7 +35,7 @@
     <button
       class="border-[1px] rounded flex items-center justify-center"
       type="button"
-      @click="googleLogin"
+      @click="googleAuth"
     >
       <img src="@/assets/images/google-icon.png" alt="google icon" class="w-10 p-2" />
       <p class="text-white">{{ $t('sign_in_google') }}</p>
@@ -57,6 +57,8 @@ import { Form, Field } from 'vee-validate'
 import AuthInput from './AuthInput.vue'
 import { useRouter } from 'vue-router'
 import { defineEmits } from 'vue'
+import { googleLogin } from '../services/registerRequest'
+import { userLogin } from '../services/loginRequest'
 import axios from '@/config/axios/index.js'
 const router = useRouter()
 const emits = defineEmits(['showRegistration', 'showReset'])
@@ -66,28 +68,20 @@ const toggleRegistration = () => {
 const toggleReset = () => {
   emits('showReset', true)
 }
-const googleLogin = async () => {
-  await axios.get('/sanctum/csrf-cookie')
-  await axios
-    .get('/api/auth/google')
-    .then((response) => {
-      window.location.href = response.data.message
-      console.log(response.data.message)
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+const googleAuth = async () => {
+  try {
+    const response = await googleLogin()
+    window.location.href = response.data.message
+  } catch (error) {
+    console.error(error)
+  }
 }
 const submit = async (value, actions) => {
-  await axios.get('/sanctum/csrf-cookie')
-  await axios
-    .post('/api/login', value)
-    .then((response) => {
-      console.log(response)
-      router.replace({ name: 'news_feed' })
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+  try {
+    await userLogin(value)
+    router.replace({ name: 'news_feed' })
+  } catch (error) {
+    console.error(error)
+  }
 }
 </script>
