@@ -76,7 +76,7 @@ const googleSignup = async () => {
     console.error(error)
   }
 }
-const submit = async (value, actions) => {
+const submit = async (value) => {
   value['password_confirmation'] = value.confirmation
   try {
     await register(value)

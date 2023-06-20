@@ -1,7 +1,7 @@
 <template>
   <div class="mb-10">
     <div class="flex items-center gap-5 mb-4">
-      <img :src="profilePicture" :alt="profilePicture" class="w-[52px] rounded-full" />
+      <img :src="profileUrl" :alt="profilePicture" class="w-13 h-13 rounded-full" />
       <h2 class="text-white text-lg">{{ username }}</h2>
     </div>
     <h2 class="text-white mb-7">
@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="w-full h-[1px] bg-[#EFEFEF4D] my-6"></div>
-    <div v-for="comments in allComments">
+    <div v-for="comments in allComments" :key="comments.id">
       <user-comment
         :comment="comments.comment"
         :commentAuthor="comments.user.name"
@@ -31,7 +31,7 @@
       ></user-comment>
     </div>
     <div class="flex gap-6">
-      <img :src="aUser.profile_picture" alt="" class="w-[52px] rounded-full" />
+      <img :src="loggedInUser.profile_picture" alt="" class="w-13 h-13 rounded-full" />
       <Form class="w-full" @submit="submit">
         <Field
           v-slot="{ field, errors, value }"
@@ -61,13 +61,12 @@
 <script setup>
 import UserComment from './UserComment.vue'
 import LikeButton from './LikeButton.vue'
-import { defineProps, ref, onBeforeMount, computed } from 'vue'
+import { defineProps, ref, onBeforeMount } from 'vue'
 import { Form, Field } from 'vee-validate'
 import { useUsersStore } from '../stores/user'
 import { useLocaleStore } from '../stores/locale'
-import { like, removeLike, getLikes, comment } from '../services/postRequest'
+import { like, removeLike, getLikes, comments } from '../services/postRequest'
 const localeStore = useLocaleStore()
-const link = import.meta.env.VITE_IMAGE_BASE_URL
 const liked = ref(false)
 const likeCount = ref(props.numOfLikes)
 const commentCount = ref(props.comment.length)
@@ -117,21 +116,17 @@ const props = defineProps({
     required: true
   }
 })
-
-const imageUrl = computed(() => {
-  if (props.thumbnail.substring(0, 5) === 'https') {
-    return props.thumbnail
-  } else {
-    return link + props.thumbnail
-  }
-})
+const imageUrl = ref(store.getUrl(props.thumbnail))
+const profileUrl = ref(store.getUrl(props.profilePicture))
 
 const changeInput = (e) => {
   input.value = e.target.value
 }
 const aUser = ref([])
+aUser.value.profile_picture = store.getUrl(props.loggedInUser.profile_picture)
 onBeforeMount(async () => {
   aUser.value = props.loggedInUser
+  aUser.value.profile_picture = store.getUrl(props.loggedInUser.profile_picture)
   const data = {
     quote_id: String(props.quoteID)
   }
@@ -165,7 +160,7 @@ const newLike = async () => {
     }
   }
 }
-const submit = async (value, actions) => {
+const submit = async (value) => {
   const data = {
     quote_id: String(props.quoteID),
     comment: value['comment']
@@ -174,13 +169,13 @@ const submit = async (value, actions) => {
   const userData = store.authUser
 
   try {
-    await comment(data)
+    await comments(data)
     store.getAuthUser()
     allComments.value.push({
       comment: data.comment,
       user: {
         name: userData[0].name,
-        profile_picture: userData[0].profile_picture
+        profile_picture: store.getUrl(userData[0].profile_picture)
       }
     })
     commentCount.value++

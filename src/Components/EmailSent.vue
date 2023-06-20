@@ -19,7 +19,7 @@ const skipReset = () => {
   emits('skip')
 }
 
-const props = defineProps({
+defineProps({
   sent: {
     type: String,
     required: true

@@ -6,7 +6,7 @@
     </newitem-modal>
     <div class="pt-8">
       <user-navbar></user-navbar>
-      <div class="w-[900px] ml-[503px] mt-28">
+      <div class="w-900 ml-500 mt-28">
         <div class="flex justify-between gap-10 w-full mb-11">
           <div class="flex gap-3 cursor-pointer" @click="newPostHandler">
             <img src="../assets/images/new-quote.svg" class="w-5" alt="" />
@@ -14,7 +14,7 @@
           </div>
           <search-bar @searched="searchPosts" />
         </div>
-        <div v-for="post in postData">
+        <div v-for="post in postData" :key="post.id">
           <user-post
             :username="post.user.name"
             :profilePicture="post.user.profile_picture"

@@ -5,7 +5,7 @@
   </div>
   <div class="flex flex-col gap-6 px-8">
     <div class="flex gap-5 items-center">
-      <img :src="user.profile_picture" alt="user profile picture" class="w-14 rounded" />
+      <img :src="user.profile_picture" alt="user profile picture" class="w-15 h-15 rounded-full" />
       <h2>{{ user.name }}</h2>
     </div>
     <img alt="" />
@@ -32,7 +32,12 @@
           name="movie_id"
         >
           <option class="bg-black mb-2" selected disabled value="">Choose Movie</option>
-          <option class="bg-black px-0" v-for="movie in movieStore.movies" :value="movie.id">
+          <option
+            class="bg-black px-0"
+            v-for="movie in movieStore.movies"
+            :value="movie.id"
+            :key="movie.id"
+          >
             {{ movie.title }}
           </option>
         </Field>
@@ -47,12 +52,13 @@ import { Form, Field } from 'vee-validate'
 import textArea from './textArea.vue'
 import PhotoUpload from './PhotoUpload.vue'
 import { useMovieStore } from '../stores/movie'
-import { usePostsStore } from '../stores/post'
+import { useUsersStore } from '../stores/user'
 import { onBeforeMount, ref, defineEmits } from 'vue'
 import axios from '@/config/axios/index.js'
 const emits = defineEmits(['posted'])
 const formData = new FormData()
-const postStore = usePostsStore()
+const userStore = useUsersStore()
+
 const submit = async (val) => {
   for (let value in val) {
     formData.set(value, val[value])
@@ -69,6 +75,7 @@ onBeforeMount(async () => {
   const response = await axios.get('/api/user')
   movieStore.getMovie()
   user.value = response.data
+  user.value.profile_picture = userStore.getUrl(response.data.profile_picture)
 })
 </script>
 <style scoped>

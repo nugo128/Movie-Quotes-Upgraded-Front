@@ -22,7 +22,7 @@ const emits = defineEmits(['showLogin'])
 const showLogin = () => {
   emits('showLogin', true)
 }
-const props = defineProps({
+defineProps({
   mainText: {
     type: String,
     required: true

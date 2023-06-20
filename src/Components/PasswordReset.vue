@@ -25,7 +25,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { resetPassword, newPassword } from '../services/passwordRequest'
 const route = useRoute()
 const router = useRouter()
-const props = defineProps({
+defineProps({
   header: {
     type: String,
     required: true
@@ -43,7 +43,7 @@ const emits = defineEmits(['showLogin', 'showEmail', 'showSuccess'])
 const toggleLogin = () => {
   emits('showLogin', true)
 }
-const submit = async (value, actions) => {
+const submit = async (value) => {
   console.log(value)
   if (value.email) {
     try {

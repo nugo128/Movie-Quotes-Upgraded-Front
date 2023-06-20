@@ -1,0 +1,25 @@
+{
+    "profile":{
+        "my_profile": "My profile",
+        "upload_photo": "Upload new photo",
+        "edit": "Edit",
+        "username": "Username",
+        "new_username": "New username",
+        "username_placeholder": "Enter new usarname",
+        "email": "Email",
+        "new_email": "New email",
+        "email_placeholder": "Enter new email",
+        "password_validation": "Passwords should contain:",
+        "min_characters": "8 or more characters",
+        "max_characters": "15 lowercase character",
+        "password": "Password",
+        "password_placeholder": "enter new password",
+        "new_password": "New password",
+        "confirm_password": "Confirm new password",
+        "cancel": "Cancel",
+        "save_changes": "Save changes",
+        "changes_updated": "Changes updated succsessfully",
+        "check_email": "Please check your email and follow the instructions to activate your new email."
+
+    }
+}
