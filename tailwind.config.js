@@ -1,5 +1,5 @@
 // tailwind.config.js
-module.exports = {
+const config = {
   purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   darkMode: false, // or 'media' or 'class'
   theme: {
@@ -25,3 +25,4 @@ module.exports = {
   },
   plugins: []
 }
+export default config
