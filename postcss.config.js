@@ -1,8 +1,7 @@
-// postcss.config.js
-const config = {
+/* eslint-env node */
+module.exports = {
   plugins: {
     tailwindcss: {},
     autoprefixer: {}
   }
 }
-export default config
