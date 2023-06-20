@@ -1,0 +1,25 @@
+{
+    "profile":{
+        "my_profile": "პროფილი",
+        "upload_photo": "ატვირთე ფოტო",
+        "edit": "რედაქტირება",
+        "username": "სახელი",
+        "new_username": "ახალი სახელი",
+        "username_placeholder": "შეიყვანეთ ახალი სახელი",
+        "email": "ელფოსტის მისამართი",
+        "new_email": "ახალი ელფოსტა",
+        "email_placeholder": "შეიყვანეთ ახალი ელფოსტა",
+        "password_validation": "პაროლი უნდა შეიცავდეს:",
+        "min_characters": "8 ან მეტი სიმბოლო",
+        "max_characters": "15 დაბალი რეგისტრის სიმბოლო",
+        "password": "პაროლი",
+        "password_placeholder": "შეიყვანეთ ახალი პაროლი",
+        "new_password": "ახალი პაროლი",
+        "confirm_password": "დაადასტურეთ პაროლი",
+        "cancel": "გაუქმება",
+        "save_changes": "შენახვა",
+        "changes_updated": "ცვლილებები წარმატებით განახლდა",
+        "check_email": "გთხოვთ, შეამოწმოთ თქვენი ელ-ფოსტა და მიყევით ინსტრუქციას თქვენი ახალი მეილის გასააქტიურებლად."
+
+    }
+}

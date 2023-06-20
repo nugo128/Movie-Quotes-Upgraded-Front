@@ -2,7 +2,7 @@
   <modal-window v-if="showConfirmation" :click="toggleConfirmation">
     <email-sent
       :sent="$t('thank_you')"
-      :check="$t('check_email')"
+      :check="$t('profile.check_email')"
       :visitEmail="$t('go_to_email')"
     />
   </modal-window>
@@ -11,10 +11,15 @@
       class="w-600 ml-2 mt-48 p-6 bg-[#BADBCC] z-[100] flex items-center justify-between text-white gap-10"
     >
       <div class="flex gap-4">
-        <img src="../assets/images/check.svg" alt="" />
-        <p class="text-[#0F5132] text-lg">changes updated successfully</p>
+        <img src="../assets/images/check.svg" alt="success" />
+        <p class="text-[#0F5132] text-lg">{{ $t('profile.changes_updated') }}</p>
       </div>
-      <img src="../assets/images/X.svg" alt="" class="w-8 cursor-pointer" @click="toggleSuccess" />
+      <img
+        src="../assets/images/X.svg"
+        alt="close"
+        class="w-8 cursor-pointer"
+        @click="toggleSuccess"
+      />
     </div>
     <div class="bg-black bg-opacity-60 absolute w-full h-full" @click="toggleSuccess"></div>
   </div>
@@ -32,7 +37,7 @@
         v-slot="{ meta }"
         class="w-1000 ml-500 mt-24 text-black flex flex-col gap-16"
       >
-        <h2 class="text-white text-lg">My profile</h2>
+        <h2 class="text-white text-lg">{{ $t('profile.my_profile') }}</h2>
         <div class="flex flex-col pl-40">
           <div class="flex flex-col items-center gap-2 mb-24 mr-10">
             <img :src="user.profile_picture" alt="profile picture" class="w-48 h-48 rounded-full" />
@@ -50,13 +55,13 @@
               class="text-lg rounded px-3 py-1 cursor-pointer text-center ml-2 text-white"
               for="file"
               @click="uploadImage"
-              >Upload new photo</label
+              >{{ $t('profile.upload_photo') }}</label
             >
           </div>
 
           <div class="flex flex-col mb-12 gap-12">
             <fake-input
-              name="Username"
+              :name="$t('profile.username')"
               type="text"
               :value="userInfo[0]?.name ? userInfo[0]?.name : user?.name"
               :edit="showEditUsernameField"
@@ -66,8 +71,8 @@
               <AuthInput
                 name="username"
                 type="text"
-                label="Username"
-                placeholder="Enter new usergame"
+                :label="$t('profile.username')"
+                :placeholder="$t('profile.username_placeholder')"
                 rule="required|min:3|max:15|lowercase_num"
                 width="600"
               />
@@ -75,18 +80,18 @@
           </div>
           <div class="flex flex-col mb-12 gap-12">
             <fake-input
-              name="Email"
+              :name="$t('profile.email')"
               type="email"
               :value="user?.email"
               :edit="showEditEmailField"
             ></fake-input>
 
-            <div class="w-[600px]" v-if="editEmail">
+            <div class="w-600" v-if="editEmail">
               <AuthInput
                 name="email"
                 type="email"
-                label="Email"
-                placeholder="Enter new email"
+                :label="$t('profile.new_email')"
+                :placeholder="$t('profile.email_placeholder')"
                 rule="required|email"
                 width="600"
               />
@@ -94,31 +99,32 @@
           </div>
           <div class="flex flex-col mb-12 gap-12">
             <fake-input
-              name="password"
+              :name="$t('profile.password')"
               type="password"
               value="password"
               :edit="showEditPasswordField"
             ></fake-input>
 
-            <div class="flex flex-col gap-12 w-[600px]" v-if="editPassword">
+            <div class="flex flex-col gap-12 w-600" v-if="editPassword">
               <div class="border-[1px] border-[#CED4DA33] p-6 flex flex-col gap-5">
-                <h2 class="text-white">Password should counain:</h2>
+                <h2 class="text-white">{{ $t('profile.password_validation') }}</h2>
 
                 <div class="text-[#9C9A9A] flex flex-col gap-1">
                   <h3 :class="moreThan8 ? 'text-white' : ''">
-                    <span :class="moreThan8 ? 'text-[#198754]' : ''">•</span> 8 or more characters
+                    <span :class="moreThan8 ? 'text-[#198754]' : ''">•</span>
+                    {{ $t('profile.min_characters') }}
                   </h3>
                   <h3 :class="lessThanLowercase15 ? 'text-white' : ''">
                     <span :class="lessThanLowercase15 ? 'text-[#198754]' : ''">•</span>
-                    15 lowercase character
+                    {{ $t('profile.max_characters') }}
                   </h3>
                 </div>
               </div>
               <AuthInput
                 name="password"
                 type="password"
-                label="Password"
-                placeholder="Enter new password"
+                :label="$t('profile.new_password')"
+                :placeholder="$t('profile.password_placeholder')"
                 rule="required|min:8|max:15|lowercase_num"
                 width="600"
                 @input-value="handleInput"
@@ -126,8 +132,8 @@
               <AuthInput
                 name="password_confirmation"
                 type="password"
-                label="Password_confirmation"
-                placeholder="Confirm password"
+                :label="$t('profile.confirm_password')"
+                :placeholder="$t('profile.confirm_password')"
                 rule="required|confirmed:@password"
                 width="600"
               />
@@ -136,14 +142,14 @@
         </div>
         <div class="text-white ml-auto mt-16 flex gap-4">
           <button type="button" class="px-4 py-2 cursor-pointer text-[#CED4DA]" @click="cancel">
-            Cancel
+            {{ $t('profile.cancel') }}
           </button>
           <button
             type="submit"
             class="bg-[#E31221] px-4 py-2 rounded cursor-pointer"
             :class="meta.dirty && meta.valid ? 'bg-[#E31221]' : 'bg-[#EC4C57] pointer-events-none'"
           >
-            Save changes
+            {{ $t('profile.save_changes') }}
           </button>
         </div>
       </Form>

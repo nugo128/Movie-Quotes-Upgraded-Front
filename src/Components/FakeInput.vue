@@ -11,9 +11,9 @@
       <h2
         class="text-[#CED4DA] cursor-pointer"
         @click="edit"
-        v-if="name === 'Username' || !user[0]?.gauth_id"
+        v-if="name === 'Username' || name === 'სახელი' || !user[0]?.gauth_id"
       >
-        Edit
+        {{ $t('profile.edit') }}
       </h2>
     </div>
   </div>
