@@ -24,14 +24,16 @@
     </div>
 
     <div class="flex items-center gap-11 cursor-pointer">
-      <home-button :color="path === '/user-profile' ? 'white' : 'red'"></home-button>
+      <home-button :color="path === '/newsfeed' ? 'red' : 'white'"></home-button>
       <router-link to="newsfeed" class="text-white text-xl mb-1">{{
         $t('newsfeed.news_feed')
       }}</router-link>
     </div>
     <div class="flex items-center gap-11 cursor-pointer">
-      <img src="../assets/images/movie.svg" alt="" />
-      <h2 class="text-white text-xl mb-1">{{ $t('newsfeed.movies_list') }}</h2>
+      <movie-icon :color="path === '/my-movies' ? 'red' : 'white'"></movie-icon>
+      <router-link to="my-movies" class="text-white text-xl mb-1">{{
+        $t('newsfeed.movies_list')
+      }}</router-link>
     </div>
   </nav>
 </template>
@@ -40,6 +42,7 @@
 import { onBeforeMount, ref } from 'vue'
 import axios from '@/config/axios/index.js'
 import HomeButton from './HomeButton.vue'
+import MovieIcon from './MovieIcon.vue'
 import { useRoute } from 'vue-router'
 import { useUsersStore } from '../stores/user'
 
