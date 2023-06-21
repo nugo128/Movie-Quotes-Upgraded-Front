@@ -14,10 +14,14 @@
           </div>
         </div>
         <div class="h-max flex flex-wrap gap-10">
-          <user-movie></user-movie>
-          <user-movie></user-movie>
-          <user-movie></user-movie>
-          <user-movie></user-movie>
+          <user-movie
+            v-for="movie in movies"
+            :key="movie.id"
+            :title="movie.title"
+            :year="movie.year"
+            :thumbnail="movie.thumbnail"
+            :quotes="movie.quote.length"
+          ></user-movie>
         </div>
       </div>
     </div>
@@ -29,4 +33,20 @@ import UserNavbar from '../Components/UserNavbar.vue'
 import profileHeader from '../Components/profileHeader.vue'
 import SearchBar from '../Components/SearchBar.vue'
 import UserMovie from '../Components/UserMovie.vue'
+import axios from '@/config/axios/index.js'
+import { useMovieStore } from '../stores/movie'
+import { onBeforeMount, ref } from 'vue'
+const store = useMovieStore()
+store.getUserMovies()
+const movies = ref(store.userMovies)
+
+console.log(movies.value.length)
+onBeforeMount(async () => {
+  store.getUserMovies()
+  movies.value = store.userMovies
+  if (!movies.value.length) {
+    const response = await axios.get('/api/user-movies')
+    movies.value = response.data
+  }
+})
 </script>
