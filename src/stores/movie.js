@@ -15,7 +15,7 @@ export const useMovieStore = defineStore('movies', () => {
     upload.value = 'Image Uploaded'
     file.value = img
   }
-  const getUserMovies = async (data) => {
+  const getUserMovies = async () => {
     const response = await axios.get('/api/user-movies')
     userMovies.value = response.data
   }

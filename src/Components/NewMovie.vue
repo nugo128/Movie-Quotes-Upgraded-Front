@@ -18,6 +18,8 @@
       <movie-input name="year" label="Year/წელი"></movie-input>
       <movie-input name="director_en" label="Director" lang="Eng"></movie-input>
       <movie-input name="director_ka" label="რეჟისორი" lang="ქარ"></movie-input>
+      <movie-textarea lang="Eng" name="description_en"></movie-textarea>
+      <movie-textarea lang="ქარ" name="description_ka"></movie-textarea>
     </Form>
   </div>
 </template>
@@ -25,6 +27,7 @@
 <script setup>
 import { useUsersStore } from '../stores/user'
 import MovieInput from './MovieInput.vue'
+import MovieTextarea from './MovieTextarea.vue'
 import { ref, onBeforeMount } from 'vue'
 import { Form } from 'vee-validate'
 const store = useUsersStore()
