@@ -4,7 +4,7 @@
       class="relative w-900 mt-24 bg-[#11101A] h-max z-[999] flex flex-col justify-center text-white gap-6"
     >
       <img
-        class="absolute right-2 top-8 cursor-pointer"
+        class="absolute right-8 top-8 cursor-pointer"
         src="../assets/images/close.svg"
         @click="clickHandler"
       />
