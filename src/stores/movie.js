@@ -6,6 +6,7 @@ export const useMovieStore = defineStore('movies', () => {
   const userMovies = ref([])
   const upload = ref('Upload Image')
   const file = ref(null)
+  const categories = ref([])
 
   const getMovie = async () => {
     const response = await axios.get('/api/movies')
@@ -19,5 +20,19 @@ export const useMovieStore = defineStore('movies', () => {
     const response = await axios.get('/api/user-movies')
     userMovies.value = response.data
   }
-  return { file, upload, movies, userMovies, getUserMovies, getMovie, addFile }
+  const getCategories = async () => {
+    const response = await axios.get('/api/category')
+    categories.value = response.data
+  }
+  return {
+    file,
+    upload,
+    movies,
+    userMovies,
+    categories,
+    getUserMovies,
+    getMovie,
+    addFile,
+    getCategories
+  }
 })

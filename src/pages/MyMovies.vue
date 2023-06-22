@@ -8,7 +8,9 @@
       <user-navbar></user-navbar>
       <div class="pl-440 pt-28 pr-16">
         <div class="text-white flex items-center justify-between mb-16">
-          <h2 class="text-lg">total num of movies <span>30</span></h2>
+          <h2 class="text-lg">
+            total num of movies <span>{{ movies.length }}</span>
+          </h2>
           <div class="flex items-center gap-4">
             <search-bar></search-bar>
             <button
@@ -59,6 +61,9 @@ onBeforeMount(async () => {
   if (!movies.value.length) {
     const response = await axios.get('/api/user-movies')
     movies.value = response.data
+  }
+  if (!store.categories.length) {
+    store.getCategories()
   }
 })
 </script>
