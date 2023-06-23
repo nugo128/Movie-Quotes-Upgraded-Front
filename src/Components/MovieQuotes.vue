@@ -1,9 +1,9 @@
 <template>
   <div class="bg-[#11101A] w-[800px] px-8 py-6 flex flex-col gap-6 rounded-md">
     <div class="flex justify-between relative">
-      <img src="../assets/images/tenabaums.png" class="w-56 h-36 rounded-sm mr-8" alt="" />
+      <img :src="store.getUrl(thumbnail)" class="w-56 h-36 rounded-sm mr-8" alt="" />
       <h2 class="my-auto text-lg text-[#CED4DA]">
-        "Frankly, aaaaaaaaaaaamy sad asd sad dsa sadsa d dsdasdasdasdasear, I don'tgive a damn."
+        {{ JSON.parse(quote)[localeStore.lang] }}
       </h2>
       <span class="text-white text-lg" @click="toggleQuote">...</span>
       <div
@@ -27,12 +27,14 @@
     <div class="w-full h-[1px] bg-[#EFEFEF33]"></div>
     <div class="flex gap-5">
       <div class="flex gap-3 items-center text-white">
-        <span>3 </span>
+        <span>{{ comment.length }} </span>
         <img src="../assets/images/comment.svg" alt="" />
       </div>
       <div class="flex gap-3 items-center text-white">
-        <span>10</span>
-        <like-button color="red"></like-button>
+        <span>{{ like.length }}</span>
+        <like-button
+          :color="like.find((e) => e.user_id === store.authUser[0].id) ? 'red' : 'white'"
+        ></like-button>
       </div>
     </div>
   </div>
@@ -40,9 +42,36 @@
 
 <script setup>
 import LikeButton from './LikeButton.vue'
-import { ref } from 'vue'
+import { ref, onBeforeMount } from 'vue'
+import { useUsersStore } from '../stores/user'
+import { useLocaleStore } from '../stores/locale'
+const localeStore = useLocaleStore()
+const store = useUsersStore()
+defineProps({
+  quote: {
+    type: String,
+    required: true
+  },
+  thumbnail: {
+    type: String,
+    required: true
+  },
+  like: {
+    type: Array,
+    required: true
+  },
+  comment: {
+    type: Array,
+    required: true
+  }
+})
 const viewQuote = ref(false)
 const toggleQuote = () => {
   viewQuote.value = !viewQuote.value
 }
+onBeforeMount(() => {
+  if (!store.authUser.length) {
+    store.getAuthUser()
+  }
+})
 </script>
