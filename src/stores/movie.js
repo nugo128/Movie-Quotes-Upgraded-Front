@@ -19,6 +19,13 @@ export const useMovieStore = defineStore('movies', () => {
     const response = await axios.get('/api/user-movies')
     userMovies.value = response.data
   }
+  const clear = () => {
+    userMovies.value = []
+  }
+  const searchedMovies = (val) => {
+    clear()
+    userMovies.value.push(...val)
+  }
   const getCategories = async () => {
     const response = await axios.get('/api/category')
     categories.value = response.data
@@ -32,6 +39,7 @@ export const useMovieStore = defineStore('movies', () => {
     getUserMovies,
     getMovie,
     addFile,
-    getCategories
+    getCategories,
+    searchedMovies
   }
 })

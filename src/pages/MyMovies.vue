@@ -12,7 +12,7 @@
             total num of movies <span>{{ movies.length }}</span>
           </h2>
           <div class="flex items-center gap-4">
-            <search-bar></search-bar>
+            <search-bar @movieSearched="searchHandler" movie="true"></search-bar>
             <button
               @click="newMovieHandler"
               class="py-2 px-4 bg-[#E31221] rounded-lg flex gap-2 items-center"
@@ -56,8 +56,10 @@ const addNewMovie = ref(false)
 const newMovieHandler = () => {
   addNewMovie.value = !addNewMovie.value
 }
-
-console.log(movies.value.length)
+const searchHandler = () => {
+  store.getUserMovies()
+  movies.value = store.userMovies
+}
 onBeforeMount(async () => {
   if (!store.userMovies.length) {
     store.getUserMovies()
