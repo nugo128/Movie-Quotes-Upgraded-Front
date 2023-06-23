@@ -12,7 +12,7 @@
       />
       <h2>{{ user[0]?.name }}</h2>
     </div>
-    <Form class="flex flex-col gap-4">
+    <Form class="flex flex-col gap-4" @submit="submit">
       <movie-input name="title_en" label="Movie name" lang="Eng"></movie-input>
       <movie-input name="title_ka" label="ფილმის სახელი" lang="ქარ"></movie-input>
       <div class="relative">
@@ -61,6 +61,8 @@
       <movie-input name="director_ka" label="რეჟისორი" lang="ქარ"></movie-input>
       <movie-textarea lang="Eng" name="description_en"></movie-textarea>
       <movie-textarea lang="ქარ" name="description_ka"></movie-textarea>
+      <photo-upload></photo-upload>
+      <button type="submit" class="bg-[#E31221] rounded py-2">ADD MOVIE</button>
     </Form>
   </div>
 </template>
@@ -70,14 +72,18 @@ import { useUsersStore } from '../stores/user'
 import { useMovieStore } from '../stores/movie'
 import MovieInput from './MovieInput.vue'
 import MovieTextarea from './MovieTextarea.vue'
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, defineEmits } from 'vue'
 import { useLocaleStore } from '../stores/locale'
 import { Form } from 'vee-validate'
+import PhotoUpload from './PhotoUpload.vue'
+import axios from '@/config/axios/index.js'
+const emits = defineEmits(['newMovie'])
 const localeStore = useLocaleStore()
 const movieStore = useMovieStore()
 const store = useUsersStore()
 const user = ref(store.authUser)
 const categories = ref(movieStore.categories)
+
 const selectedItems = ref([])
 const isDropdownOpen = ref(false)
 const toggleDropdown = () => {
@@ -91,6 +97,18 @@ const selectItems = (item) => {
 }
 const removeItem = (id) => {
   selectedItems.value = selectedItems.value.filter((item) => item.id !== id)
+}
+const formData = new FormData()
+const submit = async (val) => {
+  for (let value in val) {
+    formData.set(value, val[value])
+  }
+  movieStore.addFile(val.image)
+  formData.set('thumbnail', movieStore.file)
+  formData.append('categories', JSON.stringify(selectedItems.value))
+  console.log(selectedItems.value)
+  const response = await axios.post('/api/add-movie', formData)
+  emits('newMovie', response)
 }
 onBeforeMount(async () => {
   if (!user.value.length) {

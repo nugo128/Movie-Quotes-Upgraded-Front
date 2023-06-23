@@ -2,7 +2,7 @@
   <div>
     <profile-header></profile-header>
     <newitem-modal v-if="addNewMovie" :click="newMovieHandler">
-      <new-movie></new-movie>
+      <new-movie @new-movie="displayNewMovie"></new-movie>
     </newitem-modal>
     <div>
       <user-navbar></user-navbar>
@@ -28,7 +28,7 @@
             :title="movie.title"
             :year="movie.year"
             :thumbnail="movie.thumbnail"
-            :quotes="movie.quote.length"
+            :quotes="movie?.quote?.length"
           ></user-movie>
         </div>
       </div>
@@ -46,22 +46,25 @@ import UserMovie from '../Components/UserMovie.vue'
 import axios from '@/config/axios/index.js'
 import { useMovieStore } from '../stores/movie'
 import { onBeforeMount, ref } from 'vue'
+const store = useMovieStore()
+const movies = ref(store.userMovies)
+const displayNewMovie = (val) => {
+  addNewMovie.value = false
+  movies.value.unshift(val.data)
+}
 const addNewMovie = ref(false)
 const newMovieHandler = () => {
   addNewMovie.value = !addNewMovie.value
 }
-const store = useMovieStore()
-store.getUserMovies()
-const movies = ref(store.userMovies)
 
 console.log(movies.value.length)
 onBeforeMount(async () => {
-  store.getUserMovies()
-  movies.value = store.userMovies
-  if (!movies.value.length) {
+  if (!store.userMovies.length) {
+    store.getUserMovies()
     const response = await axios.get('/api/user-movies')
     movies.value = response.data
   }
+  movies.value = store.userMovies
   if (!store.categories.length) {
     store.getCategories()
   }

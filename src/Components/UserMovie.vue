@@ -2,11 +2,11 @@
   <div>
     <img :src="poster" alt="" class="w-440 h-370 rounded-xl" />
     <h2 class="text-white text-3xl break-words w-440">
-      {{ title }} (<span>{{ year }}</span
+      {{ JSON.parse(title)[localeStore.lang] }} (<span>{{ year }}</span
       >)
     </h2>
     <div class="flex gap-3">
-      <h2 class="text-white text-2xl">{{ quotes }}</h2>
+      <h2 class="text-white text-2xl">{{ quotes ? quotes : 0 }}</h2>
       <img src="../assets/images/quoteIcon.svg" alt="" class="w-8 h-7" />
     </div>
   </div>
@@ -14,6 +14,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useUsersStore } from '../stores/user'
+import { useLocaleStore } from '../stores/locale'
+const localeStore = useLocaleStore()
 const store = useUsersStore()
 const props = defineProps({
   title: {
