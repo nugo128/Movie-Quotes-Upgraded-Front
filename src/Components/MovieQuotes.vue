@@ -33,7 +33,7 @@
       <div class="flex gap-3 items-center text-white">
         <span>{{ like.length }}</span>
         <like-button
-          :color="like.find((e) => e.user_id === store.authUser[0].id) ? 'red' : 'white'"
+          :color="like.find((e) => e.user_id === store.authUser[0]?.id) ? 'red' : 'white'"
         ></like-button>
       </div>
     </div>

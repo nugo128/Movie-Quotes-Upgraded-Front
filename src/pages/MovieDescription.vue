@@ -15,7 +15,11 @@
           <div class="w-600 pl-4 flex flex-col gap-6">
             <div class="flex justify-between">
               <h2 class="text-[#DDCCAA] text-xl">
-                {{ JSON.parse(description.title)[localeStore.lang] }}
+                {{
+                  description.title && localeStore?.lang
+                    ? JSON.parse(description?.title)[localeStore?.lang]
+                    : ''
+                }}
                 <span>{{ description.year }}</span>
               </h2>
               <div class="flex gap-4 bg-[#24222F] py-2 px-7 rounded-xl">
@@ -30,25 +34,37 @@
                 v-for="genre in description.category"
                 :key="genre.id"
               >
-                {{ JSON.parse(genre.category)[localeStore.lang] }}
+                {{
+                  genre?.category && localeStore?.lang
+                    ? JSON.parse(genre?.category)[localeStore?.lang]
+                    : ''
+                }}
               </h3>
             </div>
             <div>
               <h2 class="text-[#CED4DA]">
                 Director:
-                <span class="text-white">{{
-                  JSON.parse(description.director)[localeStore.lang]
-                }}</span>
+                <span class="text-white">
+                  {{
+                    description?.director && localeStore?.lang
+                      ? JSON.parse(description?.director)[localeStore?.lang]
+                      : ''
+                  }}</span
+                >
               </h2>
             </div>
             <p>
-              {{ JSON.parse(description.description)[localeStore.lang] }}
+              {{
+                description?.description && localeStore?.lang
+                  ? JSON.parse(description?.description)[localeStore?.lang]
+                  : ''
+              }}
             </p>
           </div>
         </div>
         <div class="flex gap-4 items-center">
           <h2 class="text-white text-xl">
-            Quotes (total <span>{{ description.quote.length }}</span
+            Quotes (total <span>{{ description.quote?.length }}</span
             >)
           </h2>
           <div class="h-7 w-[1px] bg-[#EFEFEF33]"></div>
@@ -87,7 +103,7 @@ import { onBeforeMount } from 'vue'
 const localeStore = useLocaleStore()
 const userStore = useUsersStore()
 const route = useRoute()
-const description = ref([])
+const description = ref({})
 onBeforeMount(async () => {
   console.log(route.query.id)
   const resp = await axios.get('/api/movie-description', {
