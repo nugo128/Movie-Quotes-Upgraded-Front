@@ -100,6 +100,8 @@
             :thumbnail="quote.thumbnail"
             :like="quote.like"
             :comment="quote.comment"
+            :id="quote.id"
+            @deleted="deleteQuote"
           ></movie-quotes>
         </div>
       </div>
@@ -128,12 +130,22 @@ const addQuote = ref(false)
 const newQuoteHandler = () => {
   addQuote.value = !addQuote.value
 }
+const deleteQuote = (id) => {
+  let index = description.value.quote.find((quote) => quote.id == id)
+
+  if (index) {
+    let values = description.value.quote
+    values.splice(values.indexOf(index), 1)
+    description.value.quote = values
+  }
+}
 const updateQuotes = async () => {
   const resp = await axios.get('/api/movie-description', {
     params: {
       id: route.query.id
     }
   })
+  addQuote.value = false
   description.value = resp.data
 }
 const deleteMovie = async () => {

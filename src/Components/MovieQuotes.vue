@@ -18,7 +18,7 @@
           <img src="../assets/images/edit.svg" class="w-5" alt="" />
           <p>edit</p>
         </div>
-        <div class="flex items-center gap-4 cursor-pointer">
+        <div class="flex items-center gap-4 cursor-pointer" @click="deleteQuote">
           <img src="../assets/images/delete.svg" class="w-5" alt="" />
           <p>delete</p>
         </div>
@@ -45,9 +45,10 @@ import LikeButton from './LikeButton.vue'
 import { ref, onBeforeMount } from 'vue'
 import { useUsersStore } from '../stores/user'
 import { useLocaleStore } from '../stores/locale'
+import axios from '@/config/axios/index.js'
 const localeStore = useLocaleStore()
 const store = useUsersStore()
-defineProps({
+const props = defineProps({
   quote: {
     type: String,
     required: true
@@ -63,8 +64,24 @@ defineProps({
   comment: {
     type: Array,
     required: true
+  },
+  id: {
+    type: Number,
+    required: true
   }
 })
+const emits = defineEmits(['deleted'])
+const deleteQuote = async () => {
+  emits('deleted', props.id)
+  await axios
+    .delete(`/api/delete-quote/${props.id}`)
+    .then((response) => {
+      console.log(response.data)
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+}
 const viewQuote = ref(false)
 const toggleQuote = () => {
   viewQuote.value = !viewQuote.value
