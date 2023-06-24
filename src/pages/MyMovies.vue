@@ -47,7 +47,8 @@ import UserMovie from '../Components/UserMovie.vue'
 import axios from '@/config/axios/index.js'
 import { useMovieStore } from '../stores/movie'
 import { onBeforeMount, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+const route = useRoute()
 const store = useMovieStore()
 const movies = ref(store.userMovies)
 const displayNewMovie = (val) => {
@@ -75,6 +76,16 @@ onBeforeMount(async () => {
   movies.value = store.userMovies
   if (!store.categories.length) {
     store.getCategories()
+  }
+  console.log(route?.query.delete)
+  if (route?.query.delete) {
+    let index = movies.value.find((movie) => movie.id == route?.query.delete)
+
+    if (index) {
+      let values = movies.value
+      values.splice(values.indexOf(index), 1)
+      movies.value = values
+    }
   }
 })
 </script>

@@ -25,7 +25,12 @@
               <div class="flex gap-4 bg-[#24222F] py-2 px-7 rounded-xl">
                 <img src="../assets/images/edit.svg" class="w-5 h-5 cursor-pointer" alt="" />
                 <div class="h-full w-[1px] bg-[#EFEFEF33]"></div>
-                <img src="../assets/images/delete.svg" class="w-5 h-5 cursor-pointer" alt="" />
+                <img
+                  src="../assets/images/delete.svg"
+                  class="w-5 h-5 cursor-pointer"
+                  alt=""
+                  @click="deleteMovie"
+                />
               </div>
             </div>
             <div class="flex gap-4 flex-wrap">
@@ -97,13 +102,25 @@ import MovieQuotes from '../Components/MovieQuotes.vue'
 import { useUsersStore } from '../stores/user'
 import axios from '@/config/axios/index.js'
 import { useLocaleStore } from '../stores/locale'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { onBeforeMount } from 'vue'
 const localeStore = useLocaleStore()
 const userStore = useUsersStore()
 const route = useRoute()
+const router = useRouter()
 const description = ref({})
+const deleteMovie = async () => {
+  await axios
+    .delete(`/api/delete-movie/${route.query.id}`)
+    .then((response) => {
+      console.log(response.data)
+      router.replace({ path: '/my-movies', query: { delete: route.query.id } })
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+}
 onBeforeMount(async () => {
   console.log(route.query.id)
   const resp = await axios.get('/api/movie-description', {
