@@ -1,7 +1,19 @@
 <template>
   <div>
     <profile-header></profile-header>
-
+    <newitem-modal v-if="addQuote" :click="newQuoteHandler"
+      ><new-post
+        @posted="updateQuotes"
+        :movie="{
+          id: description.id,
+          title: description.title,
+          year: description.year,
+          thumbnail: description.thumbnail,
+          director: description.director,
+          category: description.category
+        }"
+      />
+    </newitem-modal>
     <div>
       <user-navbar></user-navbar>
       <div class="pl-440 pt-28 pr-16 flex flex-col gap-8">
@@ -74,7 +86,7 @@
           </h2>
           <div class="h-7 w-[1px] bg-[#EFEFEF33]"></div>
           <button
-            @click="newMovieHandler"
+            @click="newQuoteHandler"
             class="py-2 px-4 bg-[#E31221] rounded-lg flex gap-2 items-center"
           >
             <img src="../assets/images/plus.svg" alt="" />Add quote
@@ -99,6 +111,8 @@
 import profileHeader from '../Components/profileHeader.vue'
 import UserNavbar from '../Components/UserNavbar.vue'
 import MovieQuotes from '../Components/MovieQuotes.vue'
+import NewitemModal from '../Components/NewitemModal.vue'
+import NewPost from '../Components/NewPost.vue'
 import { useUsersStore } from '../stores/user'
 import axios from '@/config/axios/index.js'
 import { useLocaleStore } from '../stores/locale'
@@ -110,6 +124,18 @@ const userStore = useUsersStore()
 const route = useRoute()
 const router = useRouter()
 const description = ref({})
+const addQuote = ref(false)
+const newQuoteHandler = () => {
+  addQuote.value = !addQuote.value
+}
+const updateQuotes = async () => {
+  const resp = await axios.get('/api/movie-description', {
+    params: {
+      id: route.query.id
+    }
+  })
+  description.value = resp.data
+}
 const deleteMovie = async () => {
   await axios
     .delete(`/api/delete-movie/${route.query.id}`)
@@ -122,13 +148,11 @@ const deleteMovie = async () => {
     })
 }
 onBeforeMount(async () => {
-  console.log(route.query.id)
   const resp = await axios.get('/api/movie-description', {
     params: {
       id: route.query.id
     }
   })
   description.value = resp.data
-  console.log(resp)
 })
 </script>

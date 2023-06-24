@@ -3,12 +3,36 @@
     <h2 class="text-center pt-8">Write New Quote</h2>
     <div class="w-full h-[1px] bg-[#EFEFEF33] mt-4 bg-opacity-20"></div>
   </div>
-  <div class="flex flex-col gap-6 px-8">
+  <div class="flex flex-col gap-10 px-8">
     <div class="flex gap-5 items-center">
       <img :src="user.profile_picture" alt="user profile picture" class="w-15 h-15 rounded-full" />
       <h2>{{ user.name }}</h2>
     </div>
-    <img alt="" />
+    <div v-if="movie" class="flex gap-7">
+      <img :src="userStore.getUrl(movie.thumbnail)" alt="" class="w-72 h-40 rounded-xl" />
+      <div class="flex flex-col justify-between py-3">
+        <h2 class="text-[#DDCCAA] text-lg">
+          {{ JSON.parse(movie.title)[localeStore.lang] }} (<span>{{ movie.year }}</span
+          >)
+        </h2>
+        <div class="flex gap-4 flex-wrap">
+          <h3
+            class="bg-[#6C757D] w-max px-3 py-1 rounded-md text-white"
+            v-for="genre in movie.category"
+            :key="genre.id"
+          >
+            {{
+              genre?.category && localeStore?.lang
+                ? JSON.parse(genre?.category)[localeStore?.lang]
+                : ''
+            }}
+          </h3>
+        </div>
+        <h3>
+          director: <span>{{ JSON.parse(movie.director)[localeStore.lang] }}</span>
+        </h3>
+      </div>
+    </div>
     <Form @submit="submit">
       <text-area
         name="quote_en"
@@ -23,7 +47,7 @@
         rule="required"
       ></text-area>
       <photo-upload></photo-upload>
-      <div class="flex pl-3">
+      <div v-if="!movie" class="flex pl-3">
         <img src="../assets/images/movieCamera.svg" class="absolute z-0 mt-4" alt="" />
         <Field
           id=""
@@ -54,16 +78,26 @@ import PhotoUpload from './PhotoUpload.vue'
 import { useMovieStore } from '../stores/movie'
 import { useUsersStore } from '../stores/user'
 import { onBeforeMount, ref, defineEmits } from 'vue'
+import { useLocaleStore } from '../stores/locale'
+const localeStore = useLocaleStore()
 import axios from '@/config/axios/index.js'
 const emits = defineEmits(['posted'])
 const formData = new FormData()
 const userStore = useUsersStore()
-
+const props = defineProps({
+  movie: {
+    type: Object,
+    required: false
+  }
+})
 const submit = async (val) => {
   for (let value in val) {
     formData.set(value, val[value])
   }
   movieStore.addFile(val.image)
+  if (props.movie) {
+    formData.set('movie_id', props.movie.id)
+  }
   formData.set('thumbnail', movieStore.file)
   await axios.post('/api/newPost', formData)
   emits('posted')

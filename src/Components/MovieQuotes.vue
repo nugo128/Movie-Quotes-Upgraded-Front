@@ -5,20 +5,20 @@
       <h2 class="my-auto text-lg text-[#CED4DA]">
         {{ JSON.parse(quote)[localeStore.lang] }}
       </h2>
-      <span class="text-white text-lg" @click="toggleQuote">...</span>
+      <span class="text-white text-lg cursor-pointer" @click="toggleQuote">...</span>
       <div
         v-if="viewQuote"
         class="absolute bg-[#24222F] left-[44.5rem] top-8 px-10 py-8 rounded-lg flex flex-col gap-8 text-white w-64"
       >
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-4 cursor-pointer">
           <img src="../assets/images/view.svg" class="w-5" alt="" />
           <p>View Quote</p>
         </div>
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-4 cursor-pointer">
           <img src="../assets/images/edit.svg" class="w-5" alt="" />
           <p>edit</p>
         </div>
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-4 cursor-pointer">
           <img src="../assets/images/delete.svg" class="w-5" alt="" />
           <p>delete</p>
         </div>
