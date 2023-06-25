@@ -14,6 +14,9 @@
         }"
       />
     </newitem-modal>
+    <newitem-modal v-if="editMovie" :click="editMovieHandler">
+      <new-movie :description="description"></new-movie>
+    </newitem-modal>
     <div>
       <user-navbar></user-navbar>
       <div class="pl-440 pt-28 pr-16 flex flex-col gap-8">
@@ -35,7 +38,12 @@
                 <span>{{ description.year }}</span>
               </h2>
               <div class="flex gap-4 bg-[#24222F] py-2 px-7 rounded-xl">
-                <img src="../assets/images/edit.svg" class="w-5 h-5 cursor-pointer" alt="" />
+                <img
+                  src="../assets/images/edit.svg"
+                  class="w-5 h-5 cursor-pointer"
+                  alt=""
+                  @click="editMovieHandler"
+                />
                 <div class="h-full w-[1px] bg-[#EFEFEF33]"></div>
                 <img
                   src="../assets/images/delete.svg"
@@ -114,13 +122,17 @@ import profileHeader from '../Components/profileHeader.vue'
 import UserNavbar from '../Components/UserNavbar.vue'
 import MovieQuotes from '../Components/MovieQuotes.vue'
 import NewitemModal from '../Components/NewitemModal.vue'
+import NewMovie from '../Components/NewMovie.vue'
 import NewPost from '../Components/NewPost.vue'
 import { useUsersStore } from '../stores/user'
 import axios from '@/config/axios/index.js'
 import { useLocaleStore } from '../stores/locale'
 import { useRoute, useRouter } from 'vue-router'
-import { ref } from 'vue'
-import { onBeforeMount } from 'vue'
+import { onBeforeMount, ref } from 'vue'
+const editMovie = ref(false)
+const editMovieHandler = () => {
+  editMovie.value = !editMovie.value
+}
 const localeStore = useLocaleStore()
 const userStore = useUsersStore()
 const route = useRoute()

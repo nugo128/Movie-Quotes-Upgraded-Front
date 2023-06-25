@@ -27,6 +27,7 @@
               'border-2 border-green-500': !errors?.length && value?.length > 0
             }"
             type="text"
+            :placeholder="placeholderValue"
             @input="inputValue"
           />
           <img
@@ -62,6 +63,7 @@ const inputValue = (event) => {
 defineProps({
   name: { type: String, required: true },
   label: { type: String, required: true },
-  lang: { type: String, required: false }
+  lang: { type: String, required: false },
+  placeholderValue: { type: String, required: false }
 })
 </script>

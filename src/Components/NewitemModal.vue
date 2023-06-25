@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed w-full h-screen flex justify-center z-[60]">
+  <div class="fixed w-full h-screen flex justify-center z-[60] overflow-y-auto">
     <div
       class="relative w-900 mt-24 bg-[#11101A] h-max z-[999] flex flex-col justify-center text-white gap-6"
     >
