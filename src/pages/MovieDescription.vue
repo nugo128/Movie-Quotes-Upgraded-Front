@@ -15,7 +15,7 @@
       />
     </newitem-modal>
     <newitem-modal v-if="editMovie" :click="editMovieHandler">
-      <new-movie :description="description"></new-movie>
+      <new-movie @edit-movie="update" :description="description"></new-movie>
     </newitem-modal>
     <div>
       <user-navbar></user-navbar>
@@ -141,6 +141,13 @@ const description = ref({})
 const addQuote = ref(false)
 const newQuoteHandler = () => {
   addQuote.value = !addQuote.value
+}
+const update = (val) => {
+  const quote = description.value.quote
+  editMovie.value = false
+  description.value = val.response.data
+  description.value.category = val.category
+  description.value.quote = quote
 }
 const deleteQuote = (id) => {
   let index = description.value.quote.find((quote) => quote.id == id)

@@ -2,7 +2,7 @@
   <div
     class="flex justify-between md:justify-start items-center border border-[#6C757D] rounded px-3 py-3 mb-5"
     @dragover.prevent=""
-    @drop.prevent="movieStore.addFile($event.dataTransfer.files[0])"
+    @drop.prevent="dragPhoto"
   >
     <img v-if="placeholderValue" :src="picture" alt="" class="w-440 h-36 p-1" />
 
@@ -46,6 +46,20 @@ const props = defineProps({
 })
 const picture = ref(props.placeholderValue)
 const movieStore = useMovieStore()
+const dragPhoto = (e) => {
+  movieStore.addFile(e.dataTransfer.files[0])
+  const file = e.dataTransfer.files[0]
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    picture.value = e.target.result
+  }
+  if (file) {
+    reader.readAsDataURL(file)
+  }
+  const inputField = document.getElementById('file')
+  inputField.files = e.dataTransfer.files
+  inputField.dispatchEvent(new Event('input'))
+}
 const changePhoto = (event) => {
   movieStore.addFile(event.target.files[0])
   const file = event.target.files[0]

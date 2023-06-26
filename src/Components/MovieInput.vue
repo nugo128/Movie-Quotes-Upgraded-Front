@@ -7,7 +7,7 @@
       <Field
         v-slot="{ field, errors, value }"
         :name="name"
-        rules="required"
+        :rules="!placeholderValue ? 'required' : ''"
         :validate-on-input="true"
         class="border border-[#6C757D] rounded-sm"
       >

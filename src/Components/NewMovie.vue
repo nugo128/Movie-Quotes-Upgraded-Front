@@ -113,7 +113,7 @@ import { useLocaleStore } from '../stores/locale'
 import { Form } from 'vee-validate'
 import PhotoUpload from './PhotoUpload.vue'
 import axios from '@/config/axios/index.js'
-const emits = defineEmits(['newMovie'])
+const emits = defineEmits(['newMovie', 'editMovie'])
 const localeStore = useLocaleStore()
 const movieStore = useMovieStore()
 const store = useUsersStore()
@@ -128,6 +128,7 @@ const props = defineProps({
 const selectedItems = ref([])
 const isDropdownOpen = ref(false)
 const toggleDropdown = () => {
+  categories.value = movieStore.categories
   isDropdownOpen.value = !isDropdownOpen.value
 }
 const selectItems = (item) => {
@@ -142,15 +143,28 @@ const removeItem = (id) => {
 const formData = new FormData()
 const submit = async (val) => {
   for (let value in val) {
-    formData.set(value, val[value])
+    if (val[value]) {
+      formData.set(value, val[value])
+    }
   }
-  movieStore.addFile(val.image)
-  formData.set('thumbnail', movieStore.file)
   formData.append('categories', JSON.stringify(selectedItems.value))
-  console.log(selectedItems.value)
-  const response = await axios.post('/api/add-movie', formData)
-  emits('newMovie', response)
+  if (!props.description) {
+    movieStore.addFile(val.image)
+    formData.set('thumbnail', movieStore.file)
+    console.log(selectedItems.value)
+    const response = await axios.post('/api/add-movie', formData)
+    emits('newMovie', response)
+  } else {
+    formData.set('id', props.description.id)
+    const response = await axios.post('/api/update-movie', formData)
+    console.log(response)
+    emits('editMovie', {
+      response: response,
+      category: selectedItems.value
+    })
+  }
 }
+
 onBeforeMount(async () => {
   if (!user.value.length) {
     store.getAuthUser()
