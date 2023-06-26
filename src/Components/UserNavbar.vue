@@ -31,7 +31,11 @@
     </div>
     <div class="flex items-center gap-11 cursor-pointer">
       <movie-icon
-        :color="path === '/my-movies' || path === '/movie-description' ? 'red' : 'white'"
+        :color="
+          path === '/my-movies' || path === '/movie-description' || path === '/view-quote'
+            ? 'red'
+            : 'white'
+        "
       ></movie-icon>
       <router-link to="my-movies" class="text-white text-xl mb-1">{{
         $t('newsfeed.movies_list')

@@ -10,7 +10,7 @@
         v-if="viewQuote"
         class="absolute bg-[#24222F] left-[44.5rem] top-8 px-10 py-8 rounded-lg flex flex-col gap-8 text-white w-64"
       >
-        <div class="flex items-center gap-4 cursor-pointer">
+        <div class="flex items-center gap-4 cursor-pointer" @click="view">
           <img src="../assets/images/view.svg" class="w-5" alt="" />
           <p>View Quote</p>
         </div>
@@ -48,6 +48,8 @@ import { useLocaleStore } from '../stores/locale'
 import axios from '@/config/axios/index.js'
 const localeStore = useLocaleStore()
 const store = useUsersStore()
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const props = defineProps({
   quote: {
     type: String,
@@ -70,6 +72,9 @@ const props = defineProps({
     required: true
   }
 })
+const view = () => {
+  router.replace({ path: '/view-quote', query: { id: props.id } })
+}
 const emits = defineEmits(['deleted'])
 const deleteQuote = async () => {
   emits('deleted', props.id)
