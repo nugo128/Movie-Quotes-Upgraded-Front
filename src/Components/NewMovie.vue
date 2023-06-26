@@ -133,7 +133,7 @@ const toggleDropdown = () => {
 }
 const selectItems = (item) => {
   if (!selectedItems.value.some((selectedItem) => selectedItem.id === item.id)) {
-    selectedItems.value.push(item)
+    selectedItems.value = [...selectedItems.value, item]
   }
   toggleDropdown()
 }
