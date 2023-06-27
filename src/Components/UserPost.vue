@@ -15,7 +15,12 @@
       <div class="flex gap-2 items-center">
         <span class="text-white">{{ commentCount }}</span>
         <span class="text-white">{{ user.name }}</span>
-        <img src="../assets/images/comment.svg" alt="comment icon" class="cursor-pointer" />
+        <img
+          src="../assets/images/comment.svg"
+          alt="comment icon"
+          class="cursor-pointer"
+          @click="showMoreComments"
+        />
       </div>
       <div class="flex gap-2 items-center">
         <span class="text-white">{{ likeCount }}</span>
@@ -23,7 +28,7 @@
       </div>
     </div>
     <div class="w-full h-[1px] bg-[#EFEFEF4D] my-6"></div>
-    <div v-for="comments in allComments" :key="comments.id">
+    <div v-for="comments in visibleComments" :key="comments.id">
       <user-comment
         :comment="comments.comment"
         :commentAuthor="comments.user.name"
@@ -78,6 +83,8 @@ const allComments = ref(props.comment)
 const store = useUsersStore()
 const user = ref(store.authUser)
 const input = ref('')
+const visibleComments = ref([])
+const numVisibleComments = ref(2)
 const props = defineProps({
   username: {
     type: String,
@@ -122,7 +129,9 @@ const props = defineProps({
 })
 const imageUrl = ref(store.getUrl(props.thumbnail))
 const profileUrl = ref(store.getUrl(props.profilePicture))
-
+const showMoreComments = () => {
+  visibleComments.value = allComments.value
+}
 const changeInput = (e) => {
   input.value = e.target.value
 }
@@ -140,6 +149,7 @@ onBeforeMount(async () => {
   } else {
     liked.value = false
   }
+  visibleComments.value = allComments.value.slice(0, numVisibleComments.value)
 })
 
 const newLike = async () => {
@@ -175,7 +185,7 @@ const submit = async (value) => {
   try {
     await comments(data)
     store.getAuthUser()
-    allComments.value.push({
+    visibleComments.value.push({
       comment: data.comment,
       user: {
         name: userData[0].name,

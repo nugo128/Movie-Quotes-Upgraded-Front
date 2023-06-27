@@ -31,15 +31,20 @@
         </div>
         <div class="flex gap-5 items-center">
           <div class="flex gap-3">
-            <h2>{{ data?.comments?.length }}</h2>
-            <img src="../assets/images/comment.svg" alt="comment icon" class="cursor-pointer" />
+            <h2>{{ commentCount ? commentCount : data?.comments?.length }}</h2>
+            <img
+              src="../assets/images/comment.svg"
+              alt="comment icon"
+              class="cursor-pointer"
+              @click="showMoreComments"
+            />
           </div>
           <div class="flex gap-3">
             {{ likeCount ? likeCount : data.likes?.length }}
             <LikeButton :color="liked ? 'red' : 'white'" @click="newLike" />
           </div>
         </div>
-        <div v-for="comments in data?.comments" :key="comments.id">
+        <div v-for="comments in visibleComments" :key="comments.id">
           <user-comment
             :comment="comments.comment"
             :commentAuthor="comments.user.name"
@@ -91,12 +96,24 @@ import UserComment from '../Components/UserComment.vue'
 import NewitemModal from '../Components/NewitemModal.vue'
 import LikeButton from '../Components/LikeButton.vue'
 import { like, removeLike, getLikes } from '../services/postRequest'
+import { comments } from '../services/postRequest'
 const store = useUsersStore()
 const liked = ref(false)
 const route = useRoute()
 const data = ref({})
 const likeCount = ref(data.value.likes?.length)
+const allComments = ref(data.value.comments)
+const commentCount = ref(data.value.comments?.length)
+const visibleComments = ref([])
+const numVisibleComments = ref(2)
 const loggedInUser = ref([])
+const input = ref('')
+const changeInput = (e) => {
+  input.value = e.target.value
+}
+const showMoreComments = () => {
+  visibleComments.value = allComments.value
+}
 const newLike = async () => {
   const data = {
     quote_id: String(route.query.id)
@@ -128,12 +145,39 @@ onBeforeMount(async () => {
   data.value = resp.data
   const response = await axios.get('/api/user')
   loggedInUser.value = response?.data
-  likeCount.value = data.value.likes.length
+  likeCount.value = data?.value.likes.length
+  allComments.value = data?.value.comments
+  commentCount.value = data?.value.comments.length
   const likeResponse = await getLikes({ quote_id: data.value.id })
   if (likeResponse) {
     liked.value = true
   } else {
     liked.value = false
   }
+  visibleComments.value = allComments.value.slice(0, numVisibleComments.value)
 })
+const submit = async (value) => {
+  const commentData = {
+    quote_id: String(data.value.id),
+    comment: value['comment']
+  }
+  store.getAuthUser()
+  const userData = store.authUser
+
+  try {
+    await comments(commentData)
+    store.getAuthUser()
+    visibleComments.value.push({
+      comment: commentData.comment,
+      user: {
+        name: userData[0].name,
+        profile_picture: store.getUrl(userData[0].profile_picture)
+      }
+    })
+    commentCount.value++
+    input.value = ''
+  } catch (error) {
+    console.error(error)
+  }
+}
 </script>
