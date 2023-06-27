@@ -70,6 +70,10 @@ const props = defineProps({
   id: {
     type: Number,
     required: true
+  },
+  userId: {
+    type: Number,
+    required: true
   }
 })
 const view = () => {
@@ -77,15 +81,17 @@ const view = () => {
 }
 const emits = defineEmits(['deleted'])
 const deleteQuote = async () => {
-  emits('deleted', props.id)
-  await axios
-    .delete(`/api/delete-quote/${props.id}`)
-    .then((response) => {
-      console.log(response.data)
-    })
-    .catch((error) => {
-      console.error(error)
-    })
+  if (props.userId === store.authUser[0].id) {
+    emits('deleted', props.id)
+    await axios
+      .delete(`/api/delete-quote/${props.id}`)
+      .then((response) => {
+        console.log(response.data)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }
 }
 const viewQuote = ref(false)
 const toggleQuote = () => {

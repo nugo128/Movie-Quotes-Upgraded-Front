@@ -109,6 +109,7 @@
             :like="quote.like"
             :comment="quote.comment"
             :id="quote.id"
+            :userId="quote?.user.id"
             @deleted="deleteQuote"
           ></movie-quotes>
         </div>
