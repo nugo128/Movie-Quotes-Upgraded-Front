@@ -35,8 +35,8 @@
             <img src="../assets/images/comment.svg" alt="comment icon" class="cursor-pointer" />
           </div>
           <div class="flex gap-3">
-            {{ data?.likes?.length }}
-            <LikeButton color="red" />
+            {{ likeCount ? likeCount : data.likes?.length }}
+            <LikeButton :color="liked ? 'red' : 'white'" @click="newLike" />
           </div>
         </div>
         <div v-for="comments in data?.comments" :key="comments.id">
@@ -90,10 +90,35 @@ import { Form, Field } from 'vee-validate'
 import UserComment from '../Components/UserComment.vue'
 import NewitemModal from '../Components/NewitemModal.vue'
 import LikeButton from '../Components/LikeButton.vue'
+import { like, removeLike, getLikes } from '../services/postRequest'
 const store = useUsersStore()
+const liked = ref(false)
 const route = useRoute()
 const data = ref({})
+const likeCount = ref(data.value.likes?.length)
 const loggedInUser = ref([])
+const newLike = async () => {
+  const data = {
+    quote_id: String(route.query.id)
+  }
+  if (!liked.value) {
+    try {
+      await like(data)
+      liked.value = true
+      likeCount.value++
+    } catch (error) {
+      console.error(error)
+    }
+  } else {
+    try {
+      await removeLike(data)
+      liked.value = false
+      likeCount.value--
+    } catch (error) {
+      console.error(error)
+    }
+  }
+}
 onBeforeMount(async () => {
   const resp = await axios.get('/api/view-quote', {
     params: {
@@ -103,5 +128,12 @@ onBeforeMount(async () => {
   data.value = resp.data
   const response = await axios.get('/api/user')
   loggedInUser.value = response?.data
+  likeCount.value = data.value.likes.length
+  const likeResponse = await getLikes({ quote_id: data.value.id })
+  if (likeResponse) {
+    liked.value = true
+  } else {
+    liked.value = false
+  }
 })
 </script>
