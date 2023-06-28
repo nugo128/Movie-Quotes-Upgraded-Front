@@ -14,7 +14,7 @@
             class="w-[550px] bg-black placeholder-white text-white outline-none"
             type="text"
             @input="submit"
-            :placeholder="$t('newsfeed.search_placeholder')"
+            :placeholder="movie ? 'Search movie' : $t('newsfeed.search_placeholder')"
           />
         </Field>
       </Form>
@@ -28,21 +28,42 @@ import { ref, defineEmits } from 'vue'
 import { Form, Field } from 'vee-validate'
 import axios from '@/config/axios/index.js'
 import { usePostsStore } from '../stores/post'
+import { useMovieStore } from '../stores/movie'
+const props = defineProps({
+  movie: {
+    type: String,
+    required: false
+  }
+})
+const movieStore = useMovieStore()
 const store = usePostsStore()
 const search = ref(false)
-const emits = defineEmits(['searched'])
+const emits = defineEmits(['searched', 'movieSearched'])
 const submit = async (e) => {
   if (e.target.value.length > 0) {
-    const resp = await axios.get('/api/search-post', {
-      params: {
-        search: e.target.value
-      }
-    })
-    console.log(resp.data)
-    store.searchedPosts(resp.data)
-    emits('searched')
+    if (!props.movie) {
+      const resp = await axios.get('/api/search-post', {
+        params: {
+          search: e.target.value
+        }
+      })
+      store.searchedPosts(resp.data)
+      emits('searched')
+    } else {
+      const resp = await axios.get('/api/search-movie', {
+        params: {
+          search: e.target.value
+        }
+      })
+      movieStore.searchedMovies(resp.data)
+      emits('movieSearched')
+    }
   } else {
-    store.getPosts()
+    if (!props.movie) {
+      store.getPosts()
+    } else {
+      emits('movieSearched')
+    }
   }
 }
 const appearSearch = () => {
