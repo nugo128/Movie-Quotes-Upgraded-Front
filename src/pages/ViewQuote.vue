@@ -1,11 +1,20 @@
 <template>
   <div>
     <user-navbar> </user-navbar>
-    <newitem-modal :click="back">
+    <newitem-modal v-if="edit" :click="editQuote">
+      <new-post
+        @posted="updateQuotes"
+        :quote="{
+          title: data?.quote,
+          thumbnail: data?.thumbnail
+        }"
+      />
+    </newitem-modal>
+    <newitem-modal :click="back" v-if="!edit">
       <div class="p-8 flex flex-col gap-4">
         <div class="flex justify-between w-1/2 pt-7 mb-12">
           <div class="flex gap-5 items-center">
-            <img src="../assets/images/edit.svg" class="w-5" alt="" />
+            <img src="../assets/images/edit.svg" class="w-5" alt="" @click="editQuote" />
             <div class="h-4 w-[1px] bg-[#EFEFEF33]"></div>
             <img src="../assets/images/delete.svg" class="w-5" alt="" @click="deleteQuote" />
           </div>
@@ -95,8 +104,13 @@ import { Form, Field } from 'vee-validate'
 import UserComment from '../Components/UserComment.vue'
 import NewitemModal from '../Components/NewitemModal.vue'
 import LikeButton from '../Components/LikeButton.vue'
+import NewPost from '../Components/NewPost.vue'
 import { like, removeLike, getLikes } from '../services/postRequest'
 import { comments } from '../services/postRequest'
+const edit = ref(false)
+const editQuote = () => {
+  edit.value = !edit.value
+}
 const router = useRouter()
 const store = useUsersStore()
 const liked = ref(false)
