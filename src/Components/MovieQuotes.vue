@@ -14,7 +14,7 @@
           <img src="../assets/images/view.svg" class="w-5" alt="" />
           <p>View Quote</p>
         </div>
-        <div class="flex items-center gap-4 cursor-pointer">
+        <div class="flex items-center gap-4 cursor-pointer" @click="edit">
           <img src="../assets/images/edit.svg" class="w-5" alt="" />
           <p>edit</p>
         </div>
@@ -76,11 +76,23 @@ const props = defineProps({
     required: true
   }
 })
+const viewQuote = ref(false)
 const view = () => {
   router.replace({ path: '/view-quote', query: { id: props.id } })
 }
-const emits = defineEmits(['deleted'])
+const emits = defineEmits(['deleted', 'edit'])
+const edit = () => {
+  viewQuote.value = false
+  if (props.userId === store.authUser[0].id) {
+    emits('edit', {
+      title: props.quote,
+      thumbnail: props.thumbnail,
+      id: props.id
+    })
+  }
+}
 const deleteQuote = async () => {
+  viewQuote.value = false
   if (props.userId === store.authUser[0].id) {
     emits('deleted', props.id)
     await axios
@@ -93,7 +105,6 @@ const deleteQuote = async () => {
       })
   }
 }
-const viewQuote = ref(false)
 const toggleQuote = () => {
   viewQuote.value = !viewQuote.value
 }

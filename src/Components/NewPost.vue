@@ -81,7 +81,7 @@ import { onBeforeMount, ref, defineEmits } from 'vue'
 import { useLocaleStore } from '../stores/locale'
 const localeStore = useLocaleStore()
 import axios from '@/config/axios/index.js'
-const emits = defineEmits(['posted'])
+const emits = defineEmits(['posted', 'updated'])
 const formData = new FormData()
 const userStore = useUsersStore()
 const props = defineProps({
@@ -95,10 +95,12 @@ const props = defineProps({
   }
 })
 const submit = async (val) => {
-  if (!props.quote) {
-    for (let value in val) {
+  for (let value in val) {
+    if (val[value]) {
       formData.set(value, val[value])
     }
+  }
+  if (!props.quote) {
     movieStore.addFile(val.image)
     if (props.movie) {
       formData.set('movie_id', props.movie.id)
@@ -107,7 +109,14 @@ const submit = async (val) => {
     await axios.post('/api/newPost', formData)
     emits('posted')
   } else {
-    console.log(val)
+    if (val.image) {
+      movieStore.addFile(val.image)
+      formData.set('thumbnail', movieStore.file)
+    }
+    formData.set('id', props.quote.id)
+    const response = await axios.post('/api/edit-quote', formData)
+    console.log(response)
+    emits('updated', response.data)
   }
 }
 const movieStore = useMovieStore()

@@ -3,10 +3,11 @@
     <user-navbar> </user-navbar>
     <newitem-modal v-if="edit" :click="editQuote">
       <new-post
-        @posted="updateQuotes"
+        @updated="updateQuotes"
         :quote="{
           title: data?.quote,
-          thumbnail: data?.thumbnail
+          thumbnail: data?.thumbnail,
+          id: data?.id
         }"
       />
     </newitem-modal>
@@ -109,7 +110,9 @@ import { like, removeLike, getLikes } from '../services/postRequest'
 import { comments } from '../services/postRequest'
 const edit = ref(false)
 const editQuote = () => {
-  edit.value = !edit.value
+  if (data.value.user.id === loggedInUser.value.id) {
+    edit.value = !edit.value
+  }
 }
 const router = useRouter()
 const store = useUsersStore()
@@ -125,6 +128,11 @@ const loggedInUser = ref([])
 const input = ref('')
 const back = () => {
   router.replace({ path: '/movie-description', query: { id: data.value.movie.id } })
+}
+const updateQuotes = (e) => {
+  data.value.quote = e.quote
+  data.value.thumbnail = e.thumbnail
+  edit.value = false
 }
 const changeInput = (e) => {
   input.value = e.target.value
