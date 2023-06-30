@@ -70,7 +70,7 @@
 <script setup>
 import UserComment from './UserComment.vue'
 import LikeButton from './LikeButton.vue'
-import { defineProps, ref, onBeforeMount, reactive, onMounted } from 'vue'
+import { defineProps, ref, onBeforeMount, onMounted } from 'vue'
 import { Form, Field } from 'vee-validate'
 import { useUsersStore } from '../stores/user'
 import { useLocaleStore } from '../stores/locale'
@@ -126,11 +126,14 @@ const props = defineProps({
   loggedInUser: {
     type: Object,
     required: true
+  },
+  userId: {
+    type: Number,
+    required: true
   }
 })
-// const likes = reactive([])
-// const removeLikes = reactive([])
 onMounted(() => {
+  store.getAuthUser()
   instantiatePusher()
   window.Echo.channel('likes').listen('LikeEvent', (data) => {
     if (data.message.quote_id === props.quoteID) {
@@ -142,11 +145,36 @@ onMounted(() => {
       likeCount.value -= 1
     }
   })
+  window.Echo.channel('comments').listen('AddComment', (data) => {
+    visibleComments.value.unshift({
+      comment: data.message?.comment,
+      user: {
+        name: data.message.user.name,
+        profile_picture: data.message.user.profile_picture
+      }
+    })
+    visibleComments.value.splice(2)
+    // console.log(visibleComments.value)
+    allComments.value.unshift({
+      comment: data.message?.comment,
+      user: {
+        name: data.message.user.name,
+        profile_picture: store.getUrl(data.message.user.profile_picture)
+      }
+    })
+    commentCount.value += 1
+  })
 })
 const imageUrl = ref(store.getUrl(props.thumbnail))
 const profileUrl = ref(store.getUrl(props.profilePicture))
+const commentsOpen = ref(false)
 const showMoreComments = () => {
-  visibleComments.value = allComments.value
+  if (!commentsOpen.value) {
+    visibleComments.value = allComments.value
+  } else {
+    visibleComments.value = allComments.value.slice(0, numVisibleComments.value)
+  }
+  commentsOpen.value = !commentsOpen.value
 }
 const changeInput = (e) => {
   input.value = e.target.value
@@ -190,24 +218,15 @@ const newLike = async () => {
   }
 }
 const submit = async (value) => {
+  console.log(store.authUser[0])
   const data = {
     quote_id: String(props.quoteID),
-    comment: value['comment']
+    comment: value['comment'],
+    user_id: store.authUser[0].id
   }
-  store.getAuthUser()
-  const userData = store.authUser
 
   try {
     await comments(data)
-    store.getAuthUser()
-    visibleComments.value.push({
-      comment: data.comment,
-      user: {
-        name: userData[0].name,
-        profile_picture: store.getUrl(userData[0].profile_picture)
-      }
-    })
-    commentCount.value++
     input.value = ''
   } catch (error) {
     console.error(error)

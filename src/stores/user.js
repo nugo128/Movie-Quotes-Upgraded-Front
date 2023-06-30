@@ -12,7 +12,6 @@ export const useUsersStore = defineStore('user', () => {
       .get('/api/user')
       .then((response) => {
         authUser.value.push(response.data)
-        console.log(response)
       })
       .catch((error) => {
         console.log(error)

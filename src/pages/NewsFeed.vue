@@ -16,6 +16,7 @@
         </div>
         <div v-for="post in postData" :key="post.id">
           <user-post
+            :userId="loggedInUser.id"
             :username="post.user.name"
             :profilePicture="post.user.profile_picture"
             :movie="post.movie.title"
