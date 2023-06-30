@@ -15,7 +15,9 @@
   "dependencies": {
     "@vee-validate/i18n": "^4.9.5",
     "@vee-validate/rules": "^4.9.5",
+    "laravel-echo": "^1.15.1",
     "pinia": "^2.0.36",
+    "pusher-js": "^8.2.0",
     "vee-validate": "^4.9.5",
     "vue": "^3.3.2",
     "vue-i18n": "^9.2.2",

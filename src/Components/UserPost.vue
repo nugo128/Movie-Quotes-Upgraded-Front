@@ -70,11 +70,12 @@
 <script setup>
 import UserComment from './UserComment.vue'
 import LikeButton from './LikeButton.vue'
-import { defineProps, ref, onBeforeMount } from 'vue'
+import { defineProps, ref, onBeforeMount, reactive, onMounted } from 'vue'
 import { Form, Field } from 'vee-validate'
 import { useUsersStore } from '../stores/user'
 import { useLocaleStore } from '../stores/locale'
 import { like, removeLike, getLikes, comments } from '../services/postRequest'
+import instantiatePusher from '../helpers/instantiatePusher'
 const localeStore = useLocaleStore()
 const liked = ref(false)
 const likeCount = ref(props.numOfLikes)
@@ -127,6 +128,21 @@ const props = defineProps({
     required: true
   }
 })
+// const likes = reactive([])
+// const removeLikes = reactive([])
+onMounted(() => {
+  instantiatePusher()
+  window.Echo.channel('likes').listen('LikeEvent', (data) => {
+    if (data.message.quote_id === props.quoteID) {
+      likeCount.value += 1
+    }
+  })
+  window.Echo.channel('removeLikes').listen('RemoveLike', (data) => {
+    if (data.message.quote_id === props.quoteID) {
+      likeCount.value -= 1
+    }
+  })
+})
 const imageUrl = ref(store.getUrl(props.thumbnail))
 const profileUrl = ref(store.getUrl(props.profilePicture))
 const showMoreComments = () => {
@@ -159,8 +175,8 @@ const newLike = async () => {
   if (!liked.value) {
     try {
       await like(data)
+
       liked.value = true
-      likeCount.value++
     } catch (error) {
       console.error(error)
     }
@@ -168,7 +184,6 @@ const newLike = async () => {
     try {
       await removeLike(data)
       liked.value = false
-      likeCount.value--
     } catch (error) {
       console.error(error)
     }
