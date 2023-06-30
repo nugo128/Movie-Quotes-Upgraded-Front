@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="w-full h-[1px] bg-[#EFEFEF4D] my-6"></div>
-    <div v-for="comments in visibleComments" :key="comments.id">
+    <div v-for="comments in !commentsOpen ? visibleComments : allComments" :key="comments.id">
       <user-comment
         :comment="comments.comment"
         :commentAuthor="comments.user.name"
@@ -85,7 +85,6 @@ const store = useUsersStore()
 const user = ref(store.authUser)
 const input = ref('')
 const visibleComments = ref([])
-const numVisibleComments = ref(2)
 const props = defineProps({
   username: {
     type: String,
@@ -133,7 +132,6 @@ const props = defineProps({
   }
 })
 onMounted(() => {
-  store.getAuthUser()
   instantiatePusher()
   window.Echo.channel('likes').listen('LikeEvent', (data) => {
     if (data.message.quote_id === props.quoteID) {
@@ -144,22 +142,22 @@ onMounted(() => {
     if (data.message.quote_id === props.quoteID) {
       likeCount.value -= 1
     }
+    console.log(data)
   })
   window.Echo.channel('comments').listen('AddComment', (data) => {
-    visibleComments.value.unshift({
+    visibleComments.value.push({
       comment: data.message?.comment,
       user: {
         name: data.message.user.name,
         profile_picture: data.message.user.profile_picture
       }
     })
-    visibleComments.value.splice(2)
-    // console.log(visibleComments.value)
-    allComments.value.unshift({
+    visibleComments.value = visibleComments.value.slice(-2)
+    allComments.value.push({
       comment: data.message?.comment,
       user: {
         name: data.message.user.name,
-        profile_picture: store.getUrl(data.message.user.profile_picture)
+        profile_picture: data.message.user.profile_picture
       }
     })
     commentCount.value += 1
@@ -169,11 +167,6 @@ const imageUrl = ref(store.getUrl(props.thumbnail))
 const profileUrl = ref(store.getUrl(props.profilePicture))
 const commentsOpen = ref(false)
 const showMoreComments = () => {
-  if (!commentsOpen.value) {
-    visibleComments.value = allComments.value
-  } else {
-    visibleComments.value = allComments.value.slice(0, numVisibleComments.value)
-  }
   commentsOpen.value = !commentsOpen.value
 }
 const changeInput = (e) => {
@@ -182,6 +175,9 @@ const changeInput = (e) => {
 const aUser = ref([])
 aUser.value.profile_picture = store.getUrl(props.loggedInUser.profile_picture)
 onBeforeMount(async () => {
+  if (!store.authUser[0]) {
+    store.getAuthUser()
+  }
   aUser.value = props.loggedInUser
   aUser.value.profile_picture = store.getUrl(props.loggedInUser.profile_picture)
   const data = {
@@ -193,7 +189,7 @@ onBeforeMount(async () => {
   } else {
     liked.value = false
   }
-  visibleComments.value = allComments.value.slice(0, numVisibleComments.value)
+  visibleComments.value = allComments.value.slice(-2)
 })
 
 const newLike = async () => {
@@ -218,11 +214,14 @@ const newLike = async () => {
   }
 }
 const submit = async (value) => {
-  console.log(store.authUser[0])
+  if (!store.authUser[0]) {
+    store.getAuthUser()
+  }
+  console.log(store.authUser)
   const data = {
     quote_id: String(props.quoteID),
     comment: value['comment'],
-    user_id: store.authUser[0].id
+    user_id: store.authUser[0]?.id
   }
 
   try {

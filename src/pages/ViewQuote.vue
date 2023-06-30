@@ -50,11 +50,11 @@
             />
           </div>
           <div class="flex gap-3">
-            {{ likeCount ? likeCount : data.likes?.length }}
+            {{ likeCount }}
             <LikeButton :color="liked ? 'red' : 'white'" @click="newLike" />
           </div>
         </div>
-        <div v-for="comments in visibleComments" :key="comments.id">
+        <div v-for="comments in !commentsOpen ? visibleComments : allComments" :key="comments.id">
           <user-comment
             :comment="comments.comment"
             :commentAuthor="comments.user.name"
@@ -97,7 +97,8 @@
 
 <script setup>
 import UserNavbar from '../Components/UserNavbar.vue'
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount, ref, onMounted } from 'vue'
+import instantiatePusher from '../helpers/instantiatePusher'
 import axios from '@/config/axios/index.js'
 import { useRoute, useRouter } from 'vue-router'
 import { useUsersStore } from '../stores/user'
@@ -109,6 +110,41 @@ import NewPost from '../Components/NewPost.vue'
 import { like, removeLike, getLikes } from '../services/postRequest'
 import { comments } from '../services/postRequest'
 const edit = ref(false)
+const data = ref({})
+const route = useRoute()
+const commentCount = ref(data.value.comments?.length)
+const likeCount = ref(0)
+onMounted(() => {
+  instantiatePusher()
+  window.Echo.channel('likes').listen('LikeEvent', (data) => {
+    if (data.message.quote_id == route.query.id) {
+      likeCount.value += 1
+    }
+  })
+  window.Echo.channel('removeLikes').listen('RemoveLike', (data) => {
+    if (data.message.quote_id == route.query.id) {
+      likeCount.value -= 1
+    }
+  })
+  window.Echo.channel('comments').listen('AddComment', (data) => {
+    visibleComments.value.push({
+      comment: data.message?.comment,
+      user: {
+        name: data.message.user.name,
+        profile_picture: data.message.user.profile_picture
+      }
+    })
+    visibleComments.value = visibleComments.value.slice(-2)
+    allComments.value.push({
+      comment: data.message?.comment,
+      user: {
+        name: data.message.user.name,
+        profile_picture: data.message.user.profile_picture
+      }
+    })
+    commentCount.value += 1
+  })
+})
 const editQuote = () => {
   if (data.value.user.id === loggedInUser.value.id) {
     edit.value = !edit.value
@@ -117,13 +153,8 @@ const editQuote = () => {
 const router = useRouter()
 const store = useUsersStore()
 const liked = ref(false)
-const route = useRoute()
-const data = ref({})
-const likeCount = ref(data.value.likes?.length)
 const allComments = ref(data.value.comments)
-const commentCount = ref(data.value.comments?.length)
 const visibleComments = ref([])
-const numVisibleComments = ref(2)
 const loggedInUser = ref([])
 const input = ref('')
 const back = () => {
@@ -150,8 +181,9 @@ const deleteQuote = async () => {
       })
   }
 }
+const commentsOpen = ref(false)
 const showMoreComments = () => {
-  visibleComments.value = allComments.value
+  commentsOpen.value = !commentsOpen.value
 }
 const newLike = async () => {
   const data = {
@@ -161,7 +193,6 @@ const newLike = async () => {
     try {
       await like(data)
       liked.value = true
-      likeCount.value++
     } catch (error) {
       console.error(error)
     }
@@ -169,13 +200,15 @@ const newLike = async () => {
     try {
       await removeLike(data)
       liked.value = false
-      likeCount.value--
     } catch (error) {
       console.error(error)
     }
   }
 }
 onBeforeMount(async () => {
+  if (!store.authUser[0]) {
+    store.getAuthUser()
+  }
   const resp = await axios.get('/api/view-quote', {
     params: {
       id: route.query.id
@@ -193,27 +226,16 @@ onBeforeMount(async () => {
   } else {
     liked.value = false
   }
-  visibleComments.value = allComments.value.slice(0, numVisibleComments.value)
+  visibleComments.value = allComments.value.slice(-2)
 })
 const submit = async (value) => {
   const commentData = {
     quote_id: String(data.value.id),
-    comment: value['comment']
+    comment: value['comment'],
+    user_id: store.authUser[0].id
   }
-  store.getAuthUser()
-  const userData = store.authUser
-
   try {
     await comments(commentData)
-    store.getAuthUser()
-    visibleComments.value.push({
-      comment: commentData.comment,
-      user: {
-        name: userData[0].name,
-        profile_picture: store.getUrl(userData[0].profile_picture)
-      }
-    })
-    commentCount.value++
     input.value = ''
   } catch (error) {
     console.error(error)
