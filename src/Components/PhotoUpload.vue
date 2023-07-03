@@ -2,27 +2,73 @@
   <div
     class="flex justify-between md:justify-start items-center border border-[#6C757D] rounded px-3 py-3 mb-5"
     @dragover.prevent=""
-    @drop.prevent="movieStore.addFile($event.dataTransfer.files[0])"
+    @drop.prevent="dragPhoto"
   >
-    <div class="flex items-center gap-3">
-      <img src="../assets/images/camera.svg" alt="" />
-      <p>{{ movieStore.upload }}</p>
+    <img v-if="placeholderValue" :src="picture" alt="" class="w-440 h-36 p-1" />
+
+    <div v-if="!placeholderValue" class="flex gap-2">
+      <div class="flex items-center gap-3">
+        <img src="../assets/images/camera.svg" alt="" />
+        <p>{{ movieStore.upload }}</p>
+      </div>
+      <Field id="file" type="file" class="hidden" name="image" @input="changePhoto" />
+      <label
+        class="w-max rounded px-3 py-1 bg-[#9747FF66] cursor-pointer text-center ml-2"
+        for="file"
+        >choose file</label
+      >
     </div>
-    <Field
-      id="file"
-      type="file"
-      class="hidden"
-      name="image"
-      @input="movieStore.addFile($event.target.files[0])"
-    />
-    <label class="rounded px-3 py-1 bg-[#9747FF66] cursor-pointer text-center ml-2" for="file"
-      >choose file</label
-    >
+    <div v-if="placeholderValue" class="flex flex-col gap-6 justify-between items-center mx-auto">
+      <h2>REPLACE PHOTO</h2>
+      <div class="flex items-center gap-3">
+        <img src="../assets/images/camera.svg" alt="" />
+        <p>{{ movieStore.upload }}</p>
+      </div>
+      <Field id="file" type="file" class="hidden" name="image" @input="changePhoto" />
+      <label
+        class="w-max rounded px-3 py-1 bg-[#9747FF66] cursor-pointer text-center ml-2"
+        for="file"
+        >choose file</label
+      >
+    </div>
   </div>
 </template>
 
 <script setup>
 import { Field } from 'vee-validate'
 import { useMovieStore } from '../stores/movie'
+import { ref } from 'vue'
+const props = defineProps({
+  placeholderValue: {
+    type: String,
+    required: false
+  }
+})
+const picture = ref(props.placeholderValue)
 const movieStore = useMovieStore()
+const dragPhoto = (e) => {
+  movieStore.addFile(e.dataTransfer.files[0])
+  const file = e.dataTransfer.files[0]
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    picture.value = e.target.result
+  }
+  if (file) {
+    reader.readAsDataURL(file)
+  }
+  const inputField = document.getElementById('file')
+  inputField.files = e.dataTransfer.files
+  inputField.dispatchEvent(new Event('input'))
+}
+const changePhoto = (event) => {
+  movieStore.addFile(event.target.files[0])
+  const file = event.target.files[0]
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    picture.value = e.target.result
+  }
+  if (file) {
+    reader.readAsDataURL(file)
+  }
+}
 </script>

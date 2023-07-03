@@ -3,6 +3,8 @@ import LandingPage from '../pages/LandingPage.vue'
 import NewsFeed from '../pages/NewsFeed.vue'
 import UserProfile from '../pages/UserProfile.vue'
 import MyMovies from '../pages/MyMovies.vue'
+import MovieDescription from '../pages/MovieDescription.vue'
+import ViewQuote from '../pages/ViewQuote.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,6 +32,16 @@ const router = createRouter({
       path: '/my-movies',
       name: 'my-movies',
       component: MyMovies
+    },
+    {
+      path: '/movie-description',
+      name: 'movie-description',
+      component: MovieDescription
+    },
+    {
+      path: '/view-quote',
+      name: 'view-quote',
+      component: ViewQuote
     }
   ]
 })

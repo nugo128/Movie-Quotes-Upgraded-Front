@@ -14,6 +14,7 @@
           class="h-20 w-full bg-transparent border border-gray-500 rounded pt-[0.1rem] pr-16"
           :class="lang === 'Eng' ? '' : 'pl-10'"
           style="text-indent: 7rem"
+          :placeholder="placeholderValue"
           @scroll="handleTextAreaScroll"
         ></textarea>
         <span class="absolute right-4 top-2 text-[#6C757D]">{{ lang }}</span>
@@ -29,7 +30,8 @@ defineProps({
   lang: {
     type: String,
     required: true
-  }
+  },
+  placeholderValue: { type: String, required: false }
 })
 const isTextAreaScrolled = ref(false)
 const active = ref(false)

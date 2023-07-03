@@ -29,6 +29,7 @@
             :year="movie.year"
             :thumbnail="movie.thumbnail"
             :quotes="movie?.quote?.length"
+            @click="seeDescription(movie)"
           ></user-movie>
         </div>
       </div>
@@ -46,15 +47,21 @@ import UserMovie from '../Components/UserMovie.vue'
 import axios from '@/config/axios/index.js'
 import { useMovieStore } from '../stores/movie'
 import { onBeforeMount, ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+const route = useRoute()
 const store = useMovieStore()
 const movies = ref(store.userMovies)
 const displayNewMovie = (val) => {
   addNewMovie.value = false
   movies.value.unshift(val.data)
 }
+const router = useRouter()
 const addNewMovie = ref(false)
 const newMovieHandler = () => {
   addNewMovie.value = !addNewMovie.value
+}
+const seeDescription = (movie) => {
+  router.replace({ path: '/movie-description', query: { id: movie.id } })
 }
 const searchHandler = () => {
   store.getUserMovies()
@@ -69,6 +76,16 @@ onBeforeMount(async () => {
   movies.value = store.userMovies
   if (!store.categories.length) {
     store.getCategories()
+  }
+  console.log(route?.query.delete)
+  if (route?.query.delete) {
+    let index = movies.value.find((movie) => movie.id == route?.query.delete)
+
+    if (index) {
+      let values = movies.value
+      values.splice(values.indexOf(index), 1)
+      movies.value = values
+    }
   }
 })
 </script>

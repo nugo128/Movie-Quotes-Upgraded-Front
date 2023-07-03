@@ -3,7 +3,7 @@
     <h2 class="text-center pt-8">Add movie</h2>
     <div class="w-full h-[1px] bg-[#EFEFEF33] mt-4 bg-opacity-20"></div>
   </div>
-  <div class="flex flex-col gap-6 px-8">
+  <div class="flex flex-col gap-6 px-8 pb-10">
     <div class="flex gap-5 items-center">
       <img
         :src="store.getUrl(user[0]?.profile_picture)"
@@ -13,8 +13,18 @@
       <h2>{{ user[0]?.name }}</h2>
     </div>
     <Form class="flex flex-col gap-4" @submit="submit">
-      <movie-input name="title_en" label="Movie name" lang="Eng"></movie-input>
-      <movie-input name="title_ka" label="ფილმის სახელი" lang="ქარ"></movie-input>
+      <movie-input
+        name="title_en"
+        label="Movie name"
+        lang="Eng"
+        :placeholderValue="description?.title ? JSON.parse(description?.title)['en'] : ''"
+      ></movie-input>
+      <movie-input
+        name="title_ka"
+        label="ფილმის სახელი"
+        lang="ქარ"
+        :placeholderValue="description?.title ? JSON.parse(description.title)['ka'] : ''"
+      ></movie-input>
       <div class="relative">
         <div
           class="dropdown-container p-2 border border-[#6C757D] cursor-pointer rounded"
@@ -52,16 +62,42 @@
             @click="selectItems(item)"
             class="px-4 py-2 cursor-pointer hover:bg-gray-100 text-black"
           >
-            {{ JSON.parse(item.category)[localeStore.lang] }}
+            {{ item?.category ? JSON.parse(item?.category)[localeStore.lang] : '' }}
           </li>
         </ul>
       </div>
-      <movie-input name="year" label="Year/წელი"></movie-input>
-      <movie-input name="director_en" label="Director" lang="Eng"></movie-input>
-      <movie-input name="director_ka" label="რეჟისორი" lang="ქარ"></movie-input>
-      <movie-textarea lang="Eng" name="description_en"></movie-textarea>
-      <movie-textarea lang="ქარ" name="description_ka"></movie-textarea>
-      <photo-upload></photo-upload>
+      <movie-input
+        name="year"
+        label="Year/წელი"
+        :placeholderValue="description?.year ? description?.year : ''"
+      ></movie-input>
+      <movie-input
+        name="director_en"
+        label="Director"
+        lang="Eng"
+        :placeholderValue="description?.director ? JSON.parse(description?.director)['en'] : ''"
+      ></movie-input>
+      <movie-input
+        name="director_ka"
+        label="რეჟისორი"
+        lang="ქარ"
+        :placeholderValue="description?.director ? JSON.parse(description?.director)['ka'] : ''"
+      ></movie-input>
+      <movie-textarea
+        lang="Eng"
+        name="description_en"
+        :placeholderValue="
+          description?.description ? JSON.parse(description?.description)['en'] : ''
+        "
+      ></movie-textarea>
+      <movie-textarea
+        lang="ქარ"
+        name="description_ka"
+        :placeholderValue="
+          description?.description ? JSON.parse(description?.description)['ka'] : ''
+        "
+      ></movie-textarea>
+      <photo-upload :placeholderValue="store.getUrl(description?.thumbnail)"></photo-upload>
       <button type="submit" class="bg-[#E31221] rounded py-2">ADD MOVIE</button>
     </Form>
   </div>
@@ -77,21 +113,27 @@ import { useLocaleStore } from '../stores/locale'
 import { Form } from 'vee-validate'
 import PhotoUpload from './PhotoUpload.vue'
 import axios from '@/config/axios/index.js'
-const emits = defineEmits(['newMovie'])
+const emits = defineEmits(['newMovie', 'editMovie'])
 const localeStore = useLocaleStore()
 const movieStore = useMovieStore()
 const store = useUsersStore()
 const user = ref(store.authUser)
 const categories = ref(movieStore.categories)
-
+const props = defineProps({
+  description: {
+    type: Object,
+    required: false
+  }
+})
 const selectedItems = ref([])
 const isDropdownOpen = ref(false)
 const toggleDropdown = () => {
+  categories.value = movieStore.categories
   isDropdownOpen.value = !isDropdownOpen.value
 }
 const selectItems = (item) => {
   if (!selectedItems.value.some((selectedItem) => selectedItem.id === item.id)) {
-    selectedItems.value.push(item)
+    selectedItems.value = [...selectedItems.value, item]
   }
   toggleDropdown()
 }
@@ -101,15 +143,28 @@ const removeItem = (id) => {
 const formData = new FormData()
 const submit = async (val) => {
   for (let value in val) {
-    formData.set(value, val[value])
+    if (val[value]) {
+      formData.set(value, val[value])
+    }
   }
-  movieStore.addFile(val.image)
-  formData.set('thumbnail', movieStore.file)
   formData.append('categories', JSON.stringify(selectedItems.value))
-  console.log(selectedItems.value)
-  const response = await axios.post('/api/add-movie', formData)
-  emits('newMovie', response)
+  if (!props.description) {
+    movieStore.addFile(val.image)
+    formData.set('thumbnail', movieStore.file)
+    console.log(selectedItems.value)
+    const response = await axios.post('/api/add-movie', formData)
+    emits('newMovie', response)
+  } else {
+    formData.set('id', props.description.id)
+    const response = await axios.post('/api/update-movie', formData)
+    console.log(response)
+    emits('editMovie', {
+      response: response,
+      category: selectedItems.value
+    })
+  }
 }
+
 onBeforeMount(async () => {
   if (!user.value.length) {
     store.getAuthUser()
@@ -117,6 +172,9 @@ onBeforeMount(async () => {
   }
   if (!movieStore.categories.length) {
     movieStore.getCategories()
+  }
+  if (props?.description?.category) {
+    selectedItems.value = props?.description?.category
   }
 })
 </script>

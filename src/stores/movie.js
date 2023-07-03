@@ -40,6 +40,7 @@ export const useMovieStore = defineStore('movies', () => {
     getMovie,
     addFile,
     getCategories,
-    searchedMovies
+    searchedMovies,
+    clear
   }
 })
