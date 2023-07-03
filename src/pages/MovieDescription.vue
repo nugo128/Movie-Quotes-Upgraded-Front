@@ -17,6 +17,9 @@
     <newitem-modal v-if="editMovie" :click="editMovieHandler">
       <new-movie @edit-movie="update" :description="description"></new-movie>
     </newitem-modal>
+    <newitem-modal v-if="edit" :click="editQuote">
+      <new-post @updated="updateQuotes" :quote="quoteDetails" />
+    </newitem-modal>
     <div>
       <user-navbar></user-navbar>
       <div class="pl-440 pt-28 pr-16 flex flex-col gap-8">
@@ -109,7 +112,9 @@
             :like="quote.like"
             :comment="quote.comment"
             :id="quote.id"
+            :userId="quote?.user.id"
             @deleted="deleteQuote"
+            @edit="editQuote"
           ></movie-quotes>
         </div>
       </div>
@@ -130,6 +135,12 @@ import { useLocaleStore } from '../stores/locale'
 import { useRoute, useRouter } from 'vue-router'
 import { onBeforeMount, ref } from 'vue'
 const editMovie = ref(false)
+const edit = ref(false)
+const quoteDetails = ref({})
+const editQuote = (e) => {
+  quoteDetails.value = e
+  edit.value = !edit.value
+}
 const editMovieHandler = () => {
   editMovie.value = !editMovie.value
 }
@@ -166,6 +177,7 @@ const updateQuotes = async () => {
   })
   addQuote.value = false
   description.value = resp.data
+  edit.value = false
 }
 const deleteMovie = async () => {
   await axios

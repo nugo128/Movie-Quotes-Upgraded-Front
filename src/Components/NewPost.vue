@@ -36,18 +36,18 @@
     <Form @submit="submit">
       <text-area
         name="quote_en"
-        placeholder="Start create new quote"
+        :placeholder="quote ? JSON.parse(quote.title)['en'] : 'Start create new quote'"
         language="eng"
-        rule="required"
+        :rule="!quote ? 'required' : ''"
       ></text-area>
       <text-area
         name="quote_ka"
-        placeholder="ახალი ციტატა"
+        :placeholder="quote ? JSON.parse(quote.title)['ka'] : 'ახალი ციტატა'"
         language="ქარ"
-        rule="required"
+        :rule="!quote ? 'required' : ''"
       ></text-area>
-      <photo-upload></photo-upload>
-      <div v-if="!movie" class="flex pl-3">
+      <photo-upload :thumbnail="quote?.thumbnail"></photo-upload>
+      <div v-if="!movie && !quote" class="flex pl-3">
         <img src="../assets/images/movieCamera.svg" class="absolute z-0 mt-4" alt="" />
         <Field
           id=""
@@ -81,26 +81,43 @@ import { onBeforeMount, ref, defineEmits } from 'vue'
 import { useLocaleStore } from '../stores/locale'
 const localeStore = useLocaleStore()
 import axios from '@/config/axios/index.js'
-const emits = defineEmits(['posted'])
+const emits = defineEmits(['posted', 'updated'])
 const formData = new FormData()
 const userStore = useUsersStore()
 const props = defineProps({
   movie: {
     type: Object,
     required: false
+  },
+  quote: {
+    type: Object,
+    required: false
   }
 })
 const submit = async (val) => {
   for (let value in val) {
-    formData.set(value, val[value])
+    if (val[value]) {
+      formData.set(value, val[value])
+    }
   }
-  movieStore.addFile(val.image)
-  if (props.movie) {
-    formData.set('movie_id', props.movie.id)
+  if (!props.quote) {
+    movieStore.addFile(val.image)
+    if (props.movie) {
+      formData.set('movie_id', props.movie.id)
+    }
+    formData.set('thumbnail', movieStore.file)
+    await axios.post('/api/newPost', formData)
+    emits('posted')
+  } else {
+    if (val.image) {
+      movieStore.addFile(val.image)
+      formData.set('thumbnail', movieStore.file)
+    }
+    formData.set('id', props.quote.id)
+    const response = await axios.post('/api/edit-quote', formData)
+    console.log(response)
+    emits('updated', response.data)
   }
-  formData.set('thumbnail', movieStore.file)
-  await axios.post('/api/newPost', formData)
-  emits('posted')
 }
 const movieStore = useMovieStore()
 

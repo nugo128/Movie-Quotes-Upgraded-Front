@@ -14,7 +14,7 @@
           <img src="../assets/images/view.svg" class="w-5" alt="" />
           <p>View Quote</p>
         </div>
-        <div class="flex items-center gap-4 cursor-pointer">
+        <div class="flex items-center gap-4 cursor-pointer" @click="edit">
           <img src="../assets/images/edit.svg" class="w-5" alt="" />
           <p>edit</p>
         </div>
@@ -70,24 +70,41 @@ const props = defineProps({
   id: {
     type: Number,
     required: true
+  },
+  userId: {
+    type: Number,
+    required: true
   }
 })
+const viewQuote = ref(false)
 const view = () => {
   router.replace({ path: '/view-quote', query: { id: props.id } })
 }
-const emits = defineEmits(['deleted'])
-const deleteQuote = async () => {
-  emits('deleted', props.id)
-  await axios
-    .delete(`/api/delete-quote/${props.id}`)
-    .then((response) => {
-      console.log(response.data)
+const emits = defineEmits(['deleted', 'edit'])
+const edit = () => {
+  viewQuote.value = false
+  if (props.userId === store.authUser[0].id) {
+    emits('edit', {
+      title: props.quote,
+      thumbnail: props.thumbnail,
+      id: props.id
     })
-    .catch((error) => {
-      console.error(error)
-    })
+  }
 }
-const viewQuote = ref(false)
+const deleteQuote = async () => {
+  viewQuote.value = false
+  if (props.userId === store.authUser[0].id) {
+    emits('deleted', props.id)
+    await axios
+      .delete(`/api/delete-quote/${props.id}`)
+      .then((response) => {
+        console.log(response.data)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }
+}
 const toggleQuote = () => {
   viewQuote.value = !viewQuote.value
 }
