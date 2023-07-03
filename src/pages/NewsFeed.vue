@@ -16,7 +16,6 @@
         </div>
         <div v-for="post in postData" :key="post.id">
           <user-post
-            :userId="loggedInUser.id"
             :username="post.user.name"
             :profilePicture="post.user.profile_picture"
             :movie="post.movie.title"
@@ -42,11 +41,16 @@ import UserPost from '../Components/UserPost.vue'
 import { usePostsStore } from '../stores/post'
 import { onBeforeMount, ref } from 'vue'
 import NewitemModal from '../Components/NewitemModal.vue'
+import { useUsersStore } from '../stores/user'
 import axios from '@/config/axios/index.js'
+const userStore = useUsersStore()
 const store = usePostsStore()
 const postData = ref(store.posts)
 const loggedInUser = ref([])
 onBeforeMount(async () => {
+  if (!userStore.authUser.length) {
+    userStore.getAuthUser()
+  }
   const response = await axios.get('/api/user')
   loggedInUser.value = response.data
   store.getPosts()

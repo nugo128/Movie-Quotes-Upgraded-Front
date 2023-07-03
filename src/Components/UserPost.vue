@@ -125,42 +125,54 @@ const props = defineProps({
   loggedInUser: {
     type: Object,
     required: true
-  },
-  userId: {
-    type: Number,
-    required: true
   }
 })
-onMounted(() => {
+onMounted(async () => {
+  const data = {
+    quote_id: String(props.quoteID)
+  }
+  const response = await getLikes(data)
+  if (response) {
+    liked.value = true
+  } else {
+    liked.value = false
+  }
   instantiatePusher()
   window.Echo.channel('likes').listen('LikeEvent', (data) => {
-    if (data.message.quote_id === props.quoteID) {
+    if (data.message.quote_id == props.quoteID) {
       likeCount.value += 1
+      if (data.message.user_id == store.authUser[0].id) {
+        liked.value = true
+      }
     }
   })
   window.Echo.channel('removeLikes').listen('RemoveLike', (data) => {
-    if (data.message.quote_id === props.quoteID) {
+    if (data.message.quote_id == props.quoteID) {
       likeCount.value -= 1
+      if (data.message.user_id == store.authUser[0].id) {
+        liked.value = false
+      }
     }
-    console.log(data)
   })
   window.Echo.channel('comments').listen('AddComment', (data) => {
-    visibleComments.value.push({
-      comment: data.message?.comment,
-      user: {
-        name: data.message.user.name,
-        profile_picture: data.message.user.profile_picture
-      }
-    })
-    visibleComments.value = visibleComments.value.slice(-2)
-    allComments.value.push({
-      comment: data.message?.comment,
-      user: {
-        name: data.message.user.name,
-        profile_picture: data.message.user.profile_picture
-      }
-    })
-    commentCount.value += 1
+    if (data.message.quote_id == props.quoteID) {
+      visibleComments.value.push({
+        comment: data.message?.comment,
+        user: {
+          name: data.message.user.name,
+          profile_picture: data.message.user.profile_picture
+        }
+      })
+      visibleComments.value = visibleComments.value.slice(-2)
+      allComments.value.push({
+        comment: data.message?.comment,
+        user: {
+          name: data.message.user.name,
+          profile_picture: data.message.user.profile_picture
+        }
+      })
+      commentCount.value += 1
+    }
   })
 })
 const imageUrl = ref(store.getUrl(props.thumbnail))
@@ -180,15 +192,6 @@ onBeforeMount(async () => {
   }
   aUser.value = props.loggedInUser
   aUser.value.profile_picture = store.getUrl(props.loggedInUser.profile_picture)
-  const data = {
-    quote_id: String(props.quoteID)
-  }
-  const response = await getLikes(data)
-  if (response) {
-    liked.value = true
-  } else {
-    liked.value = false
-  }
   visibleComments.value = allComments.value.slice(-2)
 })
 

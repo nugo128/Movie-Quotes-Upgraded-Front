@@ -45,7 +45,7 @@ import instantiatePusher from '../helpers/instantiatePusher'
 import { useUsersStore } from '../stores/user'
 import { useLocaleStore } from '../stores/locale'
 import axios from '@/config/axios/index.js'
-import { like, removeLike } from '../services/postRequest'
+import { like, removeLike, getLikes } from '../services/postRequest'
 const localeStore = useLocaleStore()
 const store = useUsersStore()
 import { useRouter } from 'vue-router'
@@ -78,21 +78,37 @@ const props = defineProps({
 })
 const likeCount = ref(props.likes.length)
 const commentCount = ref(props.comment.length)
-onMounted(() => {
+onMounted(async () => {
+  const data = {
+    quote_id: String(props.id)
+  }
+  const response = await getLikes(data)
+  if (response) {
+    liked.value = true
+  } else {
+    liked.value = false
+  }
   instantiatePusher()
   window.Echo.channel('likes').listen('LikeEvent', (data) => {
-    if (data.message.quote_id === props.id) {
+    if (data.message.quote_id == props.id) {
       likeCount.value += 1
+      if (data.message.user_id == store.authUser[0].id) {
+        liked.value = true
+      }
     }
   })
   window.Echo.channel('removeLikes').listen('RemoveLike', (data) => {
-    if (data.message.quote_id === props.id) {
+    if (data.message.quote_id == props.id) {
       likeCount.value -= 1
+      if (data.message.user_id == store.authUser[0].id) {
+        liked.value = false
+      }
     }
-    console.log(data)
   })
-  window.Echo.channel('comments').listen('AddComment', () => {
-    commentCount.value += 1
+  window.Echo.channel('comments').listen('AddComment', (data) => {
+    if (data.message.quote_id == props.id) {
+      commentCount.value += 1
+    }
   })
 })
 const liked = ref(false)
@@ -148,7 +164,7 @@ const deleteQuote = async () => {
 const toggleQuote = () => {
   viewQuote.value = !viewQuote.value
 }
-onBeforeMount(() => {
+onBeforeMount(async () => {
   if (!store.authUser.length) {
     store.getAuthUser()
   }

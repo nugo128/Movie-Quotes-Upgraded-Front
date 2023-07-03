@@ -111,6 +111,7 @@ import { like, removeLike, getLikes } from '../services/postRequest'
 import { comments } from '../services/postRequest'
 const edit = ref(false)
 const data = ref({})
+const liked = ref(false)
 const route = useRoute()
 const commentCount = ref(data.value.comments?.length)
 const likeCount = ref(0)
@@ -119,30 +120,38 @@ onMounted(() => {
   window.Echo.channel('likes').listen('LikeEvent', (data) => {
     if (data.message.quote_id == route.query.id) {
       likeCount.value += 1
+      if (data.message.user_id == store.authUser[0].id) {
+        liked.value = true
+      }
     }
   })
   window.Echo.channel('removeLikes').listen('RemoveLike', (data) => {
     if (data.message.quote_id == route.query.id) {
+      if (data.message.user_id == store.authUser[0].id) {
+        liked.value = false
+      }
       likeCount.value -= 1
     }
   })
   window.Echo.channel('comments').listen('AddComment', (data) => {
-    visibleComments.value.push({
-      comment: data.message?.comment,
-      user: {
-        name: data.message.user.name,
-        profile_picture: data.message.user.profile_picture
-      }
-    })
-    visibleComments.value = visibleComments.value.slice(-2)
-    allComments.value.push({
-      comment: data.message?.comment,
-      user: {
-        name: data.message.user.name,
-        profile_picture: data.message.user.profile_picture
-      }
-    })
-    commentCount.value += 1
+    if (data.message.quote_id == route.query.id) {
+      visibleComments.value.push({
+        comment: data.message?.comment,
+        user: {
+          name: data.message.user.name,
+          profile_picture: data.message.user.profile_picture
+        }
+      })
+      visibleComments.value = visibleComments.value.slice(-2)
+      allComments.value.push({
+        comment: data.message?.comment,
+        user: {
+          name: data.message.user.name,
+          profile_picture: data.message.user.profile_picture
+        }
+      })
+      commentCount.value += 1
+    }
   })
 })
 const editQuote = () => {
@@ -152,7 +161,6 @@ const editQuote = () => {
 }
 const router = useRouter()
 const store = useUsersStore()
-const liked = ref(false)
 const allComments = ref(data.value.comments)
 const visibleComments = ref([])
 const loggedInUser = ref([])
