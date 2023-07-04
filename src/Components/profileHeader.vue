@@ -25,22 +25,23 @@
 import LanguageSelect from './LanguageSelect.vue'
 import { useRouter } from 'vue-router'
 import { userLogOut } from '../services/loginRequest'
-import { onMounted, onBeforeMount, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import instantiatePusher from '../helpers/instantiatePusher'
-import { useUsersStore } from '../stores/user'
+
 import axios from '@/config/axios/index.js'
-const store = useUsersStore()
 const user = ref([])
 onMounted(async () => {
   instantiatePusher()
-  let a = 0
+  let user = 0
   await axios
     .get('/api/user')
-    .then((response) => (a = response.data.id))
+    .then((response) => (user = response.data.id))
     .catch((err) => console.log(err))
 
-  console.log(a)
-  window.Echo.private(`notifications.${a}`).listen('LikeNotification', (data) => {
+  window.Echo.private(`notifications.${user}`).listen('LikeNotification', (data) => {
+    console.log(data)
+  })
+  window.Echo.private(`commentNotifications.${user}`).listen('CommentNotification', (data) => {
     console.log(data)
   })
 })
