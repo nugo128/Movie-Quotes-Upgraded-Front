@@ -229,7 +229,8 @@ const submit = async (value) => {
   const data = {
     quote_id: String(props.quoteID),
     comment: value['comment'],
-    user_id: store.authUser[0]?.id
+    user_id: store.authUser[0]?.id,
+    post_author: props.userId
   }
 
   try {
