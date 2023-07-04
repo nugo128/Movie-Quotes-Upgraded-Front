@@ -1,7 +1,7 @@
 <template>
   <header class="px-16 pt-8 pb-4 bg-[#24222F] flex justify-between fixed right-0 w-full z-[999]">
     <h2 class="text-[#DDCCAA]">MOVIE QUOTES</h2>
-
+    <p>{{ user }}</p>
     <div class="flex gap-10 items-center">
       <div class="relative cursor-pointer">
         <img src="../assets/images/bell.svg" alt="bell" />
@@ -25,6 +25,25 @@
 import LanguageSelect from './LanguageSelect.vue'
 import { useRouter } from 'vue-router'
 import { userLogOut } from '../services/loginRequest'
+import { onMounted, onBeforeMount, ref } from 'vue'
+import instantiatePusher from '../helpers/instantiatePusher'
+import { useUsersStore } from '../stores/user'
+import axios from '@/config/axios/index.js'
+const store = useUsersStore()
+const user = ref([])
+onMounted(async () => {
+  instantiatePusher()
+  let a = 0
+  await axios
+    .get('/api/user')
+    .then((response) => (a = response.data.id))
+    .catch((err) => console.log(err))
+
+  console.log(a)
+  window.Echo.private(`notifications.${a}`).listen('LikeNotification', (data) => {
+    console.log(data)
+  })
+})
 const router = useRouter()
 const logoutHandler = async () => {
   try {

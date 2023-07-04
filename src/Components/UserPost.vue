@@ -5,9 +5,9 @@
       <h2 class="text-white text-lg">{{ username }}</h2>
     </div>
     <h2 class="text-white mb-7">
-      <span>“{{ props.quote ? JSON.parse(props.quote)[localeStore.lang] : '' }}”</span>
+      <span>“{{ quote ? JSON.parse(quote)[localeStore.lang] : '' }}”</span>
       <span class="text-[#DDCCAA]"
-        >{{ movie }} <span>({{ year }})</span></span
+        >{{ movie ? JSON.parse(movie)[localeStore.lang] : '' }} <span>({{ year }})</span></span
       >
     </h2>
     <img :src="imageUrl" alt="quote picture" class="w-full" />
@@ -90,6 +90,10 @@ const props = defineProps({
     type: String,
     required: true
   },
+  userId: {
+    type: Number,
+    required: true
+  },
   profilePicture: {
     type: String,
     required: true
@@ -128,6 +132,7 @@ const props = defineProps({
   }
 })
 onMounted(async () => {
+  instantiatePusher()
   const data = {
     quote_id: String(props.quoteID)
   }
@@ -137,7 +142,6 @@ onMounted(async () => {
   } else {
     liked.value = false
   }
-  instantiatePusher()
   window.Echo.channel('likes').listen('LikeEvent', (data) => {
     if (data.message.quote_id == props.quoteID) {
       likeCount.value += 1
@@ -197,7 +201,8 @@ onBeforeMount(async () => {
 
 const newLike = async () => {
   const data = {
-    quote_id: String(props.quoteID)
+    quote_id: String(props.quoteID),
+    user_id: props.userId
   }
   if (!liked.value) {
     try {

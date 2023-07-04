@@ -31,7 +31,7 @@
         <img src="../assets/images/comment.svg" alt="" />
       </div>
       <div class="flex gap-3 items-center text-white">
-        {{ likeCount ? likeCount : data.likes?.length }}
+        {{ likeCount ? likeCount : 0 }}
         <LikeButton :color="liked ? 'red' : 'white'" @click="newLike" />
       </div>
     </div>
@@ -115,7 +115,8 @@ const liked = ref(false)
 const viewQuote = ref(false)
 const newLike = async () => {
   const data = {
-    quote_id: String(props.id)
+    quote_id: String(props.id),
+    user_id: props.userId
   }
   if (!liked.value) {
     try {

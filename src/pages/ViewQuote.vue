@@ -111,10 +111,15 @@ import { like, removeLike, getLikes } from '../services/postRequest'
 import { comments } from '../services/postRequest'
 const edit = ref(false)
 const data = ref({})
+const loggedInUser = ref({})
 const liked = ref(false)
 const route = useRoute()
 const commentCount = ref(data.value.comments?.length)
 const likeCount = ref(0)
+const store = useUsersStore()
+if (!store.authUser[0]) {
+  store.getAuthUser()
+}
 onMounted(() => {
   instantiatePusher()
   window.Echo.channel('likes').listen('LikeEvent', (data) => {
@@ -160,10 +165,8 @@ const editQuote = () => {
   }
 }
 const router = useRouter()
-const store = useUsersStore()
 const allComments = ref(data.value.comments)
 const visibleComments = ref([])
-const loggedInUser = ref([])
 const input = ref('')
 const back = () => {
   router.replace({ path: '/movie-description', query: { id: data.value.movie.id } })
@@ -194,19 +197,20 @@ const showMoreComments = () => {
   commentsOpen.value = !commentsOpen.value
 }
 const newLike = async () => {
-  const data = {
-    quote_id: String(route.query.id)
+  const likeData = {
+    quote_id: String(route.query.id),
+    user_id: data.value.user.id
   }
   if (!liked.value) {
     try {
-      await like(data)
+      await like(likeData)
       liked.value = true
     } catch (error) {
       console.error(error)
     }
   } else {
     try {
-      await removeLike(data)
+      await removeLike(likeData)
       liked.value = false
     } catch (error) {
       console.error(error)
