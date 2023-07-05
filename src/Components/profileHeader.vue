@@ -7,7 +7,7 @@
         <span
           class="absolute left-4 bottom-4 bg-[#E33812] w-7 h-7 text-center rounded-full text-white text-lg"
           @click="toggleNotification"
-          >{{ notification[0]?.length }}</span
+          >{{ notificationCount }}</span
         >
         <img v-if="showNotifications" src="../assets/images/triangle.svg" class="absolute" alt="" />
         <div
@@ -16,12 +16,13 @@
         >
           <div class="flex items-center justify-between pt-10 pb-6 text-2xl text-white px-8">
             <h2>Notifications</h2>
-            <h2 class="underline text-lg">Mark as all read</h2>
+            <h2 class="underline text-lg" @click="readNotification('all')">Mark as all read</h2>
           </div>
           <div
             v-for="notify in notification[0]"
             :key="notify.id"
             class="flex justify-between border border-[#6C757D80] mx-8 px-6 py-5 mb-4 rounded-md"
+            @click="readNotification(notify.id)"
           >
             <div class="flex gap-6 text-white text-lg">
               <img :src="store.getUrl(notify?.picture)" alt="" class="rounded-full w-20 h-20" />
@@ -41,7 +42,7 @@
             </div>
             <div class="text-lg flex flex-col gap-2 items-end">
               <h3 class="text-white">{{ getTimeAgo(notify.createdAt) }}</h3>
-              <h3 class="text-[#198754]">New</h3>
+              <h3 class="text-[#198754]">{{ notify.seen ? '' : 'New' }}</h3>
             </div>
           </div>
         </div>
@@ -71,6 +72,7 @@ const toggleNotification = () => {
 }
 const store = useUsersStore()
 const notification = ref([])
+const notificationCount = ref(0)
 onMounted(async () => {
   instantiatePusher()
   let user = 0
@@ -81,6 +83,7 @@ onMounted(async () => {
 
   axios.get(`/api/get-notifications/${user}`).then((response) => {
     notification.value.push(response.data)
+    notificationCount.value = notification.value[0].filter((item) => item.seen == false).length
   })
   window.Echo.private(`notifications.${user}`).listen('LikeNotification', (data) => {
     const existingLike = notification.value[0].find((obj) =>
@@ -88,15 +91,39 @@ onMounted(async () => {
     )
 
     if (!existingLike && data.notification.user_id !== user) {
-      notification.value[0].unshift(data.notification)
+      let fullData = data.notification
+      fullData.id = notification.value[0][0].id + 1
+      notification.value[0].unshift(fullData)
+      notificationCount.value++
     }
   })
   window.Echo.private(`commentNotifications.${user}`).listen('CommentNotification', (data) => {
     if (data.notification.user_id !== user) {
-      notification.value[0].unshift(data.notification)
+      let fullData = data.notification
+      fullData.id = notification.value[0][0].id + 1
+      notification.value[0].unshift(fullData)
+      notificationCount.value++
     }
   })
 })
+const readNotification = async (id) => {
+  if (id !== 'all') {
+    await axios
+      .post('/api/read-notifications', { id })
+      .then((response) => console.log(response.data))
+    const seenNotification = notification.value[0].find((item) => item.id === id)
+    seenNotification.seen = true
+    notificationCount.value--
+  } else {
+    await axios
+      .post('/api/read-notifications', { all: 'all' })
+      .then((response) => console.log(response.data))
+    notification.value[0].map((val) => {
+      val.seen = true
+    })
+    notificationCount.value = 0
+  }
+}
 const getTimeAgo = (timestamp) => {
   const now = new Date()
   const createdAt = new Date(timestamp)
