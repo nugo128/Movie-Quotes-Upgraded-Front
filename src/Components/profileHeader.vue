@@ -3,38 +3,33 @@
     <h2 class="text-[#DDCCAA]">MOVIE QUOTES</h2>
     <div class="flex gap-10 items-center">
       <div class="relative cursor-pointer">
-        <img src="../assets/images/bell.svg" alt="bell" />
+        <img src="../assets/images/bell.svg" alt="bell" @click="toggleNotification" />
         <span
           class="absolute left-4 bottom-4 bg-[#E33812] w-7 h-7 text-center rounded-full text-white text-lg"
-          >3</span
+          @click="toggleNotification"
+          >{{ notification[0]?.length }}</span
         >
-        <img
-          v-if="notification.length"
-          src="../assets/images/triangle.svg"
-          class="absolute"
-          alt=""
-        />
-        <div v-if="notification.length" class="absolute top-12 bg-black w-900 left-[-650px] pb-8">
+        <img v-if="showNotifications" src="../assets/images/triangle.svg" class="absolute" alt="" />
+        <div
+          v-if="showNotifications"
+          class="absolute top-12 bg-black w-900 left-[-650px] pb-8 max-h-[812px] h-700 overflow-y-scroll scrollbar-hide"
+        >
           <div class="flex items-center justify-between pt-10 pb-6 text-2xl text-white px-8">
             <h2>Notifications</h2>
             <h2 class="underline text-lg">Mark as all read</h2>
           </div>
           <div
-            v-for="notify in notification"
-            :key="notify.notification.id"
+            v-for="notify in notification[0]"
+            :key="notify.id"
             class="flex justify-between border border-[#6C757D80] mx-8 px-6 py-5 mb-4 rounded-md"
           >
             <div class="flex gap-6 text-white text-lg">
-              <img
-                :src="store.getUrl(notify?.notification?.picture)"
-                alt=""
-                class="rounded-full w-20 h-20"
-              />
+              <img :src="store.getUrl(notify?.picture)" alt="" class="rounded-full w-20 h-20" />
               <div class="flex flex-col gap-3">
                 <h2 class="">
-                  {{ notify?.notification?.from }}
+                  {{ notify?.from }}
                 </h2>
-                <h2 class="flex gap-3" v-if="notify?.notification?.type === 'comment'">
+                <h2 class="flex gap-3" v-if="notify?.type === 'comment'">
                   <img src="../assets/images/quoteIcon.svg" alt="" class="w-8 h-7" />
                   <span>Commented to your movie quote</span>
                 </h2>
@@ -69,9 +64,13 @@ import { userLogOut } from '../services/loginRequest'
 import { onMounted, ref } from 'vue'
 import { useUsersStore } from '../stores/user'
 import instantiatePusher from '../helpers/instantiatePusher'
+import axios from '@/config/axios/index.js'
+const showNotifications = ref(false)
+const toggleNotification = () => {
+  showNotifications.value = !showNotifications.value
+}
 const store = useUsersStore()
 const notification = ref([])
-import axios from '@/config/axios/index.js'
 onMounted(async () => {
   instantiatePusher()
   let user = 0
@@ -80,13 +79,22 @@ onMounted(async () => {
     .then((response) => (user = response.data.id))
     .catch((err) => console.log(err))
 
+  axios.get(`/api/get-notifications/${user}`).then((response) => {
+    notification.value.push(response.data)
+  })
   window.Echo.private(`notifications.${user}`).listen('LikeNotification', (data) => {
-    console.log(data)
-    notification.value.push(data)
+    const existingLike = notification.value[0].find((obj) =>
+      obj.type === 'like' ? obj.user_id === data.notification.user_id : false
+    )
+
+    if (!existingLike && data.notification.user_id !== user) {
+      notification.value[0].unshift(data.notification)
+    }
   })
   window.Echo.private(`commentNotifications.${user}`).listen('CommentNotification', (data) => {
-    console.log(data)
-    notification.value.push(data)
+    if (data.notification.user_id !== user) {
+      notification.value[0].unshift(data.notification)
+    }
   })
 })
 const router = useRouter()
@@ -99,3 +107,8 @@ const logoutHandler = async () => {
   }
 }
 </script>
+<style>
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+</style>
