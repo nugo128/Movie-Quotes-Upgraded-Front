@@ -39,9 +39,9 @@
                 </h2>
               </div>
             </div>
-            <div class="text-lg">
-              <h3 class="text-white">5 min ago</h3>
-              <h3 class="text-[#198754] pt-2">New</h3>
+            <div class="text-lg flex flex-col gap-2 items-end">
+              <h3 class="text-white">{{ getTimeAgo(notify.createdAt) }}</h3>
+              <h3 class="text-[#198754]">New</h3>
             </div>
           </div>
         </div>
@@ -97,6 +97,23 @@ onMounted(async () => {
     }
   })
 })
+const getTimeAgo = (timestamp) => {
+  const now = new Date()
+  const createdAt = new Date(timestamp)
+  let seconds = Math.floor((now - createdAt) / 1000)
+  let minutes = Math.floor(seconds / 60)
+  let hours = Math.floor(minutes / 60)
+  let days = Math.floor(hours / 24)
+  if (days > 0) {
+    return days === 1 ? ' 1 day ago' : days + ' days ago'
+  } else if (hours > 0) {
+    return hours === 1 ? '1 hour ago' : hours + ' hours ago'
+  } else if (minutes > 0) {
+    return minutes + ' minutes ago'
+  } else {
+    return 'Just now'
+  }
+}
 const router = useRouter()
 const logoutHandler = async () => {
   try {
