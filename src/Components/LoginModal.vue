@@ -1,9 +1,5 @@
 <template>
-  <Form
-    @submit="submit"
-    v-slot="{ meta }"
-    class="flex flex-col gap-2 md:gap-3 px-20 rounded z-[100]"
-  >
+  <Form @submit="submit" v-slot="{ meta }" class="flex flex-col gap-3 px-20 rounded z-[100]">
     <div class="flex flex-col justify-center items-center md:gap-4 gap-2">
       <h2 class="text-white text-base md:text-3xl">{{ $t('login') }}</h2>
       <p class="text-[#6C757D] text-xs md:text-base [400px] text-center">

@@ -1,8 +1,13 @@
 <template>
   <modal-window :click="registrationHandler" v-if="showRegistration">
-    <registration-modal @registered="emailIsSent" @showLogin="toggleLogin" />
+    <registration-modal
+      @registered="emailIsSent"
+      @showLogin="toggleLogin"
+      :currentWidth="currentWidth"
+    />
   </modal-window>
-  <modal-window v-if="showEmailSent" :click="emailSentHandler">
+  <!-- showEmailSent -->
+  <modal-window v-if="true" :click="emailSentHandler">
     <email-sent
       :sent="$t('thank_you')"
       :check="$t('check_email')"
@@ -20,6 +25,7 @@
     <login-modal
       @showRegistration="toggleRegistration"
       @showReset="togglePasswordResetEmail"
+      :currentWidth="currentWidth"
     ></login-modal>
   </modal-window>
   <modal-window v-if="showPasswordResetEmail" :click="resetModalHandler">
@@ -51,7 +57,6 @@
         name="password"
         type="password"
         :label="$t('form.password_label')"
-        require="*"
         :placeholder="$t('form.password_placeholder')"
         rule="required|min:8|max:15|lowercase_num"
       />
@@ -59,7 +64,6 @@
         name="confirmation"
         type="password"
         :label="$t('form.confirm_password_label')"
-        require="*"
         :placeholder="$t('form.confirm_password_placeholder')"
         rule="required|confirmed:@password"
       />
@@ -173,7 +177,7 @@ const showPasswordResetEmail = ref(false)
 const showResetEmailSent = ref(false)
 const showPasswordResetForm = ref(false)
 const showSuccessPassword = ref(false)
-
+const currentWidth = ref(window.innerWidth)
 if (route.path === '/verify' && route.query.token.length === 128) {
   axios
     .get(`/api/verify/${route.query.token}`)
@@ -241,5 +245,8 @@ window.addEventListener('scroll', () => {
   } else {
     scroll.value = false
   }
+})
+window.addEventListener('resize', () => {
+  currentWidth.value = window.innerWidth
 })
 </script>

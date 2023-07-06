@@ -1,9 +1,5 @@
 <template>
-  <Form
-    @submit="submit"
-    v-slot="{ meta }"
-    class="flex flex-col gap-2 md:gap-3 px-20 rounded z-[100]"
-  >
+  <Form @submit="submit" v-slot="{ meta }" class="flex flex-col gap-3 px-20 rounded z-[100]">
     <div class="flex flex-col justify-center items-center md:gap-4 gap-2">
       <h2 class="text-white text-base md:text-3xl">{{ $t('create_account') }}</h2>
       <p class="text-[#6C757D] text-xs md:text-base">{{ $t('start_journey') }}</p>
@@ -13,7 +9,9 @@
       type="text"
       :label="$t('form.name_label')"
       require="*"
-      :placeholder="$t('form.name_placeholder')"
+      :placeholder="
+        currentWidth < 700 ? $t('form.name_placeholder_mobile') : $t('form.name_placeholder')
+      "
       rule="required|min:3|max:15|lowercase_num"
     />
     <AuthInput
@@ -29,7 +27,9 @@
       type="password"
       :label="$t('form.password_label')"
       require="*"
-      :placeholder="$t('form.password_placeholder')"
+      :placeholder="
+        currentWidth < 700 ? $t('form.password_label') : $t('form.password_placeholder')
+      "
       rule="required|min:8|max:15|lowercase_num"
     />
     <AuthInput
@@ -37,17 +37,19 @@
       type="password"
       :label="$t('form.confirm_password_label')"
       require="*"
-      :placeholder="$t('form.confirm_password_placeholder')"
+      :placeholder="
+        currentWidth < 700 ? $t('form.password_label') : $t('form.password_placeholder')
+      "
       rule="required|confirmed:@password"
     />
     <button
-      class="bg-[#E31221] md:py-2 py-1 md:mt-3 mt-1 mb-1 rounded-sm"
+      class="bg-[#E31221] py-2 md:mt-3 mt-1 mb-1 rounded-sm"
       :class="{ ['pointer-events-none']: !meta.valid }"
     >
       <p class="text-white md:text-base text-xs">{{ $t('get_started') }}</p>
     </button>
     <button
-      class="border-[1px] rounded-sm flex items-center justify-center md:py-2 py-1"
+      class="border-[1px] rounded-sm flex items-center justify-center py-2"
       type="button"
       @click="googleSignup"
     >
@@ -72,6 +74,12 @@ import AuthInput from './AuthInput.vue'
 import { defineEmits } from 'vue'
 import { register, googleLogin } from '../services/registerRequest'
 const emits = defineEmits(['registered', 'showLogin'])
+defineProps({
+  currentWidth: {
+    required: false,
+    type: Number
+  }
+})
 const toggleLogin = () => {
   emits('showLogin', true)
 }

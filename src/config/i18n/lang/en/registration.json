@@ -4,6 +4,7 @@
     "form":{
         "name_label":"Name",
         "name_placeholder":"At least 3 & max.15 lower case characters",
+        "name_placeholder_mobile": "Enter your name",
         "email_label": "Email",
         "email_placeholder" : "Enter your email",
         "password_label": "Password",

@@ -1,13 +1,16 @@
 <template>
-  <Form @submit="submit" v-slot="{ meta }" class="flex flex-col gap-3 px-20 rounded z-[100]">
-    <div class="flex flex-col justify-center items-center">
-      <h2 class="text-white text-3xl">{{ header }}</h2>
-      <p class="text-[#6C757D] max-w-[400px] text-center">
+  <Form @submit="submit" v-slot="{ meta }" class="flex flex-col gap-5 px-20 rounded z-[100]">
+    <div class="flex flex-col justify-center items-center gap-3">
+      <h2 class="text-white md:text-3xl text-2xl">{{ header }}</h2>
+      <p class="text-[#6C757D] max-w-[25rem] text-center md:text-sm text-xs">
         {{ secondaryText }}
       </p>
     </div>
     <slot></slot>
-    <button class="bg-[#E31221] py-2 mt-3 mb-1" :class="{ ['pointer-events-none']: !meta.valid }">
+    <button
+      class="bg-[#E31221] md:py-2 py-1 md:mt-3 mt-1 mb-1 rounded-sm"
+      :class="{ ['pointer-events-none']: !meta.valid }"
+    >
       <p class="text-white">{{ buttonText }}</p>
     </button>
 
