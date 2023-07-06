@@ -6,8 +6,7 @@
       :currentWidth="currentWidth"
     />
   </modal-window>
-  <!-- showEmailSent -->
-  <modal-window v-if="true" :click="emailSentHandler">
+  <modal-window v-if="showEmailSent" :click="emailSentHandler">
     <email-sent
       :sent="$t('thank_you')"
       :check="$t('check_email')"
@@ -90,7 +89,7 @@
   <div class="bg-black flex flex-col md:gap-64 gap-32 pb-[11.25rem]">
     <div class="flex justify-between items-center md:px-8 p-4">
       <h3 class="text-[#DDCCAA] text-xs md:text-base">{{ $t('header.movie_quotes') }}</h3>
-      <div class="flex gap-1 md:gap-5">
+      <div class="flex gap-2 md:gap-5">
         <language-select class="hidden md:flex"></language-select>
         <button
           class="text-white md:text-base text-xs md:px-7 text-[0.625rem] px-2 py-1 rounded border-[1px]"

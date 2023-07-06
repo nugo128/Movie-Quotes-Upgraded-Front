@@ -4,6 +4,7 @@
     "form":{
         "name_label":"სახელი",
         "name_placeholder":"მინიმუმ 3 და მაქსიმუმ 15 სიმბოლო",
+        "name_placeholder_mobile": "შეიყვანეთ თქვენი სახელი",
         "email_label": "ელ-ფოსტა",
         "email_placeholder" : "შეიყვანეთ ელ-ფოსტა",
         "password_label": "პაროლი",
