@@ -83,29 +83,38 @@
     ></success-modal>
   </modal-window>
 
-  <div class="bg-black flex flex-col gap-64 pb-[180px]">
-    <div class="flex justify-between px-8 py-4">
-      <h3 class="text-[#DDCCAA]">{{ $t('header.movie_quotes') }}</h3>
-      <div class="flex gap-6">
-        <language-select></language-select>
-        <button class="bg-[#E31221] text-white px-7 py-1 rounded" @click="registrationHandler">
-          {{ $t('header.sign_up') }}
-        </button>
-        <button class="text-white px-7 py-1 border-[1px]" @click="loginModalHandler">
+  <div class="bg-black flex flex-col md:gap-64 gap-32 pb-[11.25rem]">
+    <div class="flex justify-between items-center md:px-8 p-4">
+      <h3 class="text-[#DDCCAA] text-xs md:text-base">{{ $t('header.movie_quotes') }}</h3>
+      <div class="flex gap-1 md:gap-5">
+        <language-select class="hidden md:flex"></language-select>
+        <button
+          class="text-white md:text-base text-xs md:px-7 text-[0.625rem] px-2 py-1 rounded border-[1px]"
+          @click="loginModalHandler"
+        >
           {{ $t('header.log_in') }}
+        </button>
+        <button
+          class="bg-[#E31221] text-white md:text-base text-[0.625rem] px-2 py-1 md:px-7 rounded"
+          @click="registrationHandler"
+        >
+          {{ $t('header.sign_up') }}
         </button>
       </div>
     </div>
 
     <div class="flex flex-col items-center">
       <h2
-        :class="`text-[#DDCCAA] text-[60px] ${
-          this.$i18n.locale === 'en' ? 'w-[800px]' : 'w-[1200px]'
+        :class="`text-[#DDCCAA] md:text-[4.375rem] md:p-0 ${
+          this.$i18n.locale === 'en' ? 'md:w-[55rem] px-16' : 'md:w-[75rem] px-6'
         } text-center font-light`"
       >
         {{ $t('main_text.find_any_quote') }}
       </h2>
-      <button class="bg-[#E31221] text-white p-3 rounded mt-5" @click="registrationHandler">
+      <button
+        class="bg-[#E31221] text-white md:p-3 py-1 px-3 rounded mt-5"
+        @click="registrationHandler"
+      >
         {{ $t('main_text.get_started') }}
       </button>
     </div>
@@ -115,7 +124,7 @@
     :quote="$t('interstellar_quote')"
     :movie="$t('interstellar')"
     :scroll="scroll"
-    width="w-[760px]"
+    width="md:w-[47.5rem] w-[16rem]"
   >
   </landing-quote>
   <landing-quote
@@ -123,7 +132,7 @@
     :quote="$t('royal_tenebaums_quote')"
     :movie="$t('royal_tenebaums')"
     :scroll="scroll"
-    width="w-[850px]"
+    width="md:w-[53rem] w-[16rem]"
   >
   </landing-quote>
   <landing-quote
@@ -131,11 +140,13 @@
     :quote="$t('royal_tenebaums_quote')"
     :movie="$t('royal_tenebaums')"
     :scroll="scroll"
-    width="w-[850px]"
+    width="md:w-[53rem] w-[16rem]"
   >
   </landing-quote>
   <div class="bg-black p-2">
-    <h2 class="ml-20 text-[#DDCCAA]">© 2022 movie quotes. All rights reserved.</h2>
+    <h2 class="md:ml-20 text-[#DDCCAA] text-[0.5rem] md:text-xl">
+      {{ $t('rights_served') }}
+    </h2>
   </div>
 </template>
 
@@ -225,7 +236,7 @@ const toggleRegistration = (registration) => {
 }
 
 window.addEventListener('scroll', () => {
-  if (window.innerHeight * 0.78 <= window.scrollY) {
+  if (window.innerHeight * 0.74 <= window.scrollY) {
     scroll.value = true
   } else {
     scroll.value = false
