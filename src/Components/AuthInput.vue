@@ -8,7 +8,7 @@
         <input
           :id="name"
           v-bind="field"
-          class="md:w-[25rem] md:h-10 h-7 bg-[#CED4DA] md:p-4 p-1 rounded-md outline-none pr-20 text-[12px]"
+          class="md:w-[25rem] md:h-10 h-7 bg-[#CED4DA] md:p-4 p-1 rounded-md outline-none pr-36 text-[12px]"
           :class="{
             'border-2 border-red-500': !!errors?.length,
             'border-2 border-green-500': !errors?.length && value?.length > 0,
