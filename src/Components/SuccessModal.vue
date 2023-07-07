@@ -1,6 +1,6 @@
 <template>
   <div
-    class="md:bg-transparent py-5 px-10 md:bg-none bg-gradient-to-br from-black to-gray-900 flex flex-col items-center md:justify-center justify-start text-white gap-7 rounded-lg"
+    class="md:bg-transparent py-5 px-16 md:bg-none bg-gradient-to-br from-black to-gray-900 flex flex-col items-center md:justify-center justify-start text-white gap-7 rounded-lg"
   >
     <img src="@/assets/images/check.png" alt="" class="md:w-14 w-12" />
     <h2 class="text-2xl md:text-3xl">{{ mainText }}</h2>
