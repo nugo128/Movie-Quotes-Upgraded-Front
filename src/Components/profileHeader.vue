@@ -1,10 +1,15 @@
 <template>
-  <header class="px-16 pt-8 pb-4 bg-[#24222F] flex justify-between fixed right-0 w-full z-[999]">
-    <h2 class="text-[#DDCCAA]">MOVIE QUOTES</h2>
+  <header class="md:px-16 px-9 py-6 bg-[#24222F] flex justify-between fixed right-0 w-full z-[999]">
+    <img src="../assets/images/burger.svg" class="w-5 md:hidden" alt="" @click="toggleMenu" />
+    <h2 class="text-[#DDCCAA] md:block hidden">MOVIE QUOTES</h2>
     <div class="flex gap-10 items-center">
+      <div class="md:hidden block">
+        <slot></slot>
+      </div>
       <div class="relative cursor-pointer">
-        <img src="../assets/images/bell.svg" alt="bell" @click="toggleNotification" />
+        <img src="../assets/images/bell.svg" class="w-6" alt="bell" @click="toggleNotification" />
         <span
+          v-if="notificationCount"
           class="absolute left-4 bottom-4 bg-[#E33812] w-7 h-7 text-center rounded-full text-white text-lg"
           @click="toggleNotification"
           >{{ notificationCount }}</span
@@ -47,15 +52,16 @@
           </div>
         </div>
       </div>
-      <language-select></language-select>
+      <language-select class="hidden md:flex"></language-select>
       <button
-        class="text-white text-sm border border-white py-2 px-3 rounded-md"
+        class="text-white text-sm border border-white py-2 px-3 rounded-md hidden md:flex"
         @click="logoutHandler"
       >
         {{ $t('newsfeed.logout') }}
       </button>
     </div>
   </header>
+  <user-navbar v-if="menuUpon"></user-navbar>
 </template>
 
 <script setup>
@@ -65,7 +71,12 @@ import { userLogOut } from '../services/loginRequest'
 import { onMounted, ref } from 'vue'
 import { useUsersStore } from '../stores/user'
 import instantiatePusher from '../helpers/instantiatePusher'
+import userNavbar from './UserNavbar.vue'
 import axios from '@/config/axios/index.js'
+const menuUpon = ref(false)
+const toggleMenu = () => {
+  menuUpon.value = !menuUpon.value
+}
 const showNotifications = ref(false)
 const toggleNotification = () => {
   showNotifications.value = !showNotifications.value

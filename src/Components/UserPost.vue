@@ -1,33 +1,34 @@
 <template>
-  <div class="mb-10">
-    <div class="flex items-center gap-5 mb-4">
-      <img :src="profileUrl" :alt="profilePicture" class="w-13 h-13 rounded-full" />
-      <h2 class="text-white text-lg">{{ username }}</h2>
+  <div class="mb-14">
+    <div class="flex items-center gap-5 md:mb-4 mb-2">
+      <img :src="profileUrl" :alt="profilePicture" class="md:w-13 md:h-13 w-10 h-10 rounded-full" />
+      <h2 class="text-white md:text-lg text-sm">{{ username }}</h2>
     </div>
-    <h2 class="text-white mb-7">
+    <h2 class="text-white md:mb-7 mb-4 text-sm md:text-base">
       <span>“{{ quote ? JSON.parse(quote)[localeStore.lang] : '' }}”</span>
       <span class="text-[#DDCCAA]"
-        >{{ movie ? JSON.parse(movie)[localeStore.lang] : '' }} <span>({{ year }})</span></span
+        >{{ movie ? JSON.parse(movie)[localeStore.lang] : '' }}
+        <span class="text-white">({{ year }})</span></span
       >
     </h2>
-    <img :src="imageUrl" alt="quote picture" class="w-full" />
-    <div class="flex gap-5 mt-6">
+    <img :src="imageUrl" alt="quote picture" class="w-full rounded-lg" />
+    <div class="flex gap-5 md:mt-6 mt-2">
       <div class="flex gap-2 items-center">
         <span class="text-white">{{ commentCount }}</span>
         <span class="text-white">{{ user.name }}</span>
         <img
           src="../assets/images/comment.svg"
           alt="comment icon"
-          class="cursor-pointer"
+          class="cursor-pointer md:w-8 w-6"
           @click="showMoreComments"
         />
       </div>
       <div class="flex gap-2 items-center">
         <span class="text-white">{{ likeCount }}</span>
-        <LikeButton :color="liked ? 'red' : 'white'" @click="newLike" />
+        <LikeButton :color="liked ? 'red' : 'white'" @click="newLike" class="md:w-8 w-6" />
       </div>
     </div>
-    <div class="w-full h-[1px] bg-[#EFEFEF4D] my-6"></div>
+    <div class="w-full h-[1px] bg-[#EFEFEF4D] md:my-6 my-3"></div>
     <div v-for="comments in !commentsOpen ? visibleComments : allComments" :key="comments.id">
       <user-comment
         :comment="comments.comment"
@@ -59,7 +60,7 @@
             @input="changeInput"
             type="text"
             :placeholder="$t('newsfeed.comment')"
-            class="bg-[#24222F] w-full h-14 p-7 outline-none"
+            class="bg-[#24222F] w-full h-14 p-7 outline-none rounded-md"
           />
         </Field>
       </Form>

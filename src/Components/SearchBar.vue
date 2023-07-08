@@ -2,8 +2,8 @@
   <div class="relative">
     <div class="flex gap-4">
       <div @click="appearSearch" class="flex gap-4 cursor-pointer">
-        <img src="../assets/images/search.svg" alt="" />
-        <h2 class="text-white" v-if="!search">{{ $t('newsfeed.search') }}</h2>
+        <img src="../assets/images/search.svg" class="w-6" lt="" />
+        <h2 class="text-white md:block hidden" v-if="!search">{{ $t('newsfeed.search') }}</h2>
       </div>
 
       <Form v-if="search">
