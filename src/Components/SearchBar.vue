@@ -1,17 +1,16 @@
 <template>
-  <div class="relative">
+  <div class="md:relative">
     <div class="flex gap-4">
       <div @click="appearSearch" class="flex gap-4 cursor-pointer">
         <img src="../assets/images/search.svg" class="w-6" lt="" />
         <h2 class="text-white md:block hidden" v-if="!search">{{ $t('newsfeed.search') }}</h2>
       </div>
-
-      <Form v-if="search">
+      <Form v-if="search" class="md:block hidden">
         <Field name="search" v-slot="{ field }">
           <input
             id="search"
             v-bind="field"
-            class="w-[550px] bg-black placeholder-white text-white outline-none"
+            class="md:w-[34.375rem] w-15 bg-black placeholder-white text-white outline-none"
             type="text"
             @input="submit"
             :placeholder="movie ? 'Search movie' : $t('newsfeed.search_placeholder')"
@@ -19,7 +18,7 @@
         </Field>
       </Form>
     </div>
-    <div class="h-[0.5px] w-full bg-[#EFEFEF4D] mt-2 absolute" v-if="search"></div>
+    <div class="md:block hidden h-[0.5px] w-full bg-[#EFEFEF4D] mt-7 absolute" v-if="search"></div>
   </div>
 </template>
 

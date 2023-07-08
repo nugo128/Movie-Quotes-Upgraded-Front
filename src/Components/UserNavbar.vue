@@ -1,5 +1,5 @@
 <template>
-  <nav class="fixed bg-transparen h-full w-full md:h-fit z-[999]">
+  <nav class="fixed bg-transparen h-full w-fit md:h-fit z-[999]">
     <div
       class="md:pl-[4.375rem] md:pt-0 rounded-lg pl-11 md:mt-24 flex flex-col gap-11 md:bg-transparent bg-black md:h-fit h-3/4 p-11 w-fit z-[999]"
     >

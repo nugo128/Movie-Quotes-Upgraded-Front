@@ -3,7 +3,7 @@
     <img src="../assets/images/burger.svg" class="w-5 md:hidden" alt="" @click="toggleMenu" />
     <h2 class="text-[#DDCCAA] md:block hidden">MOVIE QUOTES</h2>
     <div class="flex gap-10 items-center">
-      <div class="md:hidden block">
+      <div class="md:hidden flex">
         <slot></slot>
       </div>
       <div class="relative cursor-pointer">
