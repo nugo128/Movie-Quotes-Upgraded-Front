@@ -61,7 +61,7 @@
       </button>
     </div>
   </header>
-  <user-navbar v-if="menuUpon"></user-navbar>
+  <user-navbar v-if="menuUpon" :click="toggleMenu"></user-navbar>
 </template>
 
 <script setup>

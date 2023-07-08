@@ -5,7 +5,7 @@
       <new-movie @new-movie="displayNewMovie"></new-movie>
     </newitem-modal>
     <div>
-      <user-navbar></user-navbar>
+      <user-navbar class="hidden md:flex"></user-navbar>
       <div class="pl-440 pt-28 pr-16">
         <div class="text-white flex items-center justify-between mb-16">
           <h2 class="text-lg">
