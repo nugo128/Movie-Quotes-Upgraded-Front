@@ -6,46 +6,66 @@
       <div class="md:hidden flex">
         <slot></slot>
       </div>
-      <div class="relative cursor-pointer">
+      <div class="md:relative cursor-pointer">
         <img src="../assets/images/bell.svg" class="w-6" alt="bell" @click="toggleNotification" />
         <span
           v-if="notificationCount"
-          class="absolute left-4 bottom-4 bg-[#E33812] w-7 h-7 text-center rounded-full text-white text-lg"
+          class="absolute md:left-3 md:-top-3 top-3 bg-[#E33812] md:w-7 md:h-7 w-6 h-6 text-center rounded-full text-white md:text-lg right-6"
           @click="toggleNotification"
           >{{ notificationCount }}</span
         >
-        <img v-if="showNotifications" src="../assets/images/triangle.svg" class="absolute" alt="" />
+        <img
+          v-if="showNotifications"
+          src="../assets/images/triangle.svg"
+          class="absolute right-8"
+          alt=""
+        />
         <div
           v-if="showNotifications"
-          class="absolute top-12 bg-black w-900 left-[-650px] pb-8 max-h-[812px] h-700 overflow-y-scroll scrollbar-hide"
+          class="absolute md:top-12 bg-black md:w-900 w-screen md:left-[-650px] left-0 top-16 pb-8 max-h-[50.75rem] overflow-y-scroll scrollbar-hide"
         >
           <div class="flex items-center justify-between pt-10 pb-6 text-2xl text-white px-8">
-            <h2>Notifications</h2>
-            <h2 class="underline text-lg" @click="readNotification('all')">Mark as all read</h2>
+            <h2 class="text-base md:text-lg">Notifications</h2>
+            <h2 class="underline text-base md:text-lg" @click="readNotification('all')">
+              Mark as all read
+            </h2>
           </div>
           <div
             v-for="notify in notification[0]"
             :key="notify.id"
-            class="flex justify-between border border-[#6C757D80] mx-8 px-6 py-5 mb-4 rounded-md"
+            class="flex justify-between border border-[#6C757D80] mx-8 md:px-6 px-3 py-5 mb-4 rounded-md flex-col md:flex-row"
             @click="readNotification(notify.id)"
           >
-            <div class="flex gap-6 text-white text-lg">
-              <img :src="store.getUrl(notify?.picture)" alt="" class="rounded-full w-20 h-20" />
-              <div class="flex flex-col gap-3">
+            <div class="flex gap-3 md:gap-6 text-white text-lg justify-between">
+              <img
+                :src="store.getUrl(notify?.picture)"
+                alt=""
+                class="rounded-full md:w-20 md:h-20 w-15 h-15"
+                :class="!notify.seen ? 'border-[#198754] border-2' : ''"
+              />
+
+              <div class="flex flex-col gap-2 md:gap-3">
                 <h2 class="">
                   {{ notify?.from }}
                 </h2>
-                <h2 class="flex gap-3" v-if="notify?.type === 'comment'">
-                  <img src="../assets/images/quoteIcon.svg" alt="" class="w-8 h-7" />
-                  <span>Commented to your movie quote</span>
+                <h2 class="flex gap-3 md:text-base text-sm" v-if="notify?.type === 'comment'">
+                  <img src="../assets/images/quoteIcon.svg" alt="" class="md:w-8 md:h-7 w-6 h-6" />
+                  <span class="hidden md:block">Commented to your movie quote</span
+                  ><span class="md:hidden block">Commented to your quote</span>
                 </h2>
                 <h2 class="flex gap-3" v-else>
-                  <img src="../assets/images/filled-hearth.svg" alt="" class="w-8 h-7" />
+                  <img
+                    src="../assets/images/filled-hearth.svg"
+                    alt=""
+                    class="md:w-8 md:h-7 w-6 h-6"
+                  />
                   <span>Reacted to your quote</span>
                 </h2>
               </div>
             </div>
-            <div class="text-lg flex flex-col gap-2 items-end">
+            <div
+              class="md:text-lg text-sm flex md:flex-col flex-row-reverse md:gap-2 md:items-end md:justify-normal justify-end gap-12"
+            >
               <h3 class="text-white">{{ getTimeAgo(notify.createdAt) }}</h3>
               <h3 class="text-[#198754]">{{ notify.seen ? '' : 'New' }}</h3>
             </div>
