@@ -4,7 +4,9 @@ import * as login from './login.json'
 import * as reset from './password-reset.json'
 import * as newsfeed from './newsfeed.json'
 import * as profile from './profile.json'
+import * as notifications from './notifications.json'
 const translations = {
+  ...notifications,
   ...profile,
   ...newsfeed,
   ...reset,

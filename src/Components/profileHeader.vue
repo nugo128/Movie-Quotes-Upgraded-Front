@@ -22,12 +22,12 @@
         />
         <div
           v-if="showNotifications"
-          class="absolute md:top-12 bg-black md:w-900 w-screen md:left-[-650px] left-0 top-16 pb-8 max-h-[50.75rem] overflow-y-scroll scrollbar-hide"
+          class="absolute md:top-12 bg-black md:w-900 w-screen md:left-[-650px] left-0 top-16 pb-8 md:max-h-[50.75rem] h-[76vh] overflow-y-scroll scrollbar-hide"
         >
           <div class="flex items-center justify-between pt-10 pb-6 text-2xl text-white px-8">
-            <h2 class="text-base md:text-lg">Notifications</h2>
+            <h2 class="text-base md:text-lg">{{ $t('notifications.notifications') }}</h2>
             <h2 class="underline text-base md:text-lg" @click="readNotification('all')">
-              Mark as all read
+              {{ $t('notifications.read_all') }}
             </h2>
           </div>
           <div
@@ -36,40 +36,57 @@
             class="flex justify-between border border-[#6C757D80] mx-8 md:px-6 px-3 py-5 mb-4 rounded-md flex-col md:flex-row"
             @click="readNotification(notify.id)"
           >
-            <div class="flex gap-3 md:gap-6 text-white text-lg justify-between">
-              <img
-                :src="store.getUrl(notify?.picture)"
-                alt=""
-                class="rounded-full md:w-20 md:h-20 w-15 h-15"
-                :class="!notify.seen ? 'border-[#198754] border-2' : ''"
-              />
+            <div class="flex gap-3 md:gap-6 text-white text-lg md:justify-between">
+              <div class="min-w-fit flex flex-col justify-between items-center">
+                <img
+                  :src="store.getUrl(notify?.picture)"
+                  alt=""
+                  class="rounded-full md:w-20 md:h-20 w-15 h-15"
+                  :class="!notify.seen ? 'border-[#198754] border-2' : ''"
+                />
+                <h3 class="text-[#198754] text-sm md:hidden">
+                  {{ notify.seen ? '' : $t('notifications.new') }}
+                </h3>
+              </div>
 
               <div class="flex flex-col gap-2 md:gap-3">
                 <h2 class="">
                   {{ notify?.from }}
                 </h2>
-                <h2 class="flex gap-3 md:text-base text-sm" v-if="notify?.type === 'comment'">
+                <h2
+                  class="flex gap-3 md:text-base text-sm items-center"
+                  v-if="notify?.type === 'comment'"
+                >
                   <img src="../assets/images/quoteIcon.svg" alt="" class="md:w-8 md:h-7 w-6 h-6" />
-                  <span class="hidden md:block">Commented to your movie quote</span
-                  ><span class="md:hidden block">Commented to your quote</span>
+                  <span class="hidden md:block">{{ $t('notifications.commented') }}</span
+                  ><span class="md:hidden block">{{ $t('notifications.commented_mobile') }}</span>
                 </h2>
-                <h2 class="flex gap-3" v-else>
+                <h2 class="flex gap-3 md:text-base text-sm" v-else>
                   <img
                     src="../assets/images/filled-hearth.svg"
                     alt=""
                     class="md:w-8 md:h-7 w-6 h-6"
                   />
-                  <span>Reacted to your quote</span>
+                  <span class="hidden md:block">{{ $t('notifications.like') }}</span>
+                  <span class="md:hidden block">{{ $t('notifications.like_mobile') }}</span>
                 </h2>
+                <h3 class="text-white md:hidden block text-sm">
+                  {{ getTimeAgo(notify.createdAt) }}
+                </h3>
               </div>
             </div>
             <div
               class="md:text-lg text-sm flex md:flex-col flex-row-reverse md:gap-2 md:items-end md:justify-normal justify-end gap-12"
             >
-              <h3 class="text-white">{{ getTimeAgo(notify.createdAt) }}</h3>
-              <h3 class="text-[#198754]">{{ notify.seen ? '' : 'New' }}</h3>
+              <h3 class="text-white hidden md:block">
+                {{ getTimeAgo(notify.createdAt) }}
+              </h3>
+              <h3 class="text-[#198754] hidden md:block">
+                {{ notify.seen ? '' : $t('notifications.new') }}
+              </h3>
             </div>
           </div>
+          <div class="h-1/6 w-full bg-transparent fixed bottom-0" @click="toggleNotification"></div>
         </div>
       </div>
       <language-select class="hidden md:flex"></language-select>
@@ -90,9 +107,11 @@ import { useRouter } from 'vue-router'
 import { userLogOut } from '../services/loginRequest'
 import { onMounted, ref } from 'vue'
 import { useUsersStore } from '../stores/user'
+import { useLocaleStore } from '../stores/locale'
 import instantiatePusher from '../helpers/instantiatePusher'
 import userNavbar from './UserNavbar.vue'
 import axios from '@/config/axios/index.js'
+const locale = useLocaleStore()
 const menuUpon = ref(false)
 const toggleMenu = () => {
   menuUpon.value = !menuUpon.value
@@ -163,13 +182,13 @@ const getTimeAgo = (timestamp) => {
   let hours = Math.floor(minutes / 60)
   let days = Math.floor(hours / 24)
   if (days > 0) {
-    return days === 1 ? ' 1 day ago' : days + ' days ago'
+    return locale.lang === 'en' ? `${days} day ago` : `${days} დღის წინ`
   } else if (hours > 0) {
-    return hours === 1 ? '1 hour ago' : hours + ' hours ago'
+    return locale.lang === 'en' ? `${hours} hour ago` : `${hours} საათის წინ`
   } else if (minutes > 0) {
-    return minutes + ' minutes ago'
+    return locale.lang === 'en' ? `${minutes} minute ago` : `${minutes} წუთის წინ`
   } else {
-    return 'Just now'
+    return locale.lang === 'en' ? `just now` : `ახლახანს`
   }
 }
 const router = useRouter()

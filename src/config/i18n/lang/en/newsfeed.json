@@ -8,7 +8,8 @@
         "search_placeholder_2": "Enter # to search quotes",
         "search": "search by",
         "logout": "Log out",
-        "comment": "Write a comment"
+        "comment": "Write a comment",
+        "search_mobile": "search"
 
     }
 }

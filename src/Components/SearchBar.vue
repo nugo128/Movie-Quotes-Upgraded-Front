@@ -33,7 +33,7 @@
                   class="bg-black placeholder-white text-white outline-none"
                   type="text"
                   @input="submit"
-                  placeholder="Search"
+                  :placeholder="$t('newsfeed.search_mobile')"
                 />
               </Field>
             </Form>
