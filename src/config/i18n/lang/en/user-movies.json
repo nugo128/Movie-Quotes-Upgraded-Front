@@ -1,0 +1,9 @@
+{
+    "movies":{
+        "my_list": "My list of movies",
+        "total": "Total",
+        "add_movie":"Add movie",
+        "add": "Add movie"
+
+    }
+}

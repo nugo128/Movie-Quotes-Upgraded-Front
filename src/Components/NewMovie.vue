@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-center pt-8">Add movie</h2>
+    <h2 class="text-center pt-8">{{ $t('movies.add_movie') }}</h2>
     <div class="w-full h-[1px] bg-[#EFEFEF33] mt-4 bg-opacity-20"></div>
   </div>
   <div class="flex flex-col gap-6 px-8 pb-10">
@@ -98,7 +98,7 @@
         "
       ></movie-textarea>
       <photo-upload :placeholderValue="store.getUrl(description?.thumbnail)"></photo-upload>
-      <button type="submit" class="bg-[#E31221] rounded py-2">ADD MOVIE</button>
+      <button type="submit" class="bg-[#E31221] rounded py-2">{{ $t('movies.add_movie') }}</button>
     </Form>
   </div>
 </template>

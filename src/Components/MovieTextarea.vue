@@ -11,9 +11,8 @@
         <textarea
           v-bind="field"
           name=""
-          class="h-20 w-full bg-transparent border border-gray-500 rounded pt-[0.1rem] pr-16"
-          :class="lang === 'Eng' ? '' : 'pl-10'"
-          style="text-indent: 7rem"
+          class="h-20 w-full bg-transparent border border-gray-500 rounded md:pt-[0.1rem] pr-16 py-auto md:indent-28 indent-0 pt-8 pl-4"
+          :class="lang === 'Eng' ? '' : 'md:indent-36'"
           :placeholder="placeholderValue"
           @scroll="handleTextAreaScroll"
         ></textarea>

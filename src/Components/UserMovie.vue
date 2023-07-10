@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <img :src="poster" alt="" class="w-440 h-370 rounded-xl" />
-    <h2 class="text-white text-3xl break-words w-440">
+  <div class="pb-8">
+    <img :src="poster" alt="" class="md:w-440 md:h-370 w-[22.375rem] h-[18.875rem] rounded-xl" />
+    <h2 class="text-white md:text-3xl text-2xl break-words md:w-440 my-2">
       {{ JSON.parse(title)[localeStore.lang] }} (<span>{{ year }}</span
       >)
     </h2>

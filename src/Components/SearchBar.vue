@@ -2,7 +2,7 @@
   <div class="md:relative">
     <div class="flex gap-4">
       <div @click="appearSearch" class="flex gap-4 cursor-pointer">
-        <img src="../assets/images/search.svg" class="w-6 md:-mt-7" />
+        <img src="../assets/images/search.svg" class="w-6" />
         <h2 class="text-white md:block hidden" v-if="!search">{{ $t('newsfeed.search') }}</h2>
       </div>
       <Form v-if="search" class="md:block hidden">

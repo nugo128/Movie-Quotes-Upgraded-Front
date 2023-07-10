@@ -6,22 +6,29 @@
     </newitem-modal>
     <div>
       <user-navbar class="hidden md:flex"></user-navbar>
-      <div class="pl-440 pt-28 pr-16">
-        <div class="text-white flex items-center justify-between mb-16">
-          <h2 class="text-lg">
-            total num of movies <span>{{ movies.length }}</span>
+      <div class="md:pl-440 pt-28 md:pr-16 w-screen flex flex-col px-8">
+        <div class="text-white flex items-center justify-between md:mb-16 mb-10">
+          <h2 class="text-lg flex md-flex-row flex-col md:gap-0 gap-3">
+            <span>{{ $t('movies.my_list') }} </span>
+            <span class="text-sm">({{ $t('movies.total') }} {{ movies.length }})</span>
           </h2>
           <div class="flex items-center gap-4">
-            <search-bar @movieSearched="searchHandler" movie="true"></search-bar>
+            <search-bar
+              @movieSearched="searchHandler"
+              movie="true"
+              class="md:block hidden"
+            ></search-bar>
             <button
               @click="newMovieHandler"
-              class="py-2 px-4 bg-[#E31221] rounded-lg flex gap-2 items-center"
+              class="py-2 px-2 md:px-4 bg-[#E31221] rounded-lg flex gap-2 items-center -mt-4 md:mt-0 text-sm md:text-base"
             >
-              <img src="../assets/images/plus.svg" alt="" />Add movie
+              <img src="../assets/images/plus.svg" alt="" />
+              <span class="hidden md:block">{{ $t('movies.add_movie') }}</span>
+              <span class="block md:hidden">{{ $t('movies.add') }}</span>
             </button>
           </div>
         </div>
-        <div class="h-max flex flex-wrap gap-12">
+        <div class="h-max flex flex-wrap gap-6 justify-center md:px-0">
           <user-movie
             v-for="movie in movies"
             :key="movie.id"
