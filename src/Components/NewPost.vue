@@ -57,12 +57,12 @@
         >
           <option class="bg-black mb-2" selected disabled value="">Choose Movie</option>
           <option
-            class="bg-black px-0"
+            class="bg-black px-0 w-10"
             v-for="movie in movieStore.movies"
             :value="movie.id"
             :key="movie.id"
           >
-            {{ movie.title }}
+            {{ movie ? JSON.parse(movie.title)[localeStore.lang] : '' }}
           </option>
         </Field>
       </div>

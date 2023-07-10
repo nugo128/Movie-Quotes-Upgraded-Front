@@ -3,7 +3,7 @@
     <textarea
       v-bind="field"
       :name="name"
-      class="mb-3 h-14 w-full bg-transparent border border-[#6C757D] p-2 rounded"
+      class="mb-3 md:h-14 h-20 w-full bg-transparent border border-[#6C757D] p-2 rounded"
       :placeholder="placeholder"
     />
     <span class="absolute right-12 mt-2">{{ language }}</span>
