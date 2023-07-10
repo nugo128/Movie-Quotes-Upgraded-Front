@@ -98,7 +98,7 @@
       </button>
     </div>
   </header>
-  <user-navbar v-if="menuUpon" :click="toggleMenu"></user-navbar>
+  <user-navbar v-if="menuOpen" :click="toggleMenu"></user-navbar>
 </template>
 
 <script setup>
@@ -112,9 +112,9 @@ import instantiatePusher from '../helpers/instantiatePusher'
 import userNavbar from './UserNavbar.vue'
 import axios from '@/config/axios/index.js'
 const locale = useLocaleStore()
-const menuUpon = ref(false)
+const menuOpen = ref(false)
 const toggleMenu = () => {
-  menuUpon.value = !menuUpon.value
+  menuOpen.value = !menuOpen.value
 }
 const showNotifications = ref(false)
 const toggleNotification = () => {

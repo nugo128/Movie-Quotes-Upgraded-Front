@@ -20,27 +20,27 @@
     <newitem-modal v-if="edit" :click="editQuote">
       <new-post @updated="updateQuotes" :quote="quoteDetails" />
     </newitem-modal>
-    <div>
-      <user-navbar></user-navbar>
-      <div class="pl-440 pt-28 pr-16 flex flex-col gap-8">
-        <h2 class="text-white text-lg">Movie description</h2>
-        <div class="flex gap-2">
+    <div class="px-9">
+      <user-navbar class="md:block hidden"></user-navbar>
+      <div class="md:pl-440 pt-28 md:pr-16 flex flex-col gap-8">
+        <h2 class="text-white text-lg md:block hidden">Movie description</h2>
+        <div class="flex flex-col md:flex-row gap-2">
           <img
             :src="userStore.getUrl(description.thumbnail)"
-            class="w-[800px] h-[400px] rounded-xl"
+            class="md:w-[50rem] md:h-[25rem] rounded-xl w-[22.375rem] h-[18.875rem]"
             alt=""
           />
-          <div class="w-600 pl-4 flex flex-col gap-6">
+          <div class="md:w-600 pl-0 md:pl-4 flex flex-col gap-6">
             <div class="flex justify-between">
-              <h2 class="text-[#DDCCAA] text-xl">
+              <h2 class="text-[#DDCCAA] md:text-xl text-lg">
                 {{
                   description.title && localeStore?.lang
                     ? JSON.parse(description?.title)[localeStore?.lang]
                     : ''
                 }}
-                <span>{{ description.year }}</span>
+                <span>({{ description.year }})</span>
               </h2>
-              <div class="flex gap-4 bg-[#24222F] py-2 px-7 rounded-xl">
+              <div class="hidden md:flex gap-4 bg-[#24222F] py-2 px-7 rounded-xl">
                 <img
                   src="../assets/images/edit.svg"
                   class="w-5 h-5 cursor-pointer"
@@ -58,7 +58,7 @@
             </div>
             <div class="flex gap-4 flex-wrap">
               <h3
-                class="bg-[#6C757D] w-max px-3 py-1 rounded-md text-white"
+                class="bg-[#6C757D] w-max px-3 py-1 rounded-md text-sm md:text-base text-white"
                 v-for="genre in description.category"
                 :key="genre.id"
               >
@@ -70,7 +70,7 @@
               </h3>
             </div>
             <div>
-              <h2 class="text-[#CED4DA]">
+              <h2 class="text-[#CED4DA] text-sm md:text-base">
                 Director:
                 <span class="text-white">
                   {{
@@ -81,7 +81,7 @@
                 >
               </h2>
             </div>
-            <p>
+            <p class="break-words text-[#CED4DA] text-sm md:text-base">
               {{
                 description?.description && localeStore?.lang
                   ? JSON.parse(description?.description)[localeStore?.lang]
@@ -90,15 +90,18 @@
             </p>
           </div>
         </div>
-        <div class="flex gap-4 items-center">
-          <h2 class="text-white text-xl">
+        <div class="flex md:gap-4 gap-8 md:items-center md:flex-row flex-col-reverse items-start">
+          <h2 class="hidden md:block text-white md:text-xl text-lg">
             Quotes (total <span>{{ description.quote?.length }}</span
             >)
           </h2>
-          <div class="h-7 w-[1px] bg-[#EFEFEF33]"></div>
+          <h2 class="flex flex-col md:hidden text-white md:text-xl text-lg">
+            <span>All Quotes</span> <span>(total {{ description.quote?.length }})</span>
+          </h2>
+          <div class="md:h-7 md:w-px h-px w-full md:mb-0 mb-4 bg-[#EFEFEF33]"></div>
           <button
             @click="newQuoteHandler"
-            class="py-2 px-4 bg-[#E31221] rounded-lg flex gap-2 items-center"
+            class="py-2 px-4 bg-[#E31221] rounded-md flex gap-2 items-center text-sm md:text-base"
           >
             <img src="../assets/images/plus.svg" alt="" />Add quote
           </button>
