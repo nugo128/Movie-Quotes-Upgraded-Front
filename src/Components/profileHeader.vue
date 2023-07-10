@@ -17,7 +17,7 @@
         <img
           v-if="showNotifications"
           src="../assets/images/triangle.svg"
-          class="absolute right-8"
+          class="absolute right-8 md:right-0 md:top-8"
           alt=""
         />
         <div

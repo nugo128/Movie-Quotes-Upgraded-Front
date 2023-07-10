@@ -9,7 +9,10 @@
         "search": "search by",
         "logout": "Log out",
         "comment": "Write a comment",
-        "search_mobile": "search"
+        "search_mobile": "search",
+        "add_new_quote": "Write new quote",
+        "choose_movie": "Choose Movie",
+        "post": "POST"
 
     }
 }

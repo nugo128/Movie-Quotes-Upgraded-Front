@@ -10,7 +10,10 @@
     <div v-if="!placeholderValue" class="flex md:gap-2 justify-normal">
       <div v-if="!thumbnail" class="flex items-center gap-3 py-2 md:py-0">
         <img src="../assets/images/camera.svg" alt="" />
-        <p>{{ movieStore.upload }}</p>
+        <p class="hidden md:block">
+          {{ uploaded ? 'photo uploaded!' : 'Drag & drop your image here or' }}
+        </p>
+        <p class="block md:hidden">{{ uploaded ? 'photo uploaded!' : 'Upload image' }}</p>
       </div>
       <Field id="file" type="file" class="hidden" name="image" @input="changePhoto" />
       <label
@@ -58,6 +61,7 @@ const props = defineProps({
 })
 const userStore = useUsersStore()
 const picture = ref(props.placeholderValue || props.thumbnail)
+const uploaded = ref(null)
 const movieStore = useMovieStore()
 const dragPhoto = (e) => {
   movieStore.addFile(e.dataTransfer.files[0])
@@ -79,6 +83,7 @@ const changePhoto = (event) => {
   const reader = new FileReader()
   reader.onload = (e) => {
     picture.value = e.target.result
+    uploaded.value = true
   }
   if (file) {
     reader.readAsDataURL(file)

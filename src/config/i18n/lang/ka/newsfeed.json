@@ -9,7 +9,10 @@
         "search": "ძებნა",
         "logout": "გამოსვლა",
         "comment": "კომენტარის დაწერა",
-        "search_mobile": "ძიება"
+        "search_mobile": "ძიება",
+        "add_new_quote": "ახალი ციტატა",
+        "choose_movie": "აირჩიეთ ფილმი",
+        "post": "დაპოსტვა"
 
     }
 }

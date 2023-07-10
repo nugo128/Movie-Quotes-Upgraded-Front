@@ -12,7 +12,7 @@
         <div class="flex justify-between gap-10 w-full mb-11">
           <div class="flex gap-3 cursor-pointer md:text-base text-sm" @click="newPostHandler">
             <img src="../assets/images/new-quote.svg" class="w-5" alt="" />
-            <h2 class="text-white w-[11.25rem]">{{ $t('newsfeed.new_quote') }}</h2>
+            <h2 class="text-white w-fit">{{ $t('newsfeed.new_quote') }}</h2>
           </div>
           <search-bar @searched="searchPosts" class="md:flex hidden" />
         </div>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-center pt-8">Write New Quote</h2>
+    <h2 class="text-center pt-8">{{ $t('newsfeed.add_new_quote') }}</h2>
     <div class="w-full h-[1px] bg-[#EFEFEF33] mt-4 bg-opacity-20"></div>
   </div>
   <div class="flex flex-col gap-10 px-8">
@@ -55,7 +55,9 @@
           class="z-50 select w-full focus:appearance-none focus:outline-none text-white bg-transparent mt-2 py-5 px-12 mb-10"
           name="movie_id"
         >
-          <option class="bg-black mb-2" selected disabled value="">Choose Movie</option>
+          <option class="bg-black mb-2" selected disabled value="">
+            {{ $t('newsfeed.choose_movie') }}
+          </option>
           <option
             class="bg-black px-0 w-10"
             v-for="movie in movieStore.movies"
@@ -66,7 +68,7 @@
           </option>
         </Field>
       </div>
-      <button class="w-full bg-[#E31221] py-3 rounded mb-10">POST</button>
+      <button class="w-full bg-[#E31221] py-3 rounded mb-10">{{ $t('newsfeed.post') }}</button>
     </Form>
   </div>
 </template>
