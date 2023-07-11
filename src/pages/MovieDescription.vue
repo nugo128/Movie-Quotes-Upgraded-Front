@@ -71,7 +71,7 @@
             </div>
             <div>
               <h2 class="text-[#CED4DA] text-sm md:text-base">
-                Director:
+                {{ $t('movies.director') }}:
                 <span class="text-white">
                   {{
                     description?.director && localeStore?.lang
@@ -96,14 +96,15 @@
             >)
           </h2>
           <h2 class="flex flex-col md:hidden text-white md:text-xl text-lg">
-            <span>All Quotes</span> <span>(total {{ description.quote?.length }})</span>
+            <span>{{ $t('movies.all_quotes') }}</span>
+            <span class="text-sm">({{ $t('movies.total') }} {{ description.quote?.length }})</span>
           </h2>
           <div class="md:h-7 md:w-px h-px w-full md:mb-0 mb-4 bg-[#EFEFEF33]"></div>
           <button
             @click="newQuoteHandler"
-            class="py-2 px-4 bg-[#E31221] rounded-md flex gap-2 items-center text-sm md:text-base"
+            class="py-2 px-4 bg-[#E31221] rounded-md flex gap-2 items-center text-sm md:text-base text-white"
           >
-            <img src="../assets/images/plus.svg" alt="" />Add quote
+            <img src="../assets/images/plus.svg" alt="" />{{ $t('movies.add_quote') }}
           </button>
         </div>
         <div class="flex flex-col gap-10">

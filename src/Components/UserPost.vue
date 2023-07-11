@@ -11,7 +11,7 @@
         <span class="text-white">({{ year }})</span></span
       >
     </h2>
-    <img :src="imageUrl" alt="quote picture" class="w-full rounded-lg" />
+    <img :src="imageUrl" alt="quote picture" class="w-full md:w-900 rounded-lg" />
     <div class="flex gap-5 md:mt-6 mt-2">
       <div class="flex gap-2 items-center">
         <span class="text-white">{{ commentCount }}</span>

@@ -3,21 +3,29 @@
     <h2 class="text-center pt-8">{{ $t('newsfeed.add_new_quote') }}</h2>
     <div class="w-full h-[1px] bg-[#EFEFEF33] mt-4 bg-opacity-20"></div>
   </div>
-  <div class="flex flex-col gap-10 px-8">
+  <div class="flex flex-col gap-10 px-8 pb-20">
     <div class="flex gap-5 items-center">
-      <img :src="user.profile_picture" alt="user profile picture" class="w-15 h-15 rounded-full" />
+      <img
+        :src="user.profile_picture"
+        alt="user profile picture"
+        class="md:w-15 md:h-15 w-10 h-10 rounded-full"
+      />
       <h2>{{ user.name }}</h2>
     </div>
     <div v-if="movie" class="flex gap-7">
-      <img :src="userStore.getUrl(movie.thumbnail)" alt="" class="w-72 h-40 rounded-xl" />
-      <div class="flex flex-col justify-between py-3">
-        <h2 class="text-[#DDCCAA] text-lg">
+      <img
+        :src="userStore.getUrl(movie.thumbnail)"
+        alt=""
+        class="md:w-72 md:h-40 w-28 h-20 rounded-xl"
+      />
+      <div class="flex flex-col justify-between md:py-3">
+        <h2 class="text-[#DDCCAA] md:text-lg text-sm order-1">
           {{ JSON.parse(movie.title)[localeStore.lang] }} (<span>{{ movie.year }}</span
           >)
         </h2>
-        <div class="flex gap-4 flex-wrap">
+        <div class="flex gap-4 flex-wrap order-3 md:order-2 text-sm md:text-lg">
           <h3
-            class="bg-[#6C757D] w-max px-3 py-1 rounded-md text-white"
+            class="bg-[#6C757D] w-max md:px-3 py-1 px-2 md:text-base text-xs rounded-md text-white"
             v-for="genre in movie.category"
             :key="genre.id"
           >
@@ -28,12 +36,17 @@
             }}
           </h3>
         </div>
-        <h3>
+        <h3 class="order-2 md:order-3">
           director: <span>{{ JSON.parse(movie.director)[localeStore.lang] }}</span>
         </h3>
       </div>
     </div>
     <Form @submit="submit">
+      <photo-upload
+        v-if="movie && !quote"
+        class="md:hidden"
+        :thumbnail="quote?.thumbnail"
+      ></photo-upload>
       <text-area
         name="quote_en"
         :placeholder="quote ? JSON.parse(quote.title)['en'] : 'Start create new quote'"
@@ -46,7 +59,7 @@
         language="ქარ"
         :rule="!quote ? 'required' : ''"
       ></text-area>
-      <photo-upload :thumbnail="quote?.thumbnail"></photo-upload>
+      <photo-upload v-if="!movie || quote" :thumbnail="quote?.thumbnail"></photo-upload>
       <div v-if="!movie && !quote" class="flex pl-3">
         <img src="../assets/images/movieCamera.svg" class="absolute z-0 mt-4" alt="" />
         <Field
@@ -68,7 +81,9 @@
           </option>
         </Field>
       </div>
-      <button class="w-full bg-[#E31221] py-3 rounded mb-10">{{ $t('newsfeed.post') }}</button>
+      <button class="w-full bg-[#E31221] py-3 rounded mb-1">
+        {{ $t('newsfeed.post') }}
+      </button>
     </Form>
   </div>
 </template>

@@ -6,7 +6,12 @@
     @drop.prevent="dragPhoto"
   >
     <img v-if="placeholderValue" :src="picture" alt="" class="w-440 h-36 p-1" />
-    <img v-if="thumbnail" :src="userStore.getUrl(picture)" alt="" class="w-900 h-[31.25rem]" />
+    <img
+      v-if="thumbnail"
+      :src="userStore.getUrl(picture)"
+      alt=""
+      class="md:w-900 md:h-[31.25rem] h-80"
+    />
     <div v-if="!placeholderValue" class="flex md:gap-2 justify-normal">
       <div v-if="!thumbnail" class="flex items-center gap-3 py-2 md:py-0">
         <img src="../assets/images/camera.svg" alt="" />
@@ -17,7 +22,7 @@
       </div>
       <Field id="file" type="file" class="hidden" name="image" @input="changePhoto" />
       <label
-        class="my-auto w-max rounded px-3 py-1 bg-[#9747FF66] cursor-pointer text-center ml-2"
+        class="my-auto w-max rounded px-3 py-1 bg-[#9747FF66] cursor-pointer text-center md:ml-auto"
         :class="
           thumbnail
             ? 'absolute md:right-96 left-40 bg-black bg-opacity-80 rounded-xl py-5 px-4'
