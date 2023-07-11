@@ -9,6 +9,10 @@
         "all_quotes": "All Quotes",
         "view": "View Quote",
         "edit": "Edit",
-        "delete": "Delete"
+        "delete": "Delete",
+        "edit_movie":"Edit Movie",
+        "add_photo" : "Choose photo",
+        "edit_quote": "Edit Quote",
+        "save_changes": "Save changes"
     }
 }

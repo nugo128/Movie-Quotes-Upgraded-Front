@@ -12,7 +12,7 @@
       >
       <div
         v-if="viewQuote"
-        class="absolute bg-[#24222F] md:left-[44.5rem] left-24 top-10 md:top-8 md:px-10 py-8 px-8 rounded-lg flex flex-col gap-8 text-white w-64"
+        class="absolute bg-[#24222F] md:left-[44.5rem] right-0 top-12 md:top-8 md:px-10 py-8 px-8 rounded-lg flex flex-col gap-8 text-white w-60"
       >
         <div class="flex items-center gap-4 cursor-pointer" @click="view">
           <img src="../assets/images/view.svg" class="w-5" alt="" />

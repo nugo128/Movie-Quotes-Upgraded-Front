@@ -1,6 +1,18 @@
 <template>
+  <div class="absolute top-8 flex left-8" @click="deleteQuote" v-if="type">
+    <img src="../assets/images/delete.svg" class="w-5" alt="" />
+    <h2 class="hidden md:block">delete</h2>
+  </div>
   <div>
-    <h2 class="text-center pt-8">{{ $t('newsfeed.add_new_quote') }}</h2>
+    <h2 class="text-center pt-8">
+      {{
+        type
+          ? $t('movies.edit_quote')
+          : movie
+          ? $t('movies.add_quote')
+          : $t('newsfeed.add_new_quote')
+      }}
+    </h2>
     <div class="w-full h-[1px] bg-[#EFEFEF33] mt-4 bg-opacity-20"></div>
   </div>
   <div class="flex flex-col gap-10 px-8 pb-20">
@@ -59,6 +71,7 @@
         language="ქარ"
         :rule="!quote ? 'required' : ''"
       ></text-area>
+
       <photo-upload v-if="!movie || quote" :thumbnail="quote?.thumbnail"></photo-upload>
       <div v-if="!movie && !quote" class="flex pl-3">
         <img src="../assets/images/movieCamera.svg" class="absolute z-0 mt-4" alt="" />
@@ -82,7 +95,9 @@
         </Field>
       </div>
       <button class="w-full bg-[#E31221] py-3 rounded mb-1">
-        {{ $t('newsfeed.post') }}
+        {{
+          type ? $t('movies.save_changes') : movie ? $t('movies.add_quote') : $t('newsfeed.post')
+        }}
       </button>
     </Form>
   </div>
@@ -96,9 +111,11 @@ import { useMovieStore } from '../stores/movie'
 import { useUsersStore } from '../stores/user'
 import { onBeforeMount, ref, defineEmits } from 'vue'
 import { useLocaleStore } from '../stores/locale'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const localeStore = useLocaleStore()
 import axios from '@/config/axios/index.js'
-const emits = defineEmits(['posted', 'updated'])
+const emits = defineEmits(['posted', 'updated', 'deleted'])
 const formData = new FormData()
 const userStore = useUsersStore()
 const props = defineProps({
@@ -109,8 +126,27 @@ const props = defineProps({
   quote: {
     type: Object,
     required: false
+  },
+  type: {
+    type: Number,
+    required: false
   }
 })
+const back = () => {
+  router.replace({ path: '/movie-description', query: { id: props.type } })
+}
+const deleteQuote = async () => {
+  await axios
+    .delete(`/api/delete-quote/${props.quote.id}`)
+    .then((response) => {
+      emits('deleted', props.quote.id)
+      console.log(response.data)
+      back()
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+}
 const submit = async (val) => {
   for (let value in val) {
     if (val[value]) {

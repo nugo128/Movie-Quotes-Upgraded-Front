@@ -18,7 +18,12 @@
       <new-movie @edit-movie="update" :description="description"></new-movie>
     </newitem-modal>
     <newitem-modal v-if="edit" :click="editQuote">
-      <new-post @updated="updateQuotes" :quote="quoteDetails" />
+      <new-post
+        @updated="updateQuotes"
+        @deleted="deleteQuote"
+        :quote="quoteDetails"
+        :type="description.id"
+      />
     </newitem-modal>
     <div class="px-9">
       <user-navbar class="md:block hidden"></user-navbar>
@@ -165,6 +170,7 @@ const update = (val) => {
   description.value.quote = quote
 }
 const deleteQuote = (id) => {
+  edit.value = false
   let index = description.value.quote.find((quote) => quote.id == id)
 
   if (index) {
