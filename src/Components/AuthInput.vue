@@ -8,11 +8,11 @@
         <input
           :id="name"
           v-bind="field"
-          class="md:w-[25rem] md:h-10 h-7 bg-[#CED4DA] md:p-4 p-1 md:pr-16 rounded-sm outline-none w-[19rem] pr-12 pl-2 text-[0.6rem] md:text-[0.8rem] text-black"
+          class="md:w-[25rem] md:h-10 h-10 bg-[#CED4DA] md:p-4 p-1 md:pr-16 md:rounded-sm outline-none w-[19rem] pr-12 pl-2 text-[0.6rem] md:text-[0.8rem] text-black rounded-md"
           :class="{
             'border-2 border-red-500': !!errors?.length,
             'border-2 border-green-500': !errors?.length && value?.length > 0,
-            'w-[37.5rem]': width?.length > 0
+            'md:w-[37.5rem]': width?.length > 0
           }"
           :type="type !== 'password' ? type : inputType"
           :placeholder="placeholder"

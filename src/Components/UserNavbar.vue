@@ -53,7 +53,7 @@
         </button>
       </div>
       <div
-        class="bg-opacity-90 absolute w-1/6 top-0 right-0 h-full z-10 md:hidden"
+        class="bg-opacity-90 absolute w-3/4 top-0 -right-64 h-full z-10 md:hidden"
         @click="click"
       ></div>
     </div>

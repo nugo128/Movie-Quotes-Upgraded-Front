@@ -8,16 +8,16 @@
   </modal-window>
   <div v-if="showSuccess" class="fixed w-full h-screen flex justify-center items-start z-[60]">
     <div
-      class="w-600 ml-2 mt-48 p-6 bg-[#BADBCC] z-[100] flex items-center justify-between text-white gap-10"
+      class="md:w-600 md:ml-2 mx-2 md:mt-48 mt-28 md:p-6 px-1 py-4 bg-[#BADBCC] z-[100] flex items-center justify-between text-white gap-10"
     >
       <div class="flex gap-4">
-        <img src="../assets/images/check.svg" alt="success" />
-        <p class="text-[#0F5132] text-lg">{{ $t('profile.changes_updated') }}</p>
+        <img src="../assets/images/check.svg" class="w-5 md:w-6" alt="success" />
+        <p class="text-[#0F5132] md:text-lg text-sm">{{ $t('profile.changes_updated') }}</p>
       </div>
       <img
         src="../assets/images/X.svg"
         alt="close"
-        class="w-8 cursor-pointer"
+        class="w-5 md:w-8 cursor-pointer"
         @click="toggleSuccess"
       />
     </div>
@@ -27,20 +27,28 @@
     <profile-header></profile-header>
     <div class="pt-8">
       <user-navbar
+        class="hidden md:block"
         :username="userInfo[0]?.name ? userInfo[0]?.name : user?.name"
         :profilePic="
           userInfo[0]?.profile_picture ? userInfo[0]?.profile_picture : user?.profile_picture
         "
       ></user-navbar>
+      <div class="bg-black w-full mt-10 h-16 md:hidden flex items-center pl-8">
+        <img src="../assets/images/back.svg" class="w-5" alt="" @click="cancel" />
+      </div>
       <Form
         @submit="submit"
         v-slot="{ meta }"
-        class="w-1000 ml-500 mt-24 text-black flex flex-col gap-16"
+        class="md:w-1000 md:ml-500 md:mt-24 text-black flex flex-col gap-16 px-8 pb-40 md:pb-5 md:px-0 bg-[#24222F] md:bg-transparent"
       >
-        <h2 class="text-white text-lg">{{ $t('profile.my_profile') }}</h2>
-        <div class="flex flex-col pl-40">
+        <h2 class="text-white text-lg hidden md:block">{{ $t('profile.my_profile') }}</h2>
+        <div class="flex flex-col md:pl-40">
           <div class="flex flex-col items-center gap-2 mb-24 mr-10">
-            <img :src="user.profile_picture" alt="profile picture" class="w-48 h-48 rounded-full" />
+            <img
+              :src="user.profile_picture"
+              alt="profile picture"
+              class="w-48 h-48 rounded-full mt-5"
+            />
 
             <Field
               id="file"
@@ -67,7 +75,7 @@
               :edit="showEditUsernameField"
             ></fake-input>
 
-            <div class="w-[600px]" v-if="editUsername">
+            <div class="w-[37.5rem] hidden md:block" v-if="editUsername">
               <AuthInput
                 name="username"
                 type="text"
@@ -77,6 +85,21 @@
                 width="600"
               />
             </div>
+            <editprofile-modal
+              v-if="editUsername"
+              :cancel="cancel"
+              :valid="meta.dirty && meta.valid ? true : false"
+              :submit="submit"
+              ><AuthInput
+                class="bg-[#24222F] px-8 mt-10 py-10"
+                name="username"
+                type="text"
+                :label="$t('profile.username_placeholder')"
+                :placeholder="$t('profile.username_placeholder')"
+                rule="required|min:3|max:15|lowercase_num"
+                width="600"
+              />
+            </editprofile-modal>
           </div>
           <div class="flex flex-col mb-12 gap-12">
             <fake-input
@@ -86,7 +109,7 @@
               :edit="showEditEmailField"
             ></fake-input>
 
-            <div class="w-600" v-if="editEmail">
+            <div class="md:w-600 hidden md:block" v-if="editEmail">
               <AuthInput
                 name="email"
                 type="email"
@@ -96,6 +119,22 @@
                 width="600"
               />
             </div>
+            <editprofile-modal
+              v-if="editEmail"
+              :cancel="cancel"
+              :valid="meta.dirty && meta.valid ? true : false"
+              :submit="submit"
+            >
+              <AuthInput
+                name="email"
+                type="email"
+                class="bg-[#24222F] px-8 mt-10 py-10"
+                :label="$t('profile.email_placeholder')"
+                :placeholder="$t('profile.email_placeholder')"
+                rule="required|email"
+                width="600"
+              />
+            </editprofile-modal>
           </div>
           <div class="flex flex-col mb-12 gap-12">
             <fake-input
@@ -105,7 +144,7 @@
               :edit="showEditPasswordField"
             ></fake-input>
 
-            <div class="flex flex-col gap-12 w-600" v-if="editPassword">
+            <div class="hidden md:flex flex-col gap-12 w-600" v-if="editPassword">
               <div class="border-[1px] border-[#CED4DA33] p-6 flex flex-col gap-5">
                 <h2 class="text-white">{{ $t('profile.password_validation') }}</h2>
 
@@ -138,9 +177,49 @@
                 width="600"
               />
             </div>
+            <editprofile-modal
+              v-if="editPassword"
+              :cancel="cancel"
+              :valid="meta.dirty && meta.valid ? true : false"
+              :submit="submit"
+            >
+              <div class="border-[1px] border-[#CED4DA33] p-6 flex flex-col gap-5">
+                <h2 class="text-white">{{ $t('profile.password_validation') }}</h2>
+
+                <div class="text-[#9C9A9A] flex flex-col gap-1">
+                  <h3 :class="moreThan8 ? 'text-white' : ''">
+                    <span :class="moreThan8 ? 'text-[#198754]' : ''">•</span>
+                    {{ $t('profile.min_characters') }}
+                  </h3>
+                  <h3 :class="lessThanLowercase15 ? 'text-white' : ''">
+                    <span :class="lessThanLowercase15 ? 'text-[#198754]' : ''">•</span>
+                    {{ $t('profile.max_characters') }}
+                  </h3>
+                </div>
+              </div>
+              <AuthInput
+                name="password"
+                type="password"
+                class="bg-[#24222F] px-8 mt-10 py-10"
+                :label="$t('profile.new_password')"
+                :placeholder="$t('profile.password_placeholder')"
+                rule="required|min:8|max:15|lowercase_num"
+                width="600"
+                @input-value="handleInput"
+              />
+              <AuthInput
+                name="password_confirmation"
+                type="password"
+                class="bg-[#24222F] px-8 mt-10 py-10"
+                :label="$t('profile.confirm_password')"
+                :placeholder="$t('profile.confirm_password')"
+                rule="required|confirmed:@password"
+                width="600"
+              />
+            </editprofile-modal>
           </div>
         </div>
-        <div class="text-white ml-auto mt-16 flex gap-4">
+        <div class="text-white ml-auto mt-16 md:flex gap-4 hidden">
           <button type="button" class="px-4 py-2 cursor-pointer text-[#CED4DA]" @click="cancel">
             {{ $t('profile.cancel') }}
           </button>
@@ -158,6 +237,7 @@
 </template>
 
 <script setup>
+import EditprofileModal from '../Components/EditprofileModal.vue'
 import ModalWindow from '../Components/ModalWindow.vue'
 import EmailSent from '../Components/EmailSent.vue'
 import profileHeader from '../Components/profileHeader.vue'
