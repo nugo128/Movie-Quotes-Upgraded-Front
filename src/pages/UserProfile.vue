@@ -43,7 +43,7 @@
       >
         <h2 class="text-white text-lg hidden md:block">{{ $t('profile.my_profile') }}</h2>
         <div class="flex flex-col md:pl-40">
-          <div class="flex flex-col items-center gap-2 mb-24 mr-10">
+          <div class="flex flex-col items-center gap-2 mb-24 md:mr-10">
             <img
               :src="user.profile_picture"
               alt="profile picture"
@@ -60,7 +60,7 @@
               v-if="showUpload"
             />
             <label
-              class="text-lg rounded px-3 py-1 cursor-pointer text-center ml-2 text-white"
+              class="text-lg rounded px-3 py-1 cursor-pointer text-center md:ml-2 text-white"
               for="file"
               @click="uploadImage"
               >{{ $t('profile.upload_photo') }}</label
@@ -210,7 +210,7 @@
               <AuthInput
                 name="password_confirmation"
                 type="password"
-                class="bg-[#24222F] px-8 mt-10 py-10"
+                class="bg-[#24222F] px-8 py-10"
                 :label="$t('profile.confirm_password')"
                 :placeholder="$t('profile.confirm_password')"
                 rule="required|confirmed:@password"
@@ -314,6 +314,7 @@ const formData = new FormData()
 const submit = async (val) => {
   post.clear()
   for (let value in val) {
+    console.log(val[value])
     formData.set(value, val[value])
   }
   await axios.post('/api/editProfile', formData)
@@ -339,8 +340,14 @@ const showEditUsernameField = () => {
 const showEditEmailField = () => {
   editEmail.value = true
 }
-const changePhoto = (event) => {
+const changePhoto = async (event) => {
   const file = event.target.files[0]
+  formData.set('image', file)
+  await axios.post('/api/editProfile', formData)
+  store.clearUser()
+  store.getAuthUser()
+  userInfo.value = store.authUser
+  showSuccess.value = true
   const reader = new FileReader()
   reader.onload = (e) => {
     user.value.profile_picture = e.target.result

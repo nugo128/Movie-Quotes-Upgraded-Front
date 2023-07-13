@@ -19,7 +19,9 @@
         "cancel": "Cancel",
         "save_changes": "Save changes",
         "changes_updated": "Changes updated succsessfully",
-        "check_email": "Please check your email and follow the instructions to activate your new email."
+        "check_email": "Please check your email and follow the instructions to activate your new email.",
+        "confirm": "Confirm",
+        "you_sure": "are you sure to make changes?"
 
     }
 }

@@ -14,15 +14,15 @@
     </newitem-modal>
     <newitem-modal :click="back" v-if="!edit">
       <div class="p-8 flex flex-col gap-4">
-        <div class="flex justify-between w-1/2 md:pt-7 mb-12">
+        <div class="flex justify-between w-7/12 md:pt-7 mb-12">
           <div class="flex gap-5 items-center">
             <img src="../assets/images/edit.svg" class="w-5" alt="" @click="editQuote" />
             <div class="h-4 w-[1px] bg-[#EFEFEF33]"></div>
             <img src="../assets/images/delete.svg" class="w-5" alt="" @click="deleteQuote" />
           </div>
-          <h2 class="md:block hidden">view quote</h2>
+          <h2 class="md:block hidden">{{ $t('movies.view') }}</h2>
         </div>
-        <div class="h-[1px] w-full bg-[#EFEFEF33] absolute right-1 md:top-28 top-20"></div>
+        <div class="h-px w-full bg-[#EFEFEF33] absolute right-0 md:top-28 top-20"></div>
         <div class="flex items-center gap-5">
           <img
             :src="store.getUrl(data?.user?.profile_picture)"
