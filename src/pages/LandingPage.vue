@@ -109,7 +109,7 @@
     <div class="flex flex-col items-center">
       <h2
         :class="`text-[#DDCCAA] md:text-[4.375rem] md:p-0 ${
-          this.$i18n.locale === 'en' ? 'md:w-[55rem] px-16' : 'md:w-[75rem] px-6'
+          localeStore.lang === 'en' ? 'md:w-[55rem] px-16' : 'md:w-[75rem] px-6'
         } text-center font-light`"
       >
         {{ $t('main_text.find_any_quote') }}
@@ -166,6 +166,8 @@ import PasswordReset from '../Components/PasswordReset.vue'
 import axios from '@/config/axios/index.js'
 import { useRoute } from 'vue-router'
 import { ref } from 'vue'
+import { useLocaleStore } from '../stores/locale'
+const localeStore = useLocaleStore()
 const scroll = ref(false)
 const showRegistration = ref(false)
 const showEmailSent = ref(false)
