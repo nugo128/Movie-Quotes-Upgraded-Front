@@ -53,10 +53,11 @@
         </h3>
       </div>
     </div>
-    <Form @submit="submit">
+    <Form @submit="submit" v-slot="{ meta }">
       <photo-upload
         v-if="movie && !quote"
         class="md:hidden"
+        rule="required"
         :thumbnail="quote?.thumbnail"
       ></photo-upload>
       <text-area
@@ -73,6 +74,7 @@
       ></text-area>
 
       <photo-upload v-if="!movie || quote" :thumbnail="quote?.thumbnail"></photo-upload>
+      <h2 class="-mt-3 text-sm text-red-500">{{ errors }}</h2>
       <div v-if="!movie && !quote" class="flex pl-3">
         <img src="../assets/images/movieCamera.svg" class="absolute z-0 mt-4" alt="" />
         <Field
@@ -80,6 +82,7 @@
           as="select"
           class="z-50 select w-full focus:appearance-none focus:outline-none text-white bg-transparent mt-2 py-5 px-12 mb-10"
           name="movie_id"
+          :rules="!quote ? 'required' : ''"
         >
           <option class="bg-black mb-2" selected disabled value="">
             {{ $t('newsfeed.choose_movie') }}
@@ -94,7 +97,10 @@
           </option>
         </Field>
       </div>
-      <button class="w-full bg-[#E31221] py-3 rounded mb-1">
+      <button
+        class="w-full bg-[#E31221] py-3 rounded mb-1"
+        :class="{ ['pointer-events-none']: !meta.valid }"
+      >
         {{
           type ? $t('movies.save_changes') : movie ? $t('movies.add_quote') : $t('newsfeed.post')
         }}
@@ -113,6 +119,7 @@ import { onBeforeMount, ref, defineEmits } from 'vue'
 import { useLocaleStore } from '../stores/locale'
 import { useRouter } from 'vue-router'
 const router = useRouter()
+const errors = ref('')
 const localeStore = useLocaleStore()
 import axios from '@/config/axios/index.js'
 const emits = defineEmits(['posted', 'updated', 'deleted'])
@@ -159,8 +166,10 @@ const submit = async (val) => {
       formData.set('movie_id', props.movie.id)
     }
     formData.set('thumbnail', movieStore.file)
-    await axios.post('/api/newPost', formData)
-    emits('posted')
+    await axios.post('/api/newPost', formData).catch(() => {
+      errors.value = localeStore.lang === 'en' ? 'image is required' : 'ფოტო აუცილებელია'
+    })
+    errors.value ? '' : emits('posted')
   } else {
     if (val.image) {
       movieStore.addFile(val.image)

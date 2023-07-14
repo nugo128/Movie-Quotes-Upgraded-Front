@@ -1,5 +1,10 @@
 <template>
-  <Field v-slot="{ field }" name="name" :validate-on-input="true">
+  <Field
+    v-slot="{ field }"
+    :name="name"
+    :rules="placeholderValue ? rule : 'required|' + rule"
+    :validate-on-input="true"
+  >
     <div class="relative" @click="handleClicked">
       <label
         class="absolute top-1 left-4 z-0"
@@ -20,17 +25,20 @@
       </div>
     </div>
   </Field>
+  <ErrorMessage class="text-red-400 text-sm px-5 md:w-[400px]" :name="name" />
 </template>
 
 <script setup>
-import { Field } from 'vee-validate'
+import { Field, ErrorMessage } from 'vee-validate'
 import { ref } from 'vue'
 defineProps({
   lang: {
     type: String,
     required: true
   },
-  placeholderValue: { type: String, required: false }
+  placeholderValue: { type: String, required: false },
+  name: { type: String, required: false },
+  rule: { type: String, required: false }
 })
 const isTextAreaScrolled = ref(false)
 const active = ref(false)

@@ -20,6 +20,7 @@
       :placeholder="$t('loginform.login_password_placeholder')"
       rule="required"
     />
+    <h2 class="text-red-500 text-sm">{{ errors }}</h2>
     <div class="flex justify-between mt-2">
       <div class="flex gap-2">
         <Field name="remember_me" type="checkbox" value="true"></Field>
@@ -35,13 +36,13 @@
       </h3>
     </div>
     <button
-      class="bg-[#E31221] md:py-2 py-1 md:mt-3 mt-1 mb-1 rounded-sm"
+      class="bg-[#E31221] py-2 md:mt-3 mt-1 mb-1 rounded-sm"
       :class="{ ['pointer-events-none']: !meta.valid }"
     >
       <p class="text-white md:text-base text-xs">{{ $t('sign_in') }}</p>
     </button>
     <button
-      class="border-[1px] rounded-sm flex items-center justify-center md:py-2 py-1"
+      class="border-[1px] rounded-sm flex items-center justify-center py-2"
       type="button"
       @click="googleAuth"
     >
@@ -64,9 +65,12 @@
 import { Form, Field } from 'vee-validate'
 import AuthInput from './AuthInput.vue'
 import { useRouter } from 'vue-router'
-import { defineEmits } from 'vue'
+import { defineEmits, ref } from 'vue'
 import { googleLogin } from '../services/registerRequest'
 import { userLogin } from '../services/loginRequest'
+import { useLocaleStore } from '../stores/locale'
+const errors = ref('')
+const localeStore = useLocaleStore()
 const router = useRouter()
 const emits = defineEmits(['showRegistration', 'showReset'])
 const toggleRegistration = () => {
@@ -88,7 +92,8 @@ const submit = async (value) => {
     await userLogin(value)
     router.replace({ name: 'news_feed' })
   } catch (error) {
-    console.error(error)
+    console.error(JSON.parse(error.request.response).message[localeStore.lang])
+    errors.value = JSON.parse(error.request.response).message[localeStore.lang]
   }
 }
 </script>

@@ -18,12 +18,14 @@
       <movie-input
         name="title_en"
         label="Movie name"
+        rule="english"
         lang="Eng"
         :placeholderValue="description?.title ? JSON.parse(description?.title)['en'] : ''"
       ></movie-input>
       <movie-input
         name="title_ka"
         label="ფილმის სახელი"
+        rule="georgian"
         lang="ქარ"
         :placeholderValue="description?.title ? JSON.parse(description.title)['ka'] : ''"
       ></movie-input>
@@ -32,7 +34,7 @@
           class="dropdown-container p-2 border border-[#6C757D] cursor-pointer rounded"
           @click="toggleDropdown"
         >
-          <span v-if="selectedItems.length === 0">Select an item</span>
+          <span v-if="selectedItems.length === 0" class="pl-2">{{ $t('movies.genres') }}</span>
           <span v-else>
             <span
               v-for="item in selectedItems"
@@ -68,25 +70,30 @@
           </li>
         </ul>
       </div>
+      <h2 v-if="categoriesError" class="text-sm -mt-2 text-red-500">{{ categoriesError }}</h2>
       <movie-input
         name="year"
         label="Year/წელი"
+        rule="num"
         :placeholderValue="description?.year ? description?.year : ''"
       ></movie-input>
       <movie-input
         name="director_en"
+        rule="english"
         label="Director"
         lang="Eng"
         :placeholderValue="description?.director ? JSON.parse(description?.director)['en'] : ''"
       ></movie-input>
       <movie-input
         name="director_ka"
+        rule="georgian"
         label="რეჟისორი"
         lang="ქარ"
         :placeholderValue="description?.director ? JSON.parse(description?.director)['ka'] : ''"
       ></movie-input>
       <movie-textarea
         lang="Eng"
+        rule="english"
         name="description_en"
         :placeholderValue="
           description?.description ? JSON.parse(description?.description)['en'] : ''
@@ -94,12 +101,14 @@
       ></movie-textarea>
       <movie-textarea
         lang="ქარ"
+        rule="georgian"
         name="description_ka"
         :placeholderValue="
           description?.description ? JSON.parse(description?.description)['ka'] : ''
         "
       ></movie-textarea>
       <photo-upload :placeholderValue="store.getUrl(description?.thumbnail)"></photo-upload>
+      <h2 v-if="imageError" class="text-sm -mt-6 text-red-500">{{ imageError }}</h2>
       <button type="submit" class="bg-[#E31221] rounded py-2">
         {{ description ? $t('movies.edit_movie') : $t('movies.add_movie') }}
       </button>
@@ -121,6 +130,8 @@ const emits = defineEmits(['newMovie', 'editMovie'])
 const localeStore = useLocaleStore()
 const movieStore = useMovieStore()
 const store = useUsersStore()
+const categoriesError = ref('')
+const imageError = ref('')
 const user = ref(store.authUser)
 const categories = ref(movieStore.categories)
 const props = defineProps({
@@ -140,6 +151,7 @@ const selectItems = (item) => {
     selectedItems.value = [...selectedItems.value, item]
   }
   toggleDropdown()
+  categoriesError.value = ''
 }
 const removeItem = (id) => {
   selectedItems.value = selectedItems.value.filter((item) => item.id !== id)
@@ -153,11 +165,22 @@ const submit = async (val) => {
   }
   formData.append('categories', JSON.stringify(selectedItems.value))
   if (!props.description) {
-    movieStore.addFile(val.image)
-    formData.set('thumbnail', movieStore.file)
-    console.log(selectedItems.value)
-    const response = await axios.post('/api/add-movie', formData)
-    emits('newMovie', response)
+    if (selectedItems.value.length) {
+      console.log(selectItems.value)
+      movieStore.addFile(val.image)
+      formData.set('thumbnail', movieStore.file)
+      await axios
+        .post('/api/add-movie', formData)
+        .then((response) => {
+          emits('newMovie', response)
+        })
+        .catch((err) => (imageError.value = err.response.data.message))
+    } else {
+      categoriesError.value =
+        localeStore.lang === 'en'
+          ? 'Please choose at least one genre'
+          : 'გთხოვთ აირჩიოთ მინიმუმ 1 ჟანრი'
+    }
   } else {
     formData.set('id', props.description.id)
     const response = await axios.post('/api/update-movie', formData)

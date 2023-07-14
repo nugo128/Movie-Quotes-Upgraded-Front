@@ -7,7 +7,7 @@
       <Field
         v-slot="{ field, errors, value }"
         :name="name"
-        :rules="!placeholderValue ? 'required' : ''"
+        :rules="!placeholderValue ? 'required|' + rule : rule"
         :validate-on-input="true"
         class="border border-[#6C757D] rounded-sm"
       >
@@ -64,6 +64,10 @@ defineProps({
   name: { type: String, required: true },
   label: { type: String, required: true },
   lang: { type: String, required: false },
-  placeholderValue: { type: String, required: false }
+  placeholderValue: { type: String, required: false },
+  rule: {
+    type: String,
+    required: false
+  }
 })
 </script>

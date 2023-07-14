@@ -13,6 +13,7 @@
         "edit_movie":"Edit Movie",
         "add_photo" : "Choose photo",
         "edit_quote": "Edit Quote",
-        "save_changes": "Save changes"
+        "save_changes": "Save changes",
+        "genres":"Select a genre"
     }
 }

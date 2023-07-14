@@ -7,6 +7,7 @@
       </p>
     </div>
     <slot></slot>
+    <p v-if="errors" class="text-red-500 text-sm">{{ errors }}</p>
     <button
       class="bg-[#E31221] md:py-2 py-1 md:mt-3 mt-1 mb-1 rounded-sm"
       :class="{ ['pointer-events-none']: !meta.valid }"
@@ -23,9 +24,11 @@
 
 <script setup>
 import { Form } from 'vee-validate'
-import { defineEmits, defineProps } from 'vue'
+import { defineEmits, defineProps, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { resetPassword, newPassword } from '../services/passwordRequest'
+import { useLocaleStore } from '../stores/locale'
+const localeStore = useLocaleStore()
 const route = useRoute()
 const router = useRouter()
 defineProps({
@@ -42,6 +45,7 @@ defineProps({
     required: true
   }
 })
+const errors = ref('')
 const emits = defineEmits(['showLogin', 'showEmail', 'showSuccess'])
 const toggleLogin = () => {
   emits('showLogin', true)
@@ -53,6 +57,7 @@ const submit = async (value) => {
       await resetPassword(value)
       emits('showEmail', true)
     } catch (error) {
+      errors.value = JSON.parse(error.request.response).errors.email[0][[localeStore.lang]]
       console.error(error)
     }
   }

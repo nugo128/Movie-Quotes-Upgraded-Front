@@ -31,7 +31,7 @@
         <div class="h-max flex flex-wrap gap-6 justify-center md:px-0">
           <user-movie
             v-for="movie in movies"
-            :key="movie.id"
+            :key="movie?.id"
             :title="movie.title"
             :year="movie.year"
             :thumbnail="movie.thumbnail"

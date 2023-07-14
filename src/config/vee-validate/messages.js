@@ -12,7 +12,10 @@ configure({
         email: 'This input is not in email format',
         min: '{field} must have at least 0:{min} symbols',
         confirmed: 'passwords do not match',
-        lowercase_num: '{field} must only have lowercase letters and numbers'
+        lowercase_num: '{field} must only have lowercase letters and numbers',
+        georgian: '{field} must only have georgian characters',
+        english: '{field} must only have english characters',
+        num: 'Only numbers are allowed'
       },
       names: {}
     },
@@ -24,7 +27,10 @@ configure({
         min: '{field} უნდა შეიცავდეს მინიმუმ 0:{min} სიმბოლოს',
         confirmed: 'პაროლები არ ემთხვევა',
         lowercase_num:
-          '{field} უნდა შეიცავდეს მხოლოდ დაბალი რეგისტრის ლათინურ სიმბოლოებს და რიცხვებს'
+          '{field} უნდა შეიცავდეს მხოლოდ დაბალი რეგისტრის ლათინურ სიმბოლოებს და რიცხვებს',
+        georgian: '{field} უნდა შედგემოდეს მხოლოდ ქართული ასოებისგან',
+        english: '{field} უნდა შედგემოდეს მხოლოდ ინგლისური ასოებისგან',
+        num: 'შეიყვანეთ მხოლოდ ციფრები'
       },
       names: {
         name: 'სახელი',
