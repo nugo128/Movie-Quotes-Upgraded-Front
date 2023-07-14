@@ -104,7 +104,7 @@
 <script setup>
 import LanguageSelect from './LanguageSelect.vue'
 import { useRouter } from 'vue-router'
-import { userLogOut } from '../services/loginRequest'
+import { userLogOut } from '../services/index'
 import { onMounted, ref } from 'vue'
 import { useUsersStore } from '../stores/user'
 import { useLocaleStore } from '../stores/locale'

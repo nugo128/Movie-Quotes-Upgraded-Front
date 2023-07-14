@@ -130,8 +130,7 @@ import UserComment from '../Components/UserComment.vue'
 import NewitemModal from '../Components/NewitemModal.vue'
 import LikeButton from '../Components/LikeButton.vue'
 import NewPost from '../Components/NewPost.vue'
-import { like, removeLike, getLikes } from '../services/postRequest'
-import { comments } from '../services/postRequest'
+import { like, removeLike, getLikes, comments } from '../services/index'
 const edit = ref(false)
 const data = ref({})
 const loggedInUser = ref({})

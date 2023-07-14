@@ -70,7 +70,7 @@ import MovieIcon from './MovieIcon.vue'
 import { useRoute } from 'vue-router'
 import { useUsersStore } from '../stores/user'
 import { useRouter } from 'vue-router'
-import { userLogOut } from '../services/loginRequest'
+import { userLogOut } from '../services/index'
 const router = useRouter()
 
 defineProps({

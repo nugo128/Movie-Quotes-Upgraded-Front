@@ -75,7 +75,7 @@ import { defineProps, ref, onBeforeMount, onMounted } from 'vue'
 import { Form, Field } from 'vee-validate'
 import { useUsersStore } from '../stores/user'
 import { useLocaleStore } from '../stores/locale'
-import { like, removeLike, getLikes, comments } from '../services/postRequest'
+import { like, removeLike, getLikes, comments } from '../services/index'
 import instantiatePusher from '../helpers/instantiatePusher'
 const localeStore = useLocaleStore()
 const liked = ref(false)

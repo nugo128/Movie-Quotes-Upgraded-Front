@@ -54,7 +54,7 @@ import instantiatePusher from '../helpers/instantiatePusher'
 import { useUsersStore } from '../stores/user'
 import { useLocaleStore } from '../stores/locale'
 import axios from '@/config/axios/index.js'
-import { like, removeLike, getLikes } from '../services/postRequest'
+import { like, removeLike, getLikes } from '../services/index'
 const localeStore = useLocaleStore()
 const store = useUsersStore()
 import { useRouter } from 'vue-router'

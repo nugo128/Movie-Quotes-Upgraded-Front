@@ -26,7 +26,7 @@
 import { Form } from 'vee-validate'
 import { defineEmits, defineProps, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { resetPassword, newPassword } from '../services/passwordRequest'
+import { resetPassword, newPassword } from '../services/index'
 import { useLocaleStore } from '../stores/locale'
 const localeStore = useLocaleStore()
 const route = useRoute()

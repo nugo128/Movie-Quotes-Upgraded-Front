@@ -72,7 +72,7 @@
 import { Form } from 'vee-validate'
 import AuthInput from './AuthInput.vue'
 import { defineEmits } from 'vue'
-import { register, googleLogin } from '../services/registerRequest'
+import { register, googleLogin } from '../services/index'
 const emits = defineEmits(['registered', 'showLogin'])
 defineProps({
   currentWidth: {
