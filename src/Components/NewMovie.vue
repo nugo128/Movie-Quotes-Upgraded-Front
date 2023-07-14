@@ -124,8 +124,8 @@ import MovieTextarea from './MovieTextarea.vue'
 import { ref, onBeforeMount, defineEmits } from 'vue'
 import { useLocaleStore } from '../stores/locale'
 import { Form } from 'vee-validate'
+import { addMovie, editMovie } from '../services/index'
 import PhotoUpload from './PhotoUpload.vue'
-import axios from '@/config/axios/index.js'
 const emits = defineEmits(['newMovie', 'editMovie'])
 const localeStore = useLocaleStore()
 const movieStore = useMovieStore()
@@ -169,8 +169,8 @@ const submit = async (val) => {
       console.log(selectItems.value)
       movieStore.addFile(val.image)
       formData.set('thumbnail', movieStore.file)
-      await axios
-        .post('/api/add-movie', formData)
+
+      await addMovie(formData)
         .then((response) => {
           emits('newMovie', response)
         })
@@ -183,7 +183,7 @@ const submit = async (val) => {
     }
   } else {
     formData.set('id', props.description.id)
-    const response = await axios.post('/api/update-movie', formData)
+    const response = await editMovie(formData)
     console.log(response)
     emits('editMovie', {
       response: response,

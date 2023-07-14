@@ -51,7 +51,7 @@ import NewitemModal from '../Components/NewitemModal.vue'
 import NewMovie from '../Components/NewMovie.vue'
 import SearchBar from '../Components/SearchBar.vue'
 import UserMovie from '../Components/UserMovie.vue'
-import axios from '@/config/axios/index.js'
+import { getUMovies } from '../services/index'
 import { useMovieStore } from '../stores/movie'
 import { onBeforeMount, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
@@ -77,7 +77,7 @@ const searchHandler = () => {
 onBeforeMount(async () => {
   if (!store.userMovies.length) {
     store.getUserMovies()
-    const response = await axios.get('/api/user-movies')
+    const response = await getUMovies()
     movies.value = response.data
   }
   movies.value = store.userMovies

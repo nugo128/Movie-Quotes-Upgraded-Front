@@ -244,7 +244,7 @@ import profileHeader from '../Components/profileHeader.vue'
 import UserNavbar from '../Components/UserNavbar.vue'
 import { Form, Field } from 'vee-validate'
 import { onBeforeMount, ref } from 'vue'
-import axios from '@/config/axios/index.js'
+import { getUser, verifyEmail, editProfile } from '../services/index'
 import AuthInput from '../Components/AuthInput.vue'
 import FakeInput from '../Components/FakeInput.vue'
 import { useUsersStore } from '../stores/user'
@@ -275,8 +275,7 @@ const uploadImage = () => {
   showUpload.value = true
 }
 if (route.path === '/user-profile' && route?.query?.token?.length === 128) {
-  axios
-    .get(`/api/verify-new-email/${route.query.token}`)
+  await verifyEmail(route.query.token)
     .then((response) => {
       console.log(response)
       router.replace('/user-profile')
@@ -317,7 +316,7 @@ const submit = async (val) => {
     console.log(val[value])
     formData.set(value, val[value])
   }
-  await axios.post('/api/editProfile', formData)
+  await editProfile(formData)
   store.clearUser()
   store.getAuthUser()
   userInfo.value = store.authUser
@@ -343,7 +342,7 @@ const showEditEmailField = () => {
 const changePhoto = async (event) => {
   const file = event.target.files[0]
   formData.set('image', file)
-  await axios.post('/api/editProfile', formData)
+  await editProfile(formData)
   store.clearUser()
   store.getAuthUser()
   userInfo.value = store.authUser
@@ -357,7 +356,7 @@ const changePhoto = async (event) => {
   }
 }
 onBeforeMount(async () => {
-  const response = await axios.get('/api/user')
+  const response = await getUser()
   user.value = response.data
   user.value.profile_picture = store.getUrl(response.data.profile_picture)
   profilePicture.value = store.getUrl(response.data.profile_picture)

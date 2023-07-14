@@ -162,8 +162,8 @@ import AuthInput from '../Components/AuthInput.vue'
 import ModalWindow from '../Components/ModalWindow.vue'
 import SuccessModal from '../Components/SuccessModal.vue'
 import LoginModal from '../Components/LoginModal.vue'
+import { verifyUser } from '../services/index'
 import PasswordReset from '../Components/PasswordReset.vue'
-import axios from '@/config/axios/index.js'
 import { useRoute } from 'vue-router'
 import { ref } from 'vue'
 import { useLocaleStore } from '../stores/locale'
@@ -180,11 +180,9 @@ const showPasswordResetForm = ref(false)
 const showSuccessPassword = ref(false)
 const currentWidth = ref(window.innerWidth)
 if (route.path === '/verify' && route.query.token.length === 128) {
-  axios
-    .get(`/api/verify/${route.query.token}`)
-    .then((response) => {
+  await verifyUser(route.query.token)
+    .then(() => {
       showSuccess.value = true
-      console.log(response)
     })
     .catch((error) => {
       console.log(error)

@@ -110,7 +110,7 @@ import { useUsersStore } from '../stores/user'
 import { useLocaleStore } from '../stores/locale'
 import instantiatePusher from '../helpers/instantiatePusher'
 import userNavbar from './UserNavbar.vue'
-import axios from '@/config/axios/index.js'
+import { getUser, getNotification, seenNotifications } from '../services/index'
 const locale = useLocaleStore()
 const menuOpen = ref(false)
 const toggleMenu = () => {
@@ -126,12 +126,11 @@ const notificationCount = ref(0)
 onMounted(async () => {
   instantiatePusher()
   let user = 0
-  await axios
-    .get('/api/user')
+  await getUser()
     .then((response) => (user = response.data.id))
     .catch((err) => console.log(err))
 
-  axios.get(`/api/get-notifications/${user}`).then((response) => {
+  await getNotification(user).then((response) => {
     notification.value.push(response.data)
     notificationCount.value = notification.value[0].filter((item) => item.seen == false).length
   })
@@ -158,16 +157,12 @@ onMounted(async () => {
 })
 const readNotification = async (id) => {
   if (id !== 'all') {
-    await axios
-      .post('/api/read-notifications', { id })
-      .then((response) => console.log(response.data))
+    await seenNotifications({ id }).then((response) => console.log(response.data))
     const seenNotification = notification.value[0].find((item) => item.id === id)
     seenNotification.seen = true
     notificationCount.value--
   } else {
-    await axios
-      .post('/api/read-notifications', { all: 'all' })
-      .then((response) => console.log(response.data))
+    await seenNotifications({ all: 'all' }).then((response) => console.log(response.data))
     notification.value[0].map((val) => {
       val.seen = true
     })

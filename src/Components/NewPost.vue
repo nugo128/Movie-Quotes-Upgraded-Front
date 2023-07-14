@@ -72,6 +72,12 @@
         language="ქარ"
         :rule="!quote ? 'required|georgian' : 'georgian'"
       ></text-area>
+      <photo-upload
+        v-if="movie && !quote"
+        class="hidden md:block md:mb-10"
+        rule="required"
+        :thumbnail="quote?.thumbnail"
+      ></photo-upload>
 
       <photo-upload v-if="!movie || quote" :thumbnail="quote?.thumbnail"></photo-upload>
       <h2 class="-mt-3 text-sm text-red-500">{{ errors }}</h2>
@@ -119,11 +125,11 @@ import { useMovieStore } from '../stores/movie'
 import { useUsersStore } from '../stores/user'
 import { onBeforeMount, ref, defineEmits } from 'vue'
 import { useLocaleStore } from '../stores/locale'
+import { deleteQuotes, newPost, editQuote, getUser } from '../services/index'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 const errors = ref('')
 const localeStore = useLocaleStore()
-import axios from '@/config/axios/index.js'
 const emits = defineEmits(['posted', 'updated', 'deleted'])
 const formData = new FormData()
 const userStore = useUsersStore()
@@ -145,11 +151,9 @@ const back = () => {
   router.replace({ path: '/movie-description', query: { id: props.type } })
 }
 const deleteQuote = async () => {
-  await axios
-    .delete(`/api/delete-quote/${props.quote.id}`)
-    .then((response) => {
+  await deleteQuotes(props.quote.id)
+    .then(() => {
       emits('deleted', props.quote.id)
-      console.log(response.data)
       back()
     })
     .catch((error) => {
@@ -169,8 +173,7 @@ const submit = async (val) => {
       formData.set('movie_id', props.movie.id)
     }
     formData.set('thumbnail', movieStore.file)
-    await axios
-      .post('/api/newPost', formData)
+    await newPost(formData)
       .then((response) => {
         if (response) {
           errors.value = false
@@ -188,8 +191,7 @@ const submit = async (val) => {
       formData.set('thumbnail', movieStore.file)
     }
     formData.set('id', props.quote.id)
-    const response = await axios.post('/api/edit-quote', formData)
-    console.log(response)
+    const response = await editQuote(formData)
     emits('updated', response.data)
   }
 }
@@ -197,7 +199,7 @@ const movieStore = useMovieStore()
 
 const user = ref([])
 onBeforeMount(async () => {
-  const response = await axios.get('/api/user')
+  const response = await getUser()
   movieStore.getMovie()
   user.value = response.data
   user.value.profile_picture = userStore.getUrl(response.data.profile_picture)

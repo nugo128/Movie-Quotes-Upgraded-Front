@@ -45,7 +45,7 @@ import { usePostsStore } from '../stores/post'
 import { onBeforeMount, ref } from 'vue'
 import NewitemModal from '../Components/NewitemModal.vue'
 import { useUsersStore } from '../stores/user'
-import axios from '@/config/axios/index.js'
+import { getUser } from '../services/index'
 const userStore = useUsersStore()
 const store = usePostsStore()
 const postData = ref(store.posts)
@@ -55,7 +55,7 @@ onBeforeMount(async () => {
   if (!userStore.authUser.length) {
     userStore.getAuthUser()
   }
-  const response = await axios.get('/api/user')
+  const response = await getUser()
   loggedInUser.value = response.data
   store.getPosts()
   postData.value = store.posts

@@ -53,8 +53,7 @@ import { ref, onBeforeMount, onMounted } from 'vue'
 import instantiatePusher from '../helpers/instantiatePusher'
 import { useUsersStore } from '../stores/user'
 import { useLocaleStore } from '../stores/locale'
-import axios from '@/config/axios/index.js'
-import { like, removeLike, getLikes } from '../services/index'
+import { like, removeLike, getLikes, deleteQuotes } from '../services/index'
 const localeStore = useLocaleStore()
 const store = useUsersStore()
 import { useRouter } from 'vue-router'
@@ -161,14 +160,7 @@ const deleteQuote = async () => {
   viewQuote.value = false
   if (props.userId === store.authUser[0].id) {
     emits('deleted', props.id)
-    await axios
-      .delete(`/api/delete-quote/${props.id}`)
-      .then((response) => {
-        console.log(response.data)
-      })
-      .catch((error) => {
-        console.error(error)
-      })
+    deleteQuotes(props.id)
   }
 }
 const toggleQuote = () => {

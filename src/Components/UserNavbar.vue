@@ -63,7 +63,7 @@
 
 <script setup>
 import { onBeforeMount, ref } from 'vue'
-import axios from '@/config/axios/index.js'
+import { getUser } from '../services/index'
 import HomeButton from './HomeButton.vue'
 import LanguageSelect from './LanguageSelect.vue'
 import MovieIcon from './MovieIcon.vue'
@@ -93,7 +93,7 @@ const path = ref(route.path)
 const editedUser = ref(store.authUser)
 const user = ref([])
 onBeforeMount(async () => {
-  const response = await axios.get('/api/user')
+  const response = await getUser()
 
   user.value = response.data
   user.value.profile_picture = store.getUrl(response.data.profile_picture)

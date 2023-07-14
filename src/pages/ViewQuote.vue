@@ -122,7 +122,6 @@
 import UserNavbar from '../Components/UserNavbar.vue'
 import { onBeforeMount, ref, onMounted } from 'vue'
 import instantiatePusher from '../helpers/instantiatePusher'
-import axios from '@/config/axios/index.js'
 import { useRoute, useRouter } from 'vue-router'
 import { useUsersStore } from '../stores/user'
 import { Form, Field } from 'vee-validate'
@@ -130,7 +129,15 @@ import UserComment from '../Components/UserComment.vue'
 import NewitemModal from '../Components/NewitemModal.vue'
 import LikeButton from '../Components/LikeButton.vue'
 import NewPost from '../Components/NewPost.vue'
-import { like, removeLike, getLikes, comments } from '../services/index'
+import {
+  like,
+  removeLike,
+  getLikes,
+  comments,
+  getUser,
+  deleteQuotes,
+  viewQuote
+} from '../services/index'
 const edit = ref(false)
 const data = ref({})
 const loggedInUser = ref({})
@@ -203,8 +210,7 @@ const changeInput = (e) => {
 }
 const deleteQuote = async () => {
   if (data.value.user.id === loggedInUser.value.id) {
-    await axios
-      .delete(`/api/delete-quote/${data.value.id}`)
+    await deleteQuotes(data.value.id)
       .then((response) => {
         console.log(response.data)
         back()
@@ -243,13 +249,9 @@ onBeforeMount(async () => {
   if (!store.authUser[0]) {
     store.getAuthUser()
   }
-  const resp = await axios.get('/api/view-quote', {
-    params: {
-      id: route.query.id
-    }
-  })
+  const resp = await viewQuote(route.query.id)
   data.value = resp.data
-  const response = await axios.get('/api/user')
+  const response = await getUser()
   loggedInUser.value = response?.data
   likeCount.value = data?.value.likes.length
   allComments.value = data?.value.comments

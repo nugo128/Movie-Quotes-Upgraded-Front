@@ -31,7 +31,7 @@
         <h2 class="text-white text-lg md:block hidden">Movie description</h2>
         <div class="flex flex-col md:flex-row gap-2">
           <img
-            :src="userStore.getUrl(description.thumbnail)"
+            :src="userStore.getUrl(description?.thumbnail)"
             class="md:w-[50rem] md:h-[25rem] rounded-xl w-[22.375rem] h-[18.875rem]"
             alt=""
           />
@@ -39,11 +39,11 @@
             <div class="flex justify-between">
               <h2 class="text-[#DDCCAA] md:text-xl text-lg">
                 {{
-                  description.title && localeStore?.lang
+                  description?.title && localeStore?.lang
                     ? JSON.parse(description?.title)[localeStore?.lang]
                     : ''
                 }}
-                <span>({{ description.year }})</span>
+                <span>({{ description?.year }})</span>
               </h2>
               <div class="hidden md:flex gap-4 bg-[#24222F] py-2 px-7 rounded-xl">
                 <img
@@ -64,7 +64,7 @@
             <div class="flex gap-4 flex-wrap">
               <h3
                 class="bg-[#6C757D] w-max px-3 py-1 rounded-md text-sm md:text-base text-white"
-                v-for="genre in description.category"
+                v-for="genre in description?.category"
                 :key="genre.id"
               >
                 {{
@@ -97,12 +97,12 @@
         </div>
         <div class="flex md:gap-4 gap-8 md:items-center md:flex-row flex-col-reverse items-start">
           <h2 class="hidden md:block text-white md:text-xl text-lg">
-            Quotes (total <span>{{ description.quote?.length }}</span
+            Quotes (total <span>{{ description?.quote?.length }}</span
             >)
           </h2>
           <h2 class="flex flex-col md:hidden text-white md:text-xl text-lg">
             <span>{{ $t('movies.all_quotes') }}</span>
-            <span class="text-sm">({{ $t('movies.total') }} {{ description.quote?.length }})</span>
+            <span class="text-sm">({{ $t('movies.total') }} {{ description?.quote?.length }})</span>
           </h2>
           <div class="md:h-7 md:w-px h-px w-full md:mb-0 mb-4 bg-[#EFEFEF33]"></div>
           <button
@@ -114,7 +114,7 @@
         </div>
         <div class="flex flex-col gap-10">
           <movie-quotes
-            v-for="quote in description.quote"
+            v-for="quote in description?.quote"
             :key="quote.id"
             :quote="quote.quote"
             :thumbnail="quote.thumbnail"
@@ -139,10 +139,10 @@ import NewitemModal from '../Components/NewitemModal.vue'
 import NewMovie from '../Components/NewMovie.vue'
 import NewPost from '../Components/NewPost.vue'
 import { useUsersStore } from '../stores/user'
-import axios from '@/config/axios/index.js'
 import { useLocaleStore } from '../stores/locale'
 import { useRoute, useRouter } from 'vue-router'
 import { onBeforeMount, ref } from 'vue'
+import { movieDescription, deleteMovies } from '../services/index'
 const editMovie = ref(false)
 const edit = ref(false)
 const quoteDetails = ref({})
@@ -180,20 +180,14 @@ const deleteQuote = (id) => {
   }
 }
 const updateQuotes = async () => {
-  const resp = await axios.get('/api/movie-description', {
-    params: {
-      id: route.query.id
-    }
-  })
+  const resp = await movieDescription(route.query.id)
   addQuote.value = false
   description.value = resp.data
   edit.value = false
 }
 const deleteMovie = async () => {
-  await axios
-    .delete(`/api/delete-movie/${route.query.id}`)
-    .then((response) => {
-      console.log(response.data)
+  await deleteMovies(route.query.id)
+    .then(() => {
       router.replace({ path: '/my-movies', query: { delete: route.query.id } })
     })
     .catch((error) => {
@@ -201,11 +195,7 @@ const deleteMovie = async () => {
     })
 }
 onBeforeMount(async () => {
-  const resp = await axios.get('/api/movie-description', {
-    params: {
-      id: route.query.id
-    }
-  })
+  const resp = await movieDescription(route.query.id)
   description.value = resp.data
 })
 </script>
