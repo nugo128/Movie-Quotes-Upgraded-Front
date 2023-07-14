@@ -64,13 +64,13 @@
         name="quote_en"
         :placeholder="quote ? JSON.parse(quote.title)['en'] : 'Start create new quote'"
         language="eng"
-        :rule="!quote ? 'required' : ''"
+        :rule="!quote ? 'required|english' : 'english'"
       ></text-area>
       <text-area
         name="quote_ka"
         :placeholder="quote ? JSON.parse(quote.title)['ka'] : 'ახალი ციტატა'"
         language="ქარ"
-        :rule="!quote ? 'required' : ''"
+        :rule="!quote ? 'required|georgian' : 'georgian'"
       ></text-area>
 
       <photo-upload v-if="!movie || quote" :thumbnail="quote?.thumbnail"></photo-upload>
@@ -80,7 +80,7 @@
         <Field
           id=""
           as="select"
-          class="z-50 select w-full focus:appearance-none focus:outline-none text-white bg-transparent mt-2 py-5 px-12 mb-10"
+          class="z-50 select w-full focus:appearance-none focus:outline-none text-white bg-transparent mt-2 py-5 px-12 mb-0"
           name="movie_id"
           :rules="!quote ? 'required' : ''"
         >
@@ -97,9 +97,11 @@
           </option>
         </Field>
       </div>
+      <ErrorMessage class="text-red-400 text-sm px-5 md:w-[400px]" name="movie_id" />
       <button
         class="w-full bg-[#E31221] py-3 rounded mb-1"
         :class="{ ['pointer-events-none']: !meta.valid }"
+        @click="submit"
       >
         {{
           type ? $t('movies.save_changes') : movie ? $t('movies.add_quote') : $t('newsfeed.post')
@@ -110,7 +112,7 @@
 </template>
 
 <script setup>
-import { Form, Field } from 'vee-validate'
+import { Form, Field, ErrorMessage } from 'vee-validate'
 import textArea from './textArea.vue'
 import PhotoUpload from './PhotoUpload.vue'
 import { useMovieStore } from '../stores/movie'
@@ -160,15 +162,25 @@ const submit = async (val) => {
       formData.set(value, val[value])
     }
   }
+  errors.value = false
   if (!props.quote) {
     movieStore.addFile(val.image)
     if (props.movie) {
       formData.set('movie_id', props.movie.id)
     }
     formData.set('thumbnail', movieStore.file)
-    await axios.post('/api/newPost', formData).catch(() => {
-      errors.value = localeStore.lang === 'en' ? 'image is required' : 'ფოტო აუცილებელია'
-    })
+    await axios
+      .post('/api/newPost', formData)
+      .then((response) => {
+        if (response) {
+          errors.value = false
+        }
+      })
+      .catch((err) => {
+        err
+          ? (errors.value = localeStore.lang === 'en' ? 'image is required' : 'ფოტო აუცილებელია')
+          : ''
+      })
     errors.value ? '' : emits('posted')
   } else {
     if (val.image) {
