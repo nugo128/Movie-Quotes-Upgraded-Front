@@ -125,7 +125,7 @@ import { useMovieStore } from '../stores/movie'
 import { useUsersStore } from '../stores/user'
 import { onBeforeMount, ref, defineEmits } from 'vue'
 import { useLocaleStore } from '../stores/locale'
-import { deleteQuotes, newPost, editQuote, getUser } from '../services/index'
+import { deleteQuotes, newPost, editQuote } from '../services/index'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 const errors = ref('')
@@ -197,12 +197,16 @@ const submit = async (val) => {
 }
 const movieStore = useMovieStore()
 
-const user = ref([])
+const user = ref(userStore.authUser[0])
 onBeforeMount(async () => {
-  const response = await getUser()
-  movieStore.getMovie()
-  user.value = response.data
-  user.value.profile_picture = userStore.getUrl(response.data.profile_picture)
+  if (!userStore.authUser.length) {
+    userStore.getAuthUser()
+  }
+  if (!movieStore.movies.length) {
+    movieStore.getMovie()
+  }
+  user.value = userStore.authUser[0]
+  user.value.profile_picture = userStore.getUrl(userStore.authUser[0].profile_picture)
 })
 </script>
 <style scoped>

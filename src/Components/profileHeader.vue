@@ -126,6 +126,9 @@ const notificationCount = ref(0)
 onMounted(async () => {
   instantiatePusher()
   let user = 0
+  if (!store.authUser[0]) {
+    store.getAuthUser()
+  }
   await getUser()
     .then((response) => (user = response.data.id))
     .catch((err) => console.log(err))

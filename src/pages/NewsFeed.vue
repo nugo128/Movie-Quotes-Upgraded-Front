@@ -28,7 +28,6 @@
             :comment="post.comments"
             :numOfLikes="post.likes.length"
             :quoteID="post.id"
-            :loggedInUser="loggedInUser"
           />
         </div>
       </div>
@@ -45,20 +44,18 @@ import { usePostsStore } from '../stores/post'
 import { onBeforeMount, ref } from 'vue'
 import NewitemModal from '../Components/NewitemModal.vue'
 import { useUsersStore } from '../stores/user'
-import { getUser } from '../services/index'
 const userStore = useUsersStore()
 const store = usePostsStore()
 const postData = ref(store.posts)
-const loggedInUser = ref([])
 const showSearch = ref(false)
 onBeforeMount(async () => {
   if (!userStore.authUser.length) {
     userStore.getAuthUser()
   }
-  const response = await getUser()
-  loggedInUser.value = response.data
-  store.getPosts()
-  postData.value = store.posts
+  if (!store.posts.length) {
+    store.getPosts()
+    postData.value = store.posts
+  }
 })
 
 const addNewPost = ref(false)

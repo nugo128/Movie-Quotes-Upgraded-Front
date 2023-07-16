@@ -129,15 +129,9 @@ import UserComment from '../Components/UserComment.vue'
 import NewitemModal from '../Components/NewitemModal.vue'
 import LikeButton from '../Components/LikeButton.vue'
 import NewPost from '../Components/NewPost.vue'
-import {
-  like,
-  removeLike,
-  getLikes,
-  comments,
-  getUser,
-  deleteQuotes,
-  viewQuote
-} from '../services/index'
+import { like, removeLike, getLikes, comments, deleteQuotes, viewQuote } from '../services/index'
+import { useQuoteStore } from '../stores/quote'
+const quoteStore = useQuoteStore()
 const edit = ref(false)
 const data = ref({})
 const loggedInUser = ref({})
@@ -146,7 +140,7 @@ const route = useRoute()
 const commentCount = ref(data.value.comments?.length)
 const likeCount = ref(0)
 const store = useUsersStore()
-if (!store.authUser[0]) {
+if (!store.authUser.length) {
   store.getAuthUser()
 }
 onMounted(() => {
@@ -249,10 +243,13 @@ onBeforeMount(async () => {
   if (!store.authUser[0]) {
     store.getAuthUser()
   }
-  const resp = await viewQuote(route.query.id)
-  data.value = resp.data
-  const response = await getUser()
-  loggedInUser.value = response?.data
+  if (!quoteStore.quote.length) {
+    quoteStore.getQuote(route.query.id)
+    await viewQuote(route.query.id)
+  }
+  console.log(quoteStore.quote)
+  data.value = quoteStore.quote
+  loggedInUser.value = store.authUser[0]
   likeCount.value = data?.value.likes.length
   allComments.value = data?.value.comments
   commentCount.value = data?.value.comments.length

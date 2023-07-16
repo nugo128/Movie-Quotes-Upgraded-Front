@@ -109,7 +109,8 @@ export async function seenNotifications(data) {
   return await axios.post('/api/read-notifications', data)
 }
 export async function verifyUser(token) {
-  return await axios.get(`/api/get-notifications/${token}`)
+  await axios.get('/sanctum/csrf-cookie')
+  return await axios.get(`/api/verify/${token}`)
 }
 export async function movieDescription(id) {
   return await axios.get('/api/movie-description', {

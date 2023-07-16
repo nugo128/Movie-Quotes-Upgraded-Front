@@ -38,7 +38,7 @@
     </div>
     <div class="flex gap-6">
       <img
-        :src="store.getUrl(loggedInUser.profile_picture)"
+        :src="store.getUrl(store.authUser[0].profile_picture)"
         alt=""
         class="w-13 h-13 rounded-full"
       />
@@ -126,10 +126,6 @@ const props = defineProps({
   quoteID: {
     type: Number,
     required: true
-  },
-  loggedInUser: {
-    type: Object,
-    required: true
   }
 })
 onMounted(async () => {
@@ -189,14 +185,10 @@ const showMoreComments = () => {
 const changeInput = (e) => {
   input.value = e.target.value
 }
-const aUser = ref([])
-aUser.value.profile_picture = store.getUrl(props.loggedInUser.profile_picture)
 onBeforeMount(async () => {
   if (!store.authUser[0]) {
     store.getAuthUser()
   }
-  aUser.value = props.loggedInUser
-  aUser.value.profile_picture = store.getUrl(props.loggedInUser.profile_picture)
   visibleComments.value = allComments.value.slice(-2)
 })
 

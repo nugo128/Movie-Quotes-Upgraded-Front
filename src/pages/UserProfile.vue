@@ -244,14 +244,14 @@ import profileHeader from '../Components/profileHeader.vue'
 import UserNavbar from '../Components/UserNavbar.vue'
 import { Form, Field } from 'vee-validate'
 import { onBeforeMount, ref } from 'vue'
-import { getUser, verifyEmail, editProfile } from '../services/index'
+import { verifyEmail, editProfile } from '../services/index'
 import AuthInput from '../Components/AuthInput.vue'
 import FakeInput from '../Components/FakeInput.vue'
 import { useUsersStore } from '../stores/user'
 import { usePostsStore } from '../stores/post'
 import { useRoute, useRouter } from 'vue-router'
 const store = useUsersStore()
-const user = ref([])
+const user = ref(store.authUser[0])
 const editEmail = ref(false)
 const editUsername = ref(false)
 const editPassword = ref(false)
@@ -355,10 +355,15 @@ const changePhoto = async (event) => {
     reader.readAsDataURL(file)
   }
 }
+if (!store.authUser.length) {
+  store.getAuthUser()
+}
 onBeforeMount(async () => {
-  const response = await getUser()
-  user.value = response.data
-  user.value.profile_picture = store.getUrl(response.data.profile_picture)
-  profilePicture.value = store.getUrl(response.data.profile_picture)
+  if (!store.authUser.length) {
+    store.getAuthUser()
+  }
+  user.value = store.authUser[0]
+  user.value.profile_picture = store.getUrl(store.authUser[0]?.profile_picture)
+  profilePicture.value = store.getUrl(store.authUser[0].profile_picture)
 })
 </script>
