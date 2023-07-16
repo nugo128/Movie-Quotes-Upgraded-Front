@@ -61,7 +61,7 @@ onBeforeMount(async () => {
   }
 })
 
-const addNewPost = ref(false)
+const addNewPost = ref(route.query.newPost)
 const newPostHandler = () => {
   addNewPost.value
     ? router.replace({ path: '/newsfeed' })

@@ -185,6 +185,7 @@ const deleteQuote = (id) => {
   }
 }
 const updateQuotes = async () => {
+  router.replace({ path: '/movie-description', query: { id: route.query.id } })
   const resp = await movieDescription(route.query.id)
   addQuote.value = false
   description.value = resp.data

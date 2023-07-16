@@ -49,7 +49,6 @@
               alt="profile picture"
               class="w-48 h-48 rounded-full mt-5"
             />
-
             <Field
               id="file"
               type="file"
@@ -75,7 +74,10 @@
               :edit="showEditUsernameField"
             ></fake-input>
 
-            <div class="w-[37.5rem] hidden md:block" v-if="editUsername">
+            <div
+              class="w-[37.5rem] hidden md:block"
+              v-if="editUsername || route.query.editUsername"
+            >
               <AuthInput
                 name="username"
                 type="text"
@@ -86,7 +88,7 @@
               />
             </div>
             <editprofile-modal
-              v-if="editUsername"
+              v-if="editUsername || route.query.editUsername"
               :cancel="cancel"
               :valid="meta.dirty && meta.valid ? true : false"
               :submit="submit"
@@ -109,7 +111,7 @@
               :edit="showEditEmailField"
             ></fake-input>
 
-            <div class="md:w-600 hidden md:block" v-if="editEmail">
+            <div class="md:w-600 hidden md:block" v-if="editEmail || route.query.editEmail">
               <AuthInput
                 name="email"
                 type="email"
@@ -120,7 +122,7 @@
               />
             </div>
             <editprofile-modal
-              v-if="editEmail"
+              v-if="editEmail || route.query.editEmail"
               :cancel="cancel"
               :valid="meta.dirty && meta.valid ? true : false"
               :submit="submit"
@@ -144,7 +146,10 @@
               :edit="showEditPasswordField"
             ></fake-input>
 
-            <div class="hidden md:flex flex-col gap-12 w-600" v-if="editPassword">
+            <div
+              class="hidden md:flex flex-col gap-12 w-600"
+              v-if="editPassword || route.query.editPassword"
+            >
               <div class="border-[1px] border-[#CED4DA33] p-6 flex flex-col gap-5">
                 <h2 class="text-white">{{ $t('profile.password_validation') }}</h2>
 
@@ -178,7 +183,7 @@
               />
             </div>
             <editprofile-modal
-              v-if="editPassword"
+              v-if="editPassword || route.query.editPassword"
               :cancel="cancel"
               :valid="meta.dirty && meta.valid ? true : false"
               :submit="submit"
@@ -244,17 +249,19 @@ import profileHeader from '../Components/profileHeader.vue'
 import UserNavbar from '../Components/UserNavbar.vue'
 import { Form, Field } from 'vee-validate'
 import { onBeforeMount, ref } from 'vue'
-import { verifyEmail, editProfile } from '../services/index'
+import { verifyEmail, editProfile, getUser } from '../services/index'
 import AuthInput from '../Components/AuthInput.vue'
 import FakeInput from '../Components/FakeInput.vue'
 import { useUsersStore } from '../stores/user'
 import { usePostsStore } from '../stores/post'
 import { useRoute, useRouter } from 'vue-router'
+const route = useRoute()
+const router = useRouter()
 const store = useUsersStore()
 const user = ref(store.authUser[0])
-const editEmail = ref(false)
-const editUsername = ref(false)
-const editPassword = ref(false)
+const editEmail = ref(route.query.editEmail)
+const editUsername = ref(route.query.editUsername)
+const editPassword = ref(route.query.editPassword)
 const moreThan8 = ref(false)
 const lessThanLowercase15 = ref(false)
 const profilePicture = ref('')
@@ -262,8 +269,6 @@ const userInfo = ref(store.authUser)
 const showUpload = ref(false)
 const post = usePostsStore()
 const showConfirmation = ref(false)
-const route = useRoute()
-const router = useRouter()
 const showSuccess = ref(false)
 const toggleSuccess = () => {
   showSuccess.value = false
@@ -300,6 +305,10 @@ const handleInput = (e) => {
   }
 }
 const cancel = () => {
+  if (!editPassword.value && !editUsername.value && !editEmail.value) {
+    router.go(-1)
+  }
+  router.replace({ path: '/user-profile' })
   editPassword.value = false
   editUsername.value = false
   editEmail.value = false
@@ -331,12 +340,36 @@ const submit = async (val) => {
   }
 }
 const showEditPasswordField = () => {
+  router.replace({
+    path: '/user-profile',
+    query: {
+      editPassword: true,
+      editEmail: route.query.editEmail,
+      editUsername: route.query.editUsername
+    }
+  })
   editPassword.value = true
 }
 const showEditUsernameField = () => {
+  router.replace({
+    path: '/user-profile',
+    query: {
+      editPassword: route.query.editPassword,
+      editEmail: route.query.editEmail,
+      editUsername: true
+    }
+  })
   editUsername.value = true
 }
 const showEditEmailField = () => {
+  router.replace({
+    path: '/user-profile',
+    query: {
+      editPassword: route.query.editPassword,
+      editEmail: true,
+      editUsername: route.query.editUsername
+    }
+  })
   editEmail.value = true
 }
 const changePhoto = async (event) => {
@@ -361,9 +394,15 @@ if (!store.authUser.length) {
 onBeforeMount(async () => {
   if (!store.authUser.length) {
     store.getAuthUser()
+    const response = await getUser()
+    user.value = response.data
+    console.log(response.data)
+    user.value.profile_picture = store.getUrl(response.data.profile_picture)
+    profilePicture.value = store.getUrl(response.data.profile_picture)
+  } else {
+    user.value = store.authUser[0]
+    user.value.profile_picture = store.getUrl(store.authUser[0]?.profile_picture)
+    profilePicture.value = store.getUrl(store.authUser[0].profile_picture)
   }
-  user.value = store.authUser[0]
-  user.value.profile_picture = store.getUrl(store.authUser[0]?.profile_picture)
-  profilePicture.value = store.getUrl(store.authUser[0].profile_picture)
 })
 </script>
