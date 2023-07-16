@@ -3,7 +3,7 @@
     class="md:bg-transparent py-5 w-11/12 md:bg-none bg-gradient-to-br from-black to-gray-900 flex flex-col items-center md:justify-center justify-start text-white gap-7 rounded-lg"
   >
     <img src="@/assets/images/email-sent.png" alt="" class="w-14" />
-    <h2 class="text-2xl md:text-3xl">{{ sent }}</h2>
+    <h2 class="text-2xl md:text-3xl md:text-center">{{ sent }}</h2>
     <p class="text-center md:text-sm text-xs font-light">
       {{ check }}
     </p>

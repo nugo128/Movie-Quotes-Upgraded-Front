@@ -1,7 +1,7 @@
 <template>
   <div>
     <profile-header></profile-header>
-    <newitem-modal v-if="addNewMovie" :click="newMovieHandler">
+    <newitem-modal v-if="addNewMovie || route.query.addMovie" :click="newMovieHandler">
       <new-movie @new-movie="displayNewMovie"></new-movie>
     </newitem-modal>
     <div>
@@ -60,11 +60,15 @@ const store = useMovieStore()
 const movies = ref(store.userMovies)
 const displayNewMovie = (val) => {
   addNewMovie.value = false
+  router.replace({ path: '/my-movies' })
   movies.value.unshift(val.data)
 }
 const router = useRouter()
-const addNewMovie = ref(false)
+const addNewMovie = ref(route.query.addMovie)
 const newMovieHandler = () => {
+  addNewMovie.value
+    ? router.replace({ path: '/my-movies' })
+    : router.replace({ path: '/my-movies', query: { addMovie: true } })
   addNewMovie.value = !addNewMovie.value
 }
 const seeDescription = (movie) => {

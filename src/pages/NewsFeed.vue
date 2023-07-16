@@ -3,7 +3,7 @@
     <profile-header v-if="!showSearch">
       <search-bar @searched="searchPosts" />
     </profile-header>
-    <newitem-modal v-if="addNewPost" :click="newPostHandler"
+    <newitem-modal v-if="addNewPost || route.query.newPost" :click="newPostHandler"
       ><new-post @posted="updatePosts" />
     </newitem-modal>
     <div class="pt-8">
@@ -44,6 +44,9 @@ import { usePostsStore } from '../stores/post'
 import { onBeforeMount, ref } from 'vue'
 import NewitemModal from '../Components/NewitemModal.vue'
 import { useUsersStore } from '../stores/user'
+import { useRoute, useRouter } from 'vue-router'
+const route = useRoute()
+const router = useRouter()
 const userStore = useUsersStore()
 const store = usePostsStore()
 const postData = ref(store.posts)
@@ -60,12 +63,16 @@ onBeforeMount(async () => {
 
 const addNewPost = ref(false)
 const newPostHandler = () => {
+  addNewPost.value
+    ? router.replace({ path: '/newsfeed' })
+    : router.replace({ path: '/newsfeed', query: { newPost: true } })
   addNewPost.value = !addNewPost.value
 }
 const updatePosts = async () => {
   store.clear()
   store.getPosts()
   addNewPost.value = !addNewPost.value
+  router.replace({ path: '/newsfeed' })
   postData.value = store.posts
 }
 const searchPosts = () => {

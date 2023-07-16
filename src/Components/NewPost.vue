@@ -18,11 +18,11 @@
   <div class="flex flex-col gap-10 px-8 pb-20">
     <div class="flex gap-5 items-center">
       <img
-        :src="user.profile_picture"
+        :src="userStore.getUrl(user?.profile_picture)"
         alt="user profile picture"
         class="md:w-15 md:h-15 w-10 h-10 rounded-full"
       />
-      <h2>{{ user.name }}</h2>
+      <h2>{{ user?.name }}</h2>
     </div>
     <div v-if="movie" class="flex gap-7">
       <img
@@ -125,7 +125,7 @@ import { useMovieStore } from '../stores/movie'
 import { useUsersStore } from '../stores/user'
 import { onBeforeMount, ref, defineEmits } from 'vue'
 import { useLocaleStore } from '../stores/locale'
-import { deleteQuotes, newPost, editQuote } from '../services/index'
+import { deleteQuotes, newPost, editQuote, getUser } from '../services/index'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 const errors = ref('')
@@ -205,8 +205,11 @@ onBeforeMount(async () => {
   if (!movieStore.movies.length) {
     movieStore.getMovie()
   }
+  if (!user.value) {
+    const response = await getUser()
+    user.value = response.data
+  }
   user.value = userStore.authUser[0]
-  user.value.profile_picture = userStore.getUrl(userStore.authUser[0].profile_picture)
 })
 </script>
 <style scoped>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <profile-header></profile-header>
-    <newitem-modal v-if="addQuote" :click="newQuoteHandler"
+    <newitem-modal v-if="addQuote || route.query.addQuote" :click="newQuoteHandler"
       ><new-post
         @posted="updateQuotes"
         :movie="{
@@ -140,11 +140,14 @@ import NewMovie from '../Components/NewMovie.vue'
 import NewPost from '../Components/NewPost.vue'
 import { useUsersStore } from '../stores/user'
 import { useLocaleStore } from '../stores/locale'
+import { useMovieStore } from '../stores/movie'
 import { useRoute, useRouter } from 'vue-router'
 import { onBeforeMount, ref } from 'vue'
 import { movieDescription, deleteMovies } from '../services/index'
 const editMovie = ref(false)
 const edit = ref(false)
+const movieStore = useMovieStore()
+const description = ref({})
 const quoteDetails = ref({})
 const editQuote = (e) => {
   quoteDetails.value = e
@@ -157,9 +160,11 @@ const localeStore = useLocaleStore()
 const userStore = useUsersStore()
 const route = useRoute()
 const router = useRouter()
-const description = ref({})
-const addQuote = ref(false)
+const addQuote = ref(route.query.addQuote)
 const newQuoteHandler = () => {
+  addQuote.value
+    ? router.replace({ path: '/movie-description', query: { id: route.query.id } })
+    : router.replace({ path: '/movie-description', query: { addQuote: true, id: route.query.id } })
   addQuote.value = !addQuote.value
 }
 const update = (val) => {
@@ -195,7 +200,12 @@ const deleteMovie = async () => {
     })
 }
 onBeforeMount(async () => {
-  const resp = await movieDescription(route.query.id)
-  description.value = resp.data
+  if (!movieStore.movieDescription.id) {
+    const resp = await movieDescription(route.query.id)
+    movieStore.getDesctiption(resp.data)
+    description.value = resp.data
+  } else {
+    description.value = movieStore.movieDescription
+  }
 })
 </script>

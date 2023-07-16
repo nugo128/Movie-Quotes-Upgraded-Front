@@ -1,12 +1,12 @@
 <template>
-  <modal-window :click="registrationHandler" v-if="showRegistration">
+  <modal-window :click="registrationHandler" v-if="showRegistration || route.query.registration">
     <registration-modal
       @registered="emailIsSent"
       @showLogin="toggleLogin"
       :currentWidth="currentWidth"
     />
   </modal-window>
-  <modal-window v-if="showEmailSent" :click="emailSentHandler">
+  <modal-window v-if="showEmailSent || route.query.emailSent" :click="emailSentHandler">
     <email-sent
       :sent="$t('thank_you')"
       :check="$t('check_email')"
@@ -20,14 +20,14 @@
       :linkText="$t('go_to_newsfeed')"
     ></success-modal>
   </modal-window>
-  <modal-window v-if="showLogin" :click="loginModalHandler">
+  <modal-window v-if="showLogin || route.query.login" :click="loginModalHandler">
     <login-modal
       @showRegistration="toggleRegistration"
       @showReset="togglePasswordResetEmail"
       :currentWidth="currentWidth"
     ></login-modal>
   </modal-window>
-  <modal-window v-if="showPasswordResetEmail" :click="resetModalHandler">
+  <modal-window v-if="showPasswordResetEmail || route.query.resetEmail" :click="resetModalHandler">
     <password-reset
       @showLogin="toggleLogin"
       @showEmail="emailIsSent"
@@ -68,7 +68,7 @@
       />
     </password-reset>
   </modal-window>
-  <modal-window v-if="showResetEmailSent" :click="emailSentHandler">
+  <modal-window v-if="showResetEmailSent || route.query.resetEmailSent" :click="emailSentHandler">
     <email-sent
       :sent="$t('email_success.check')"
       :check="$t('email_success.send_instructions')"
@@ -77,7 +77,10 @@
       @skip="emailSentHandler"
     />
   </modal-window>
-  <modal-window v-if="showSuccessPassword" :click="successModalHandler">
+  <modal-window
+    v-if="showSuccessPassword || route.query.successPassword"
+    :click="successModalHandler"
+  >
     <success-modal
       :mainText="$t('success.success')"
       :secondaryText="$t('success.password_changed')"
@@ -164,18 +167,19 @@ import SuccessModal from '../Components/SuccessModal.vue'
 import LoginModal from '../Components/LoginModal.vue'
 import { verifyUser } from '../services/index'
 import PasswordReset from '../Components/PasswordReset.vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { useLocaleStore } from '../stores/locale'
+const router = useRouter()
+const route = useRoute()
 const localeStore = useLocaleStore()
 const scroll = ref(false)
-const showRegistration = ref(false)
-const showEmailSent = ref(false)
-const route = useRoute()
+const showRegistration = ref(route.query.registration)
+const showEmailSent = ref(route.query.emailSent)
 const showSuccess = ref(false)
-const showLogin = ref(false)
-const showPasswordResetEmail = ref(false)
-const showResetEmailSent = ref(false)
+const showLogin = ref(route.query.login)
+const showPasswordResetEmail = ref(route.query.resetEmail)
+const showResetEmailSent = ref(route.query.resetEmailSent)
 const showPasswordResetForm = ref(false)
 const showSuccessPassword = ref(false)
 const currentWidth = ref(window.innerWidth)
@@ -192,24 +196,36 @@ if (route.path === '/reset' && route.query.token.length === 128) {
   showPasswordResetForm.value = true
 }
 const togglePasswordResetEmail = (reset) => {
+  showPasswordResetEmail.value
+    ? router.replace({ path: '/' })
+    : router.replace({ path: '/', query: { resetEmail: true } })
   showPasswordResetEmail.value = reset
   showLogin.value = !reset
 }
 const loginModalHandler = () => {
+  showLogin.value
+    ? router.replace({ path: '/' })
+    : router.replace({ path: '/', query: { login: true } })
   showLogin.value = !showLogin.value
 }
 const resetModalHandler = () => {
+  router.replace({ path: '/' })
   showPasswordResetEmail.value = false
   showPasswordResetForm.value = false
 }
 const registrationHandler = () => {
+  showRegistration.value
+    ? router.replace({ path: '/' })
+    : router.replace({ path: '/', query: { registration: true } })
   showRegistration.value = !showRegistration.value
 }
 const emailSentHandler = () => {
+  router.replace({ path: '/' })
   showEmailSent.value = false
   showResetEmailSent.value = false
 }
 const successModalHandler = () => {
+  router.replace({ path: '/' })
   showSuccess.value = false
   showSuccessPassword.value = false
 }
@@ -217,15 +233,24 @@ const emailIsSent = (showEmail) => {
   showPasswordResetEmail.value
     ? (showResetEmailSent.value = showEmail)
     : (showResetEmailSent.value = false)
+  !showPasswordResetEmail.value
+    ? ''
+    : router.replace({ path: '/', query: { resetEmailSent: true } })
+
   showRegistration.value ? (showEmailSent.value = showEmail) : (showEmailSent.value = false)
+  !showRegistration.value ? '' : router.replace({ path: '/', query: { emailSent: true } })
   showRegistration.value = false
   showPasswordResetEmail.value = false
 }
 const resetSuccessfull = () => {
+  router.replace({ path: '/', query: { successPassword: true } })
   showSuccessPassword.value = true
   showPasswordResetForm.value = false
 }
 const toggleLogin = (login) => {
+  showLogin.value
+    ? router.replace({ path: '/' })
+    : router.replace({ path: '/', query: { login: true } })
   showRegistration.value = false
   showPasswordResetEmail.value = false
   showPasswordResetForm.value = false
@@ -234,6 +259,9 @@ const toggleLogin = (login) => {
   showLogin.value = login
 }
 const toggleRegistration = (registration) => {
+  showRegistration.value
+    ? router.replace({ path: '/' })
+    : router.replace({ path: '/', query: { registration: true } })
   showRegistration.value = registration
   showLogin.value = !registration
 }
