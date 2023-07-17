@@ -1,25 +1,54 @@
 <template>
-  <div class="relative">
+  <div class="md:relative">
     <div class="flex gap-4">
       <div @click="appearSearch" class="flex gap-4 cursor-pointer">
-        <img src="../assets/images/search.svg" alt="" />
-        <h2 class="text-white" v-if="!search">{{ $t('newsfeed.search') }}</h2>
+        <img src="../assets/images/search.svg" class="w-6" />
+        <h2 class="text-white md:block hidden" v-if="!search">{{ $t('newsfeed.search') }}</h2>
       </div>
-
-      <Form v-if="search">
+      <Form v-if="search" class="md:block hidden">
         <Field name="search" v-slot="{ field }">
           <input
             id="search"
             v-bind="field"
-            class="w-[550px] bg-black placeholder-white text-white outline-none"
+            class="md:w-[34.375rem] w-15 bg-black placeholder-white text-white outline-none"
             type="text"
             @input="submit"
-            :placeholder="movie ? 'Search movie' : $t('newsfeed.search_placeholder')"
+            :placeholder="
+              movie
+                ? 'Search movie'
+                : `${$t('newsfeed.search_placeholder_1')}, ${$t('newsfeed.search_placeholder_2')}`
+            "
           />
         </Field>
       </Form>
+      <div v-if="search" class="md:hidden w-full h-screen z-[999] absolute left-0 top-0">
+        <div class="h-4/5 bg-black">
+          <div class="flex gap-8 px-8 py-6">
+            <img src="../assets/images/back.svg" alt="" @click="toggleSearch" />
+            <Form class="w-full">
+              <Field name="search" v-slot="{ field }">
+                <input
+                  id="search"
+                  v-bind="field"
+                  class="bg-black placeholder-white text-white outline-none"
+                  type="text"
+                  @input="submit"
+                  :placeholder="$t('newsfeed.search_mobile')"
+                />
+              </Field>
+            </Form>
+          </div>
+          <div class="h-[0.5px] w-full bg-[#EFEFEF4D]"></div>
+
+          <div class="flex flex-col gap-5 mt-6 ml-20">
+            <p>{{ $t('newsfeed.search_placeholder_1') }}</p>
+            <p>{{ $t('newsfeed.search_placeholder_2') }}</p>
+          </div>
+        </div>
+        <div class="h-1/5 bg-transparent" @click="toggleSearch"></div>
+      </div>
     </div>
-    <div class="h-[0.5px] w-full bg-[#EFEFEF4D] mt-2 absolute" v-if="search"></div>
+    <div class="md:block hidden h-[0.5px] w-full bg-[#EFEFEF4D] mt-7 absolute" v-if="search"></div>
   </div>
 </template>
 
@@ -35,12 +64,15 @@ const props = defineProps({
     required: false
   }
 })
+const toggleSearch = () => {
+  search.value = !search.value
+}
 const movieStore = useMovieStore()
 const store = usePostsStore()
 const search = ref(false)
 const emits = defineEmits(['searched', 'movieSearched'])
 const submit = async (e) => {
-  if (e.target.value.length > 0) {
+  if (e?.target?.value?.length > 0) {
     if (!props.movie) {
       const resp = await axios.get('/api/search-post', {
         params: {
@@ -68,5 +100,6 @@ const submit = async (e) => {
 }
 const appearSearch = () => {
   search.value = !search.value
+  submit('')
 }
 </script>

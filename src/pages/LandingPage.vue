@@ -1,8 +1,12 @@
 <template>
-  <modal-window :click="registrationHandler" v-if="showRegistration">
-    <registration-modal @registered="emailIsSent" @showLogin="toggleLogin" />
+  <modal-window :click="registrationHandler" v-if="showRegistration || route.query.registration">
+    <registration-modal
+      @registered="emailIsSent"
+      @showLogin="toggleLogin"
+      :currentWidth="currentWidth"
+    />
   </modal-window>
-  <modal-window v-if="showEmailSent" :click="emailSentHandler">
+  <modal-window v-if="showEmailSent || route.query.emailSent" :click="emailSentHandler">
     <email-sent
       :sent="$t('thank_you')"
       :check="$t('check_email')"
@@ -16,13 +20,14 @@
       :linkText="$t('go_to_newsfeed')"
     ></success-modal>
   </modal-window>
-  <modal-window v-if="showLogin" :click="loginModalHandler">
+  <modal-window v-if="showLogin || route.query.login" :click="loginModalHandler">
     <login-modal
       @showRegistration="toggleRegistration"
       @showReset="togglePasswordResetEmail"
+      :currentWidth="currentWidth"
     ></login-modal>
   </modal-window>
-  <modal-window v-if="showPasswordResetEmail" :click="resetModalHandler">
+  <modal-window v-if="showPasswordResetEmail || route.query.resetEmail" :click="resetModalHandler">
     <password-reset
       @showLogin="toggleLogin"
       @showEmail="emailIsSent"
@@ -51,7 +56,6 @@
         name="password"
         type="password"
         :label="$t('form.password_label')"
-        require="*"
         :placeholder="$t('form.password_placeholder')"
         rule="required|min:8|max:15|lowercase_num"
       />
@@ -59,13 +63,12 @@
         name="confirmation"
         type="password"
         :label="$t('form.confirm_password_label')"
-        require="*"
         :placeholder="$t('form.confirm_password_placeholder')"
         rule="required|confirmed:@password"
       />
     </password-reset>
   </modal-window>
-  <modal-window v-if="showResetEmailSent" :click="emailSentHandler">
+  <modal-window v-if="showResetEmailSent || route.query.resetEmailSent" :click="emailSentHandler">
     <email-sent
       :sent="$t('email_success.check')"
       :check="$t('email_success.send_instructions')"
@@ -74,7 +77,10 @@
       @skip="emailSentHandler"
     />
   </modal-window>
-  <modal-window v-if="showSuccessPassword" :click="successModalHandler">
+  <modal-window
+    v-if="showSuccessPassword || route.query.successPassword"
+    :click="successModalHandler"
+  >
     <success-modal
       :mainText="$t('success.success')"
       :secondaryText="$t('success.password_changed')"
@@ -83,29 +89,38 @@
     ></success-modal>
   </modal-window>
 
-  <div class="bg-black flex flex-col gap-64 pb-[180px]">
-    <div class="flex justify-between px-8 py-4">
-      <h3 class="text-[#DDCCAA]">{{ $t('header.movie_quotes') }}</h3>
-      <div class="flex gap-6">
-        <language-select></language-select>
-        <button class="bg-[#E31221] text-white px-7 py-1 rounded" @click="registrationHandler">
-          {{ $t('header.sign_up') }}
-        </button>
-        <button class="text-white px-7 py-1 border-[1px]" @click="loginModalHandler">
+  <div class="bg-black flex flex-col md:gap-64 gap-32 pb-[11.25rem]">
+    <div class="flex justify-between items-center md:px-8 p-4">
+      <h3 class="text-[#DDCCAA] text-xs md:text-base">{{ $t('header.movie_quotes') }}</h3>
+      <div class="flex gap-2 md:gap-5">
+        <language-select class="hidden md:flex"></language-select>
+        <button
+          class="text-white md:text-base text-xs md:px-7 text-[0.625rem] px-2 py-1 rounded border-[1px]"
+          @click="loginModalHandler"
+        >
           {{ $t('header.log_in') }}
+        </button>
+        <button
+          class="bg-[#E31221] text-white md:text-base text-[0.625rem] px-2 py-1 md:px-7 rounded"
+          @click="registrationHandler"
+        >
+          {{ $t('header.sign_up') }}
         </button>
       </div>
     </div>
 
     <div class="flex flex-col items-center">
       <h2
-        :class="`text-[#DDCCAA] text-[60px] ${
-          this.$i18n.locale === 'en' ? 'w-[800px]' : 'w-[1200px]'
+        :class="`text-[#DDCCAA] md:text-[4.375rem] md:p-0 ${
+          localeStore.lang === 'en' ? 'md:w-[55rem] px-16' : 'md:w-[75rem] px-6'
         } text-center font-light`"
       >
         {{ $t('main_text.find_any_quote') }}
       </h2>
-      <button class="bg-[#E31221] text-white p-3 rounded mt-5" @click="registrationHandler">
+      <button
+        class="bg-[#E31221] text-white md:p-3 py-1 px-3 rounded mt-5"
+        @click="registrationHandler"
+      >
         {{ $t('main_text.get_started') }}
       </button>
     </div>
@@ -115,7 +130,7 @@
     :quote="$t('interstellar_quote')"
     :movie="$t('interstellar')"
     :scroll="scroll"
-    width="w-[760px]"
+    width="md:w-[47.5rem] w-[16rem]"
   >
   </landing-quote>
   <landing-quote
@@ -123,7 +138,7 @@
     :quote="$t('royal_tenebaums_quote')"
     :movie="$t('royal_tenebaums')"
     :scroll="scroll"
-    width="w-[850px]"
+    width="md:w-[53rem] w-[16rem]"
   >
   </landing-quote>
   <landing-quote
@@ -131,11 +146,13 @@
     :quote="$t('royal_tenebaums_quote')"
     :movie="$t('royal_tenebaums')"
     :scroll="scroll"
-    width="w-[850px]"
+    width="md:w-[53rem] w-[16rem]"
   >
   </landing-quote>
   <div class="bg-black p-2">
-    <h2 class="ml-20 text-[#DDCCAA]">© 2022 movie quotes. All rights reserved.</h2>
+    <h2 class="md:ml-20 text-[#DDCCAA] text-[0.5rem] md:text-xl">
+      {{ $t('rights_served') }}
+    </h2>
   </div>
 </template>
 
@@ -148,27 +165,28 @@ import AuthInput from '../Components/AuthInput.vue'
 import ModalWindow from '../Components/ModalWindow.vue'
 import SuccessModal from '../Components/SuccessModal.vue'
 import LoginModal from '../Components/LoginModal.vue'
+import { verifyUser } from '../services/index'
 import PasswordReset from '../Components/PasswordReset.vue'
-import axios from '@/config/axios/index.js'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { ref } from 'vue'
-const scroll = ref(false)
-const showRegistration = ref(false)
-const showEmailSent = ref(false)
+import { useLocaleStore } from '../stores/locale'
+const router = useRouter()
 const route = useRoute()
+const localeStore = useLocaleStore()
+const scroll = ref(false)
+const showRegistration = ref(route.query.registration)
+const showEmailSent = ref(route.query.emailSent)
 const showSuccess = ref(false)
-const showLogin = ref(false)
-const showPasswordResetEmail = ref(false)
-const showResetEmailSent = ref(false)
+const showLogin = ref(route.query.login)
+const showPasswordResetEmail = ref(route.query.resetEmail)
+const showResetEmailSent = ref(route.query.resetEmailSent)
 const showPasswordResetForm = ref(false)
 const showSuccessPassword = ref(false)
-
+const currentWidth = ref(window.innerWidth)
 if (route.path === '/verify' && route.query.token.length === 128) {
-  axios
-    .get(`/api/verify/${route.query.token}`)
-    .then((response) => {
+  await verifyUser(route.query.token)
+    .then(() => {
       showSuccess.value = true
-      console.log(response)
     })
     .catch((error) => {
       console.log(error)
@@ -178,24 +196,36 @@ if (route.path === '/reset' && route.query.token.length === 128) {
   showPasswordResetForm.value = true
 }
 const togglePasswordResetEmail = (reset) => {
+  showPasswordResetEmail.value
+    ? router.replace({ path: '/' })
+    : router.replace({ path: '/', query: { resetEmail: true } })
   showPasswordResetEmail.value = reset
   showLogin.value = !reset
 }
 const loginModalHandler = () => {
+  showLogin.value
+    ? router.replace({ path: '/' })
+    : router.replace({ path: '/', query: { login: true } })
   showLogin.value = !showLogin.value
 }
 const resetModalHandler = () => {
+  router.replace({ path: '/' })
   showPasswordResetEmail.value = false
   showPasswordResetForm.value = false
 }
 const registrationHandler = () => {
+  showRegistration.value
+    ? router.replace({ path: '/' })
+    : router.replace({ path: '/', query: { registration: true } })
   showRegistration.value = !showRegistration.value
 }
 const emailSentHandler = () => {
+  router.replace({ path: '/' })
   showEmailSent.value = false
   showResetEmailSent.value = false
 }
 const successModalHandler = () => {
+  router.replace({ path: '/' })
   showSuccess.value = false
   showSuccessPassword.value = false
 }
@@ -203,15 +233,24 @@ const emailIsSent = (showEmail) => {
   showPasswordResetEmail.value
     ? (showResetEmailSent.value = showEmail)
     : (showResetEmailSent.value = false)
+  !showPasswordResetEmail.value
+    ? ''
+    : router.replace({ path: '/', query: { resetEmailSent: true } })
+
   showRegistration.value ? (showEmailSent.value = showEmail) : (showEmailSent.value = false)
+  !showRegistration.value ? '' : router.replace({ path: '/', query: { emailSent: true } })
   showRegistration.value = false
   showPasswordResetEmail.value = false
 }
 const resetSuccessfull = () => {
+  router.replace({ path: '/', query: { successPassword: true } })
   showSuccessPassword.value = true
   showPasswordResetForm.value = false
 }
 const toggleLogin = (login) => {
+  showLogin.value
+    ? router.replace({ path: '/' })
+    : router.replace({ path: '/', query: { login: true } })
   showRegistration.value = false
   showPasswordResetEmail.value = false
   showPasswordResetForm.value = false
@@ -220,15 +259,21 @@ const toggleLogin = (login) => {
   showLogin.value = login
 }
 const toggleRegistration = (registration) => {
+  showRegistration.value
+    ? router.replace({ path: '/' })
+    : router.replace({ path: '/', query: { registration: true } })
   showRegistration.value = registration
   showLogin.value = !registration
 }
 
 window.addEventListener('scroll', () => {
-  if (window.innerHeight * 0.78 <= window.scrollY) {
+  if (window.innerHeight * 0.74 <= window.scrollY) {
     scroll.value = true
   } else {
     scroll.value = false
   }
+})
+window.addEventListener('resize', () => {
+  currentWidth.value = window.innerWidth
 })
 </script>

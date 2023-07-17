@@ -1,0 +1,13 @@
+{
+    "notifications":{
+        "notifications": "შეტყობინებები",
+        "read_all": "Mark all as read",
+        "new": "New",
+        "commented": "დატოვა კომენტარი თქვენს ციტატაზე",
+        "commented_mobile": "დატოვა კომენტარი პოსტზე",
+        "like": "ჰქონდა რეაქცია თქვენს ციტატაზე",
+        "like_mobile": "ჰქონდა რეაქცია ციტატაზე"
+        
+
+    }
+}

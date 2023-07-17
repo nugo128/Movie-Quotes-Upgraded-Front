@@ -1,0 +1,12 @@
+{
+    "notifications":{
+        "notifications": "Notifications",
+        "read_all": "Mark all as read",
+        "new": "New",
+        "commented": "Commented to your movie quote",
+        "commented_mobile": "Commented to your quote..",
+        "like": "Reacted to your quote",
+        "like_mobile": "Reacted to your quote"
+
+    }
+}

@@ -1,15 +1,15 @@
 <template>
   <div class="flex flex-col gap-2">
-    <label class="text-white">{{ name }}</label>
-    <div class="flex items-center gap-8">
+    <label class="text-white md:text-base text-sm">{{ name }}</label>
+    <div class="flex items-center gap-8 relative">
       <input
         :type="type"
         :value="value"
-        class="text-black w-600 h-10 bg-[#CED4DA] p-4 rounded-md outline-none"
+        class="md:text-black w-600 h-10 md:bg-[#CED4DA] bg-transparent p-4 text-[#CED4DA] md:rounded-md border-b-[1px] md:border-none rounded-none outline-none px-0 md:px-4 text-sm"
         disabled
       />
       <h2
-        class="text-[#CED4DA] cursor-pointer"
+        class="text-[#CED4DA] cursor-pointer absolute md:static right-0"
         @click="edit"
         v-if="name === 'Username' || name === 'სახელი' || !user[0]?.gauth_id"
       >

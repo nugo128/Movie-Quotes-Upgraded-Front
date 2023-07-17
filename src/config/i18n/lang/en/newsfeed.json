@@ -4,10 +4,15 @@
         "movies_list": "List of movies",
         "edit": "Edit your profile",
         "new_quote": "Write new quote",
-        "search_placeholder": "Enter {'@'} to search movies, Enter # to search quotes",
+        "search_placeholder_1": "Enter {'@'} to search movies",
+        "search_placeholder_2": "Enter # to search quotes",
         "search": "search by",
         "logout": "Log out",
-        "comment": "Write a comment"
+        "comment": "Write a comment",
+        "search_mobile": "search",
+        "add_new_quote": "Write new quote",
+        "choose_movie": "Choose Movie",
+        "post": "POST"
 
     }
 }

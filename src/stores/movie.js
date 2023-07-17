@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import axios from '@/config/axios/index.js'
 export const useMovieStore = defineStore('movies', () => {
   const movies = ref([])
+  const movieDescription = ref({})
   const userMovies = ref([])
   const upload = ref('Upload Image')
   const file = ref(null)
@@ -30,12 +31,17 @@ export const useMovieStore = defineStore('movies', () => {
     const response = await axios.get('/api/category')
     categories.value = response.data
   }
+  const getDesctiption = (data) => {
+    movieDescription.value = data
+  }
   return {
     file,
     upload,
     movies,
     userMovies,
     categories,
+    movieDescription,
+    getDesctiption,
     getUserMovies,
     getMovie,
     addFile,

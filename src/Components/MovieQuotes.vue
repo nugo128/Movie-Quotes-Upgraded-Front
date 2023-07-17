@@ -1,39 +1,48 @@
 <template>
-  <div class="bg-[#11101A] w-[800px] px-8 py-6 flex flex-col gap-6 rounded-md">
-    <div class="flex justify-between relative">
-      <img :src="store.getUrl(thumbnail)" class="w-56 h-36 rounded-sm mr-8" alt="" />
-      <h2 class="my-auto text-lg text-[#CED4DA]">
-        {{ JSON.parse(quote)[localeStore.lang] }}
+  <div
+    class="bg-[#11101A] md:w-[50rem] w-screen px-8 py-6 flex flex-col gap-6 rounded-md -ml-9 md:ml-0"
+  >
+    <div class="flex justify-between relative flex-col md:flex-row gap-6 md:gap-0">
+      <img :src="store.getUrl(thumbnail)" class="md:w-56 w-full h-36 rounded-sm mr-8" alt="" />
+      <h2 class="my-auto text-lg text-[#CED4DA] break-words">
+        "{{ JSON.parse(quote)[localeStore.lang] }}"
       </h2>
-      <span class="text-white text-lg cursor-pointer" @click="toggleQuote">...</span>
+      <span class="text-white text-lg cursor-pointer hidden md:block" @click="toggleQuote"
+        >...</span
+      >
       <div
         v-if="viewQuote"
-        class="absolute bg-[#24222F] left-[44.5rem] top-8 px-10 py-8 rounded-lg flex flex-col gap-8 text-white w-64"
+        class="absolute bg-[#24222F] md:left-[44.5rem] right-0 top-12 md:top-8 md:px-10 py-8 px-8 rounded-lg flex flex-col gap-8 text-white w-60"
       >
         <div class="flex items-center gap-4 cursor-pointer" @click="view">
           <img src="../assets/images/view.svg" class="w-5" alt="" />
-          <p>View Quote</p>
+          <p>{{ $t('movies.view') }}</p>
         </div>
         <div class="flex items-center gap-4 cursor-pointer" @click="edit">
           <img src="../assets/images/edit.svg" class="w-5" alt="" />
-          <p>edit</p>
+          <p>{{ $t('movies.edit') }}</p>
         </div>
         <div class="flex items-center gap-4 cursor-pointer" @click="deleteQuote">
           <img src="../assets/images/delete.svg" class="w-5" alt="" />
-          <p>delete</p>
+          <p>{{ $t('movies.delete') }}</p>
         </div>
       </div>
     </div>
-    <div class="w-full h-[1px] bg-[#EFEFEF33]"></div>
-    <div class="flex gap-5">
-      <div class="flex gap-3 items-center text-white">
-        <span>{{ commentCount }} </span>
-        <img src="../assets/images/comment.svg" alt="" />
+    <div class="w-full h-px bg-[#EFEFEF33]"></div>
+    <div class="flex justify-between">
+      <div class="flex gap-5">
+        <div class="flex gap-3 items-center text-white">
+          <span>{{ commentCount }} </span>
+          <img src="../assets/images/comment.svg" alt="" class="w-6 md:w-8" />
+        </div>
+        <div class="flex gap-3 items-center text-white">
+          {{ likeCount ? likeCount : 0 }}
+          <LikeButton class="w-6 md:w-8" :color="liked ? 'red' : 'white'" @click="newLike" />
+        </div>
       </div>
-      <div class="flex gap-3 items-center text-white">
-        {{ likeCount ? likeCount : 0 }}
-        <LikeButton :color="liked ? 'red' : 'white'" @click="newLike" />
-      </div>
+      <span class="text-white text-lg cursor-pointer md:hidden -mt-2" @click="toggleQuote"
+        >...</span
+      >
     </div>
   </div>
 </template>
@@ -44,8 +53,7 @@ import { ref, onBeforeMount, onMounted } from 'vue'
 import instantiatePusher from '../helpers/instantiatePusher'
 import { useUsersStore } from '../stores/user'
 import { useLocaleStore } from '../stores/locale'
-import axios from '@/config/axios/index.js'
-import { like, removeLike, getLikes } from '../services/postRequest'
+import { like, removeLike, getLikes, deleteQuotes } from '../services/index'
 const localeStore = useLocaleStore()
 const store = useUsersStore()
 import { useRouter } from 'vue-router'
@@ -152,14 +160,7 @@ const deleteQuote = async () => {
   viewQuote.value = false
   if (props.userId === store.authUser[0].id) {
     emits('deleted', props.id)
-    await axios
-      .delete(`/api/delete-quote/${props.id}`)
-      .then((response) => {
-        console.log(response.data)
-      })
-      .catch((error) => {
-        console.error(error)
-      })
+    deleteQuotes(props.id)
   }
 }
 const toggleQuote = () => {

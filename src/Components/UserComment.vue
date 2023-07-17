@@ -1,13 +1,17 @@
 <template>
   <div>
-    <div class="flex items-center gap-6">
-      <img :src="store.getUrl(profilePicture)" alt="profile" class="w-12 h-12 rounded-full" />
+    <div class="flex items-center md:gap-6 gap-4">
+      <img
+        :src="store.getUrl(profilePicture)"
+        alt="profile"
+        class="md:w-12 md:h-12 w-10 h-10 rounded-full"
+      />
       <div>
-        <h2 class="text-white">{{ commentAuthor }}</h2>
+        <h2 class="text-white text-sm md:text-base">{{ commentAuthor }}</h2>
       </div>
     </div>
-    <div class="ml-[74px]">
-      <p class="text-white break-words">
+    <div class="md:ml-[4.625rem] mt-3">
+      <p class="text-white break-words text-sm md:text-base">
         {{ comment }}
       </p>
       <div class="w-full h-[1px] bg-[#EFEFEF4D] my-6"></div>

@@ -1,0 +1,19 @@
+{
+    "movies":{
+        "my_list": "My list of movies",
+        "total": "Total",
+        "add_movie":"Add movie",
+        "add": "Add movie",
+        "director": "Director",
+        "add_quote": "Add quote",
+        "all_quotes": "All Quotes",
+        "view": "View Quote",
+        "edit": "Edit",
+        "delete": "Delete",
+        "edit_movie":"Edit Movie",
+        "add_photo" : "Choose photo",
+        "edit_quote": "Edit Quote",
+        "save_changes": "Save changes",
+        "genres":"Select a genre"
+    }
+}
