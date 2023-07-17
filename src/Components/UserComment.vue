@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex items-center gap-6">
-      <img :src="picture" alt="profile" class="w-12 h-12 rounded-full" />
+      <img :src="store.getUrl(profilePicture)" alt="profile" class="w-12 h-12 rounded-full" />
       <div>
         <h2 class="text-white">{{ commentAuthor }}</h2>
       </div>
@@ -16,9 +16,9 @@
 </template>
 
 <script setup>
-import { defineProps, ref } from 'vue'
+import { defineProps } from 'vue'
 import { useUsersStore } from '../stores/user'
-const props = defineProps({
+defineProps({
   comment: {
     type: String,
     required: true
@@ -33,5 +33,4 @@ const props = defineProps({
   }
 })
 const store = useUsersStore()
-const picture = ref(store.getUrl(props.profilePicture))
 </script>

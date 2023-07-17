@@ -109,7 +109,7 @@
             :key="quote.id"
             :quote="quote.quote"
             :thumbnail="quote.thumbnail"
-            :like="quote.like"
+            :likes="quote.like"
             :comment="quote.comment"
             :id="quote.id"
             :userId="quote?.user.id"

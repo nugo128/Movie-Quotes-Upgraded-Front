@@ -27,14 +27,12 @@
     <div class="w-full h-[1px] bg-[#EFEFEF33]"></div>
     <div class="flex gap-5">
       <div class="flex gap-3 items-center text-white">
-        <span>{{ comment.length }} </span>
+        <span>{{ commentCount }} </span>
         <img src="../assets/images/comment.svg" alt="" />
       </div>
       <div class="flex gap-3 items-center text-white">
-        <span>{{ like.length }}</span>
-        <like-button
-          :color="like.find((e) => e.user_id === store.authUser[0]?.id) ? 'red' : 'white'"
-        ></like-button>
+        {{ likeCount ? likeCount : 0 }}
+        <LikeButton :color="liked ? 'red' : 'white'" @click="newLike" />
       </div>
     </div>
   </div>
@@ -42,10 +40,12 @@
 
 <script setup>
 import LikeButton from './LikeButton.vue'
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, onMounted } from 'vue'
+import instantiatePusher from '../helpers/instantiatePusher'
 import { useUsersStore } from '../stores/user'
 import { useLocaleStore } from '../stores/locale'
 import axios from '@/config/axios/index.js'
+import { like, removeLike, getLikes } from '../services/postRequest'
 const localeStore = useLocaleStore()
 const store = useUsersStore()
 import { useRouter } from 'vue-router'
@@ -59,7 +59,7 @@ const props = defineProps({
     type: String,
     required: true
   },
-  like: {
+  likes: {
     type: Array,
     required: true
   },
@@ -76,7 +76,64 @@ const props = defineProps({
     required: true
   }
 })
+const likeCount = ref(props.likes.length)
+const commentCount = ref(props.comment.length)
+onMounted(async () => {
+  const data = {
+    quote_id: String(props.id)
+  }
+  const response = await getLikes(data)
+  if (response) {
+    liked.value = true
+  } else {
+    liked.value = false
+  }
+  instantiatePusher()
+  window.Echo.channel('likes').listen('LikeEvent', (data) => {
+    if (data.message.quote_id == props.id) {
+      likeCount.value += 1
+      if (data.message.user_id == store.authUser[0].id) {
+        liked.value = true
+      }
+    }
+  })
+  window.Echo.channel('removeLikes').listen('RemoveLike', (data) => {
+    if (data.message.quote_id == props.id) {
+      likeCount.value -= 1
+      if (data.message.user_id == store.authUser[0].id) {
+        liked.value = false
+      }
+    }
+  })
+  window.Echo.channel('comments').listen('AddComment', (data) => {
+    if (data.message.quote_id == props.id) {
+      commentCount.value += 1
+    }
+  })
+})
+const liked = ref(false)
 const viewQuote = ref(false)
+const newLike = async () => {
+  const data = {
+    quote_id: String(props.id),
+    user_id: props.userId
+  }
+  if (!liked.value) {
+    try {
+      await like(data)
+      liked.value = true
+    } catch (error) {
+      console.error(error)
+    }
+  } else {
+    try {
+      await removeLike(data)
+      liked.value = false
+    } catch (error) {
+      console.error(error)
+    }
+  }
+}
 const view = () => {
   router.replace({ path: '/view-quote', query: { id: props.id } })
 }
@@ -108,7 +165,7 @@ const deleteQuote = async () => {
 const toggleQuote = () => {
   viewQuote.value = !viewQuote.value
 }
-onBeforeMount(() => {
+onBeforeMount(async () => {
   if (!store.authUser.length) {
     store.getAuthUser()
   }

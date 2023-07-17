@@ -5,9 +5,9 @@
       <h2 class="text-white text-lg">{{ username }}</h2>
     </div>
     <h2 class="text-white mb-7">
-      <span>“{{ props.quote ? JSON.parse(props.quote)[localeStore.lang] : '' }}”</span>
+      <span>“{{ quote ? JSON.parse(quote)[localeStore.lang] : '' }}”</span>
       <span class="text-[#DDCCAA]"
-        >{{ movie }} <span>({{ year }})</span></span
+        >{{ movie ? JSON.parse(movie)[localeStore.lang] : '' }} <span>({{ year }})</span></span
       >
     </h2>
     <img :src="imageUrl" alt="quote picture" class="w-full" />
@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="w-full h-[1px] bg-[#EFEFEF4D] my-6"></div>
-    <div v-for="comments in visibleComments" :key="comments.id">
+    <div v-for="comments in !commentsOpen ? visibleComments : allComments" :key="comments.id">
       <user-comment
         :comment="comments.comment"
         :commentAuthor="comments.user.name"
@@ -70,11 +70,12 @@
 <script setup>
 import UserComment from './UserComment.vue'
 import LikeButton from './LikeButton.vue'
-import { defineProps, ref, onBeforeMount } from 'vue'
+import { defineProps, ref, onBeforeMount, onMounted } from 'vue'
 import { Form, Field } from 'vee-validate'
 import { useUsersStore } from '../stores/user'
 import { useLocaleStore } from '../stores/locale'
 import { like, removeLike, getLikes, comments } from '../services/postRequest'
+import instantiatePusher from '../helpers/instantiatePusher'
 const localeStore = useLocaleStore()
 const liked = ref(false)
 const likeCount = ref(props.numOfLikes)
@@ -84,10 +85,13 @@ const store = useUsersStore()
 const user = ref(store.authUser)
 const input = ref('')
 const visibleComments = ref([])
-const numVisibleComments = ref(2)
 const props = defineProps({
   username: {
     type: String,
+    required: true
+  },
+  userId: {
+    type: Number,
     required: true
   },
   profilePicture: {
@@ -127,19 +131,8 @@ const props = defineProps({
     required: true
   }
 })
-const imageUrl = ref(store.getUrl(props.thumbnail))
-const profileUrl = ref(store.getUrl(props.profilePicture))
-const showMoreComments = () => {
-  visibleComments.value = allComments.value
-}
-const changeInput = (e) => {
-  input.value = e.target.value
-}
-const aUser = ref([])
-aUser.value.profile_picture = store.getUrl(props.loggedInUser.profile_picture)
-onBeforeMount(async () => {
-  aUser.value = props.loggedInUser
-  aUser.value.profile_picture = store.getUrl(props.loggedInUser.profile_picture)
+onMounted(async () => {
+  instantiatePusher()
   const data = {
     quote_id: String(props.quoteID)
   }
@@ -149,18 +142,73 @@ onBeforeMount(async () => {
   } else {
     liked.value = false
   }
-  visibleComments.value = allComments.value.slice(0, numVisibleComments.value)
+  window.Echo.channel('likes').listen('LikeEvent', (data) => {
+    if (data.message.quote_id == props.quoteID) {
+      likeCount.value += 1
+      if (data.message.user_id == store.authUser[0].id) {
+        liked.value = true
+      }
+    }
+  })
+  window.Echo.channel('removeLikes').listen('RemoveLike', (data) => {
+    if (data.message.quote_id == props.quoteID) {
+      likeCount.value -= 1
+      if (data.message.user_id == store.authUser[0].id) {
+        liked.value = false
+      }
+    }
+  })
+  window.Echo.channel('comments').listen('AddComment', (data) => {
+    if (data.message.quote_id == props.quoteID) {
+      visibleComments.value.push({
+        comment: data.message?.comment,
+        user: {
+          name: data.message.user.name,
+          profile_picture: data.message.user.profile_picture
+        }
+      })
+      visibleComments.value = visibleComments.value.slice(-2)
+      allComments.value.push({
+        comment: data.message?.comment,
+        user: {
+          name: data.message.user.name,
+          profile_picture: data.message.user.profile_picture
+        }
+      })
+      commentCount.value += 1
+    }
+  })
+})
+const imageUrl = ref(store.getUrl(props.thumbnail))
+const profileUrl = ref(store.getUrl(props.profilePicture))
+const commentsOpen = ref(false)
+const showMoreComments = () => {
+  commentsOpen.value = !commentsOpen.value
+}
+const changeInput = (e) => {
+  input.value = e.target.value
+}
+const aUser = ref([])
+aUser.value.profile_picture = store.getUrl(props.loggedInUser.profile_picture)
+onBeforeMount(async () => {
+  if (!store.authUser[0]) {
+    store.getAuthUser()
+  }
+  aUser.value = props.loggedInUser
+  aUser.value.profile_picture = store.getUrl(props.loggedInUser.profile_picture)
+  visibleComments.value = allComments.value.slice(-2)
 })
 
 const newLike = async () => {
   const data = {
-    quote_id: String(props.quoteID)
+    quote_id: String(props.quoteID),
+    user_id: props.userId
   }
   if (!liked.value) {
     try {
       await like(data)
+
       liked.value = true
-      likeCount.value++
     } catch (error) {
       console.error(error)
     }
@@ -168,31 +216,25 @@ const newLike = async () => {
     try {
       await removeLike(data)
       liked.value = false
-      likeCount.value--
     } catch (error) {
       console.error(error)
     }
   }
 }
 const submit = async (value) => {
+  if (!store.authUser[0]) {
+    store.getAuthUser()
+  }
+  console.log(store.authUser)
   const data = {
     quote_id: String(props.quoteID),
-    comment: value['comment']
+    comment: value['comment'],
+    user_id: store.authUser[0]?.id,
+    post_author: props.userId
   }
-  store.getAuthUser()
-  const userData = store.authUser
 
   try {
     await comments(data)
-    store.getAuthUser()
-    visibleComments.value.push({
-      comment: data.comment,
-      user: {
-        name: userData[0].name,
-        profile_picture: store.getUrl(userData[0].profile_picture)
-      }
-    })
-    commentCount.value++
     input.value = ''
   } catch (error) {
     console.error(error)
