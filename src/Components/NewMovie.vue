@@ -166,7 +166,6 @@ const submit = async (val) => {
   formData.append('categories', JSON.stringify(selectedItems.value))
   if (!props.description) {
     if (selectedItems.value.length) {
-      console.log(selectItems.value)
       movieStore.addFile(val.image)
       formData.set('thumbnail', movieStore.file)
 
@@ -184,7 +183,6 @@ const submit = async (val) => {
   } else {
     formData.set('id', props.description.id)
     const response = await editMovie(formData)
-    console.log(response)
     emits('editMovie', {
       response: response,
       category: selectedItems.value

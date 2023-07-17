@@ -65,6 +65,5 @@ const props = defineProps({
 const inputType = ref(props.type)
 const showPasswordHandler = () => {
   inputType.value === 'password' ? (inputType.value = 'text') : (inputType.value = 'password')
-  console.log(inputType.value)
 }
 </script>

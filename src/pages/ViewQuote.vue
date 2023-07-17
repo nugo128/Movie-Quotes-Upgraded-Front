@@ -205,8 +205,7 @@ const changeInput = (e) => {
 const deleteQuote = async () => {
   if (data.value.user.id === loggedInUser.value.id) {
     await deleteQuotes(data.value.id)
-      .then((response) => {
-        console.log(response.data)
+      .then(() => {
         back()
       })
       .catch((error) => {
@@ -247,7 +246,6 @@ onBeforeMount(async () => {
     quoteStore.getQuote(route.query.id)
     await viewQuote(route.query.id)
   }
-  console.log(quoteStore.quote)
   data.value = quoteStore.quote
   loggedInUser.value = store.authUser[0]
   likeCount.value = data?.value.likes.length

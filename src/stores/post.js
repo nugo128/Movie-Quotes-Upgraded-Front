@@ -9,7 +9,6 @@ export const usePostsStore = defineStore('post', () => {
       .get('/api/post')
       .then((response) => {
         posts.value.push(...response.data)
-        console.log(response)
       })
       .catch((error) => {
         console.log(error)
@@ -21,7 +20,6 @@ export const usePostsStore = defineStore('post', () => {
   const searchedPosts = (val) => {
     clear()
     posts.value.push(...val)
-    console.log(posts.value)
   }
   return { posts, getPosts, clear, searchedPosts }
 })

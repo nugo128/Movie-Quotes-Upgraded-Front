@@ -160,12 +160,12 @@ onMounted(async () => {
 })
 const readNotification = async (id) => {
   if (id !== 'all') {
-    await seenNotifications({ id }).then((response) => console.log(response.data))
+    await seenNotifications({ id }).then((response) => response.data)
     const seenNotification = notification.value[0].find((item) => item.id === id)
     seenNotification.seen = true
     notificationCount.value--
   } else {
-    await seenNotifications({ all: 'all' }).then((response) => console.log(response.data))
+    await seenNotifications({ all: 'all' }).then((response) => response.data)
     notification.value[0].map((val) => {
       val.seen = true
     })

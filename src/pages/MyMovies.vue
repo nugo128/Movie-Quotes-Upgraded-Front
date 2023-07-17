@@ -88,7 +88,6 @@ onBeforeMount(async () => {
   if (!store.categories.length) {
     store.getCategories()
   }
-  console.log(route?.query.delete)
   if (route?.query.delete) {
     let index = movies.value.find((movie) => movie.id == route?.query.delete)
 

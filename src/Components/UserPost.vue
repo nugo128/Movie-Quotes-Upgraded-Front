@@ -218,7 +218,6 @@ const submit = async (value) => {
   if (!store.authUser[0]) {
     store.getAuthUser()
   }
-  console.log(store.authUser)
   const data = {
     quote_id: String(props.quoteID),
     comment: value['comment'],

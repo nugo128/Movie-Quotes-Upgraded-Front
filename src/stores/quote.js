@@ -6,7 +6,6 @@ export const useQuoteStore = defineStore('quote', () => {
 
   const getQuote = async (id) => {
     const response = await viewQuote(id)
-    console.log(response.data)
     quote.value = response.data
   }
   return { quote, getQuote }

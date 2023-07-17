@@ -51,7 +51,6 @@ const toggleLogin = () => {
   emits('showLogin', true)
 }
 const submit = async (value) => {
-  console.log(value)
   if (value.email) {
     try {
       await resetPassword(value)
