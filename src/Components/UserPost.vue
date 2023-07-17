@@ -38,7 +38,7 @@
     </div>
     <div class="flex gap-6">
       <img
-        :src="store.getUrl(store.authUser[0].profile_picture)"
+        :src="store.getUrl(store.authUser[0]?.profile_picture)"
         alt=""
         class="w-13 h-13 rounded-full"
       />

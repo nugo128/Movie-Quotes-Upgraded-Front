@@ -279,10 +279,9 @@ const toggleConfirmation = () => {
 const uploadImage = () => {
   showUpload.value = true
 }
-if (route.path === '/user-profile' && route?.query?.token?.length === 128) {
-  await verifyEmail(route.query.token)
-    .then((response) => {
-      console.log(response)
+if (route.path === '/user-profile' && route?.query?.email) {
+  await verifyEmail(route.query.email)
+    .then(() => {
       router.replace('/user-profile')
       showSuccess.value = true
     })
@@ -307,8 +306,9 @@ const handleInput = (e) => {
 const cancel = () => {
   if (!editPassword.value && !editUsername.value && !editEmail.value) {
     router.go(-1)
+  } else {
+    router.replace({ path: '/user-profile' })
   }
-  router.replace({ path: '/user-profile' })
   editPassword.value = false
   editUsername.value = false
   editEmail.value = false
@@ -322,7 +322,6 @@ const formData = new FormData()
 const submit = async (val) => {
   post.clear()
   for (let value in val) {
-    console.log(val[value])
     formData.set(value, val[value])
   }
   await editProfile(formData)
@@ -338,6 +337,7 @@ const submit = async (val) => {
     showSuccess.value = false
     showConfirmation.value = true
   }
+  router.replace({ path: '/user-profile' })
 }
 const showEditPasswordField = () => {
   router.replace({
@@ -396,7 +396,6 @@ onBeforeMount(async () => {
     store.getAuthUser()
     const response = await getUser()
     user.value = response.data
-    console.log(response.data)
     user.value.profile_picture = store.getUrl(response.data.profile_picture)
     profilePicture.value = store.getUrl(response.data.profile_picture)
   } else {

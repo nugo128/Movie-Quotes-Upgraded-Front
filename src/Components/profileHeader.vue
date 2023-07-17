@@ -191,6 +191,7 @@ const getTimeAgo = (timestamp) => {
 }
 const router = useRouter()
 const logoutHandler = async () => {
+  store.clearUser()
   try {
     await userLogOut()
     router.replace({ name: 'home' })
