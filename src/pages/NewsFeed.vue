@@ -42,6 +42,7 @@ import SearchBar from '../Components/SearchBar.vue'
 import UserPost from '../Components/UserPost.vue'
 import { usePostsStore } from '../stores/post'
 import { onBeforeMount, ref } from 'vue'
+import { getUser } from '../services'
 import NewitemModal from '../Components/NewitemModal.vue'
 import { useUsersStore } from '../stores/user'
 import { useRoute, useRouter } from 'vue-router'
@@ -52,6 +53,9 @@ const store = usePostsStore()
 const postData = ref(store.posts)
 const showSearch = ref(false)
 onBeforeMount(async () => {
+  await getUser().catch(() => {
+    router.replace({ path: '/no-permission' })
+  })
   if (!userStore.authUser.length) {
     userStore.getAuthUser()
   }

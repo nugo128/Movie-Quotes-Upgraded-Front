@@ -51,7 +51,7 @@ import NewitemModal from '../Components/NewitemModal.vue'
 import NewMovie from '../Components/NewMovie.vue'
 import SearchBar from '../Components/SearchBar.vue'
 import UserMovie from '../Components/UserMovie.vue'
-import { getUMovies } from '../services/index'
+import { getUMovies, getUser } from '../services/index'
 import { useMovieStore } from '../stores/movie'
 import { onBeforeMount, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
@@ -79,6 +79,9 @@ const searchHandler = () => {
   movies.value = store.userMovies
 }
 onBeforeMount(async () => {
+  await getUser().catch(() => {
+    router.replace({ path: '/no-permission' })
+  })
   if (!store.userMovies.length) {
     store.getUserMovies()
     const response = await getUMovies()

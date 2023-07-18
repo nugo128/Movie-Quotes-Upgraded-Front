@@ -5,7 +5,8 @@ import UserProfile from '../pages/UserProfile.vue'
 import MyMovies from '../pages/MyMovies.vue'
 import MovieDescription from '../pages/MovieDescription.vue'
 import ViewQuote from '../pages/ViewQuote.vue'
-
+import NotFound from '../pages/NotFound.vue'
+import NoPermission from '../pages/NoPermission.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -42,8 +43,17 @@ const router = createRouter({
       path: '/view-quote',
       name: 'view-quote',
       component: ViewQuote
+    },
+    {
+      path: '/:catchAll(.*)',
+      name: 'NotFound',
+      component: NotFound
+    },
+    {
+      path: '/no-permission',
+      name: 'no-permission',
+      component: NoPermission
     }
   ]
 })
-
 export default router

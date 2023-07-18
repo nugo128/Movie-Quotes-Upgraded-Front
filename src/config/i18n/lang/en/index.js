@@ -6,7 +6,9 @@ import * as newsfeed from './newsfeed.json'
 import * as profile from './profile.json'
 import * as notifications from './notifications.json'
 import * as user_movies from './user-movies.json'
+import * as error_pages from './error-pages.json'
 const translations = {
+  ...error_pages,
   ...user_movies,
   ...notifications,
   ...profile,
