@@ -392,12 +392,12 @@ if (!store.authUser.length) {
   store.getAuthUser()
 }
 onBeforeMount(async () => {
+  const response = await getUser()
   if (!store.authUser.length) {
     store.getAuthUser()
-    const response = await getUser()
-    user.value = response.data
-    user.value.profile_picture = store.getUrl(response.data.profile_picture)
-    profilePicture.value = store.getUrl(response.data.profile_picture)
+    user.value = response?.data
+    user.value.profile_picture = store.getUrl(response?.data.profile_picture)
+    profilePicture.value = store.getUrl(response?.data.profile_picture)
   } else {
     user.value = store.authUser[0]
     user.value.profile_picture = store.getUrl(store.authUser[0]?.profile_picture)

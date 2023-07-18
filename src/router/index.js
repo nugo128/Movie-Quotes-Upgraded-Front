@@ -5,7 +5,9 @@ import UserProfile from '../pages/UserProfile.vue'
 import MyMovies from '../pages/MyMovies.vue'
 import MovieDescription from '../pages/MovieDescription.vue'
 import ViewQuote from '../pages/ViewQuote.vue'
-
+import NotFound from '../pages/NotFound.vue'
+import NoPermission from '../pages/NoPermission.vue'
+import { useUsersStore } from '../stores/user'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -42,8 +44,38 @@ const router = createRouter({
       path: '/view-quote',
       name: 'view-quote',
       component: ViewQuote
+    },
+    {
+      path: '/:catchAll(.*)',
+      name: 'NotFound',
+      component: NotFound
+    },
+    {
+      path: '/no-permission',
+      name: 'no-permission',
+      component: NoPermission
     }
   ]
 })
 
+router.beforeEach(async (to, from, next) => {
+  const store = useUsersStore()
+
+  if (!store.authUser.length) {
+    await store.getAuthUser()
+  }
+
+  if (
+    !store.authUser.length &&
+    (to.path === '/newsfeed' ||
+      to.path === '/user-profile' ||
+      to.path === '/my-movies' ||
+      to.path === '/movie-description' ||
+      to.path === '/view-quote')
+  ) {
+    next({ name: 'no-permission' })
+  } else {
+    next()
+  }
+})
 export default router
