@@ -129,15 +129,7 @@ import UserComment from '../Components/UserComment.vue'
 import NewitemModal from '../Components/NewitemModal.vue'
 import LikeButton from '../Components/LikeButton.vue'
 import NewPost from '../Components/NewPost.vue'
-import {
-  like,
-  removeLike,
-  getLikes,
-  comments,
-  deleteQuotes,
-  viewQuote,
-  getUser
-} from '../services/index'
+import { like, removeLike, getLikes, comments, deleteQuotes, viewQuote } from '../services/index'
 import { useQuoteStore } from '../stores/quote'
 const quoteStore = useQuoteStore()
 const edit = ref(false)
@@ -247,9 +239,6 @@ const newLike = async () => {
   }
 }
 onBeforeMount(async () => {
-  await getUser().catch(() => {
-    router.replace({ name: 'no-permission' })
-  })
   if (!store.authUser[0]) {
     store.getAuthUser()
   }

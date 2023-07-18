@@ -143,7 +143,7 @@ import { useLocaleStore } from '../stores/locale'
 import { useMovieStore } from '../stores/movie'
 import { useRoute, useRouter } from 'vue-router'
 import { onBeforeMount, ref } from 'vue'
-import { movieDescription, deleteMovies, getUser } from '../services/index'
+import { movieDescription, deleteMovies } from '../services/index'
 const editMovie = ref(false)
 const edit = ref(false)
 const movieStore = useMovieStore()
@@ -201,9 +201,6 @@ const deleteMovie = async () => {
     })
 }
 onBeforeMount(async () => {
-  await getUser().catch(() => {
-    router.replace({ name: 'no-permission' })
-  })
   if (!movieStore.movieDescription.id) {
     const resp = await movieDescription(route.query.id)
     movieStore.getDesctiption(resp.data)

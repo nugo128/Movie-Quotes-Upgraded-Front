@@ -392,9 +392,7 @@ if (!store.authUser.length) {
   store.getAuthUser()
 }
 onBeforeMount(async () => {
-  const response = await getUser().catch(() => {
-    router.replace({ name: 'no-permission' })
-  })
+  const response = await getUser()
   if (!store.authUser.length) {
     store.getAuthUser()
     user.value = response?.data

@@ -7,6 +7,7 @@ import MovieDescription from '../pages/MovieDescription.vue'
 import ViewQuote from '../pages/ViewQuote.vue'
 import NotFound from '../pages/NotFound.vue'
 import NoPermission from '../pages/NoPermission.vue'
+import { useUsersStore } from '../stores/user'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -56,4 +57,54 @@ const router = createRouter({
     }
   ]
 })
+
+router.beforeEach(async (to, from, next) => {
+  const store = useUsersStore()
+
+  if (!store.authUser.length) {
+    await store.getAuthUser()
+  }
+
+  if (
+    !store.authUser.length &&
+    (to.path === '/newsfeed' ||
+      to.path === '/user-profile' ||
+      to.path === '/my-movies' ||
+      to.path === '/movie-description' ||
+      to.path === '/view-quote')
+  ) {
+    next({ name: 'no-permission' })
+  } else {
+    next()
+  }
+})
+
+// router.beforeEach(async (to, from, next) => {
+//   const store = useUsersStore()
+//   // if (!store.authUser.length) {
+//   //     await store.getAuthUser();
+//   // }
+
+//   // if (to.meta.auth && !authStore.authenticated) {
+//   //   next({ name: 'notAuthorized' })
+//   // } else if (to.name === 'home' && authStore.authenticated) {
+//   //   next({ name: 'newsFeed' })
+//   // } else if (to.meta.guest && authStore.authenticated) {
+//   //   next({ name: 'notAuthorized' })
+//   // } else {
+//   //   next();
+//   // }
+//   if (to.path !== '/no-permission' && to.path !== '/' && !store.authUser.length) {
+//     console.log(21312312)
+//     await store.getAuthUser()
+//     console.log(store.authUser.length)
+//   }
+
+//   if (!store.authUser.length && to.path == '/news_feed') {
+//     console.log(123123)
+//     next({ name: 'no-permission' })
+//   } else {
+//     next()
+//   }
+// })
 export default router
