@@ -248,7 +248,7 @@ const newLike = async () => {
 }
 onBeforeMount(async () => {
   await getUser().catch(() => {
-    router.replace({ path: '/no-permission' })
+    router.replace({ name: 'no-permission' })
   })
   if (!store.authUser[0]) {
     store.getAuthUser()

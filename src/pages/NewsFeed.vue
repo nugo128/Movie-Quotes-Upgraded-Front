@@ -54,7 +54,7 @@ const postData = ref(store.posts)
 const showSearch = ref(false)
 onBeforeMount(async () => {
   await getUser().catch(() => {
-    router.replace({ path: '/no-permission' })
+    router.replace({ name: 'no-permission' })
   })
   if (!userStore.authUser.length) {
     userStore.getAuthUser()

@@ -202,7 +202,7 @@ const deleteMovie = async () => {
 }
 onBeforeMount(async () => {
   await getUser().catch(() => {
-    router.replace({ path: '/no-permission' })
+    router.replace({ name: 'no-permission' })
   })
   if (!movieStore.movieDescription.id) {
     const resp = await movieDescription(route.query.id)

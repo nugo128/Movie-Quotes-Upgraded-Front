@@ -80,7 +80,7 @@ const searchHandler = () => {
 }
 onBeforeMount(async () => {
   await getUser().catch(() => {
-    router.replace({ path: '/no-permission' })
+    router.replace({ name: 'no-permission' })
   })
   if (!store.userMovies.length) {
     store.getUserMovies()

@@ -393,7 +393,7 @@ if (!store.authUser.length) {
 }
 onBeforeMount(async () => {
   const response = await getUser().catch(() => {
-    router.replace({ path: '/no-permission' })
+    router.replace({ name: 'no-permission' })
   })
   if (!store.authUser.length) {
     store.getAuthUser()
