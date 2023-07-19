@@ -9,7 +9,7 @@
       <div class="md:relative cursor-pointer">
         <img src="../assets/images/bell.svg" class="w-6" alt="bell" @click="toggleNotification" />
         <span
-          v-if="notificationCount"
+          v-if="notificationCount > 0"
           class="absolute md:left-3 md:-top-3 top-3 bg-[#E33812] md:w-7 md:h-7 w-6 h-6 text-center rounded-full text-white md:text-lg right-6"
           @click="toggleNotification"
           >{{ notificationCount }}</span
@@ -34,7 +34,7 @@
             v-for="notify in notification[0]"
             :key="notify.id"
             class="flex justify-between border border-[#6C757D80] mx-8 md:px-6 px-3 py-5 mb-4 rounded-md flex-col md:flex-row"
-            @click="readNotification(notify.id)"
+            @click="!notify.seen ? readNotification(notify.id) : ''"
           >
             <div class="flex gap-3 md:gap-6 text-white text-lg md:justify-between">
               <div class="min-w-fit flex flex-col justify-between items-center">
@@ -134,7 +134,7 @@ onMounted(async () => {
     .catch((err) => console.log(err))
 
   await getNotification().then((response) => {
-    notification.value.push(response.data)
+    notification.value.push(response.data.filter((item) => item.user_id !== user))
     notificationCount.value = notification.value[0].filter((item) => item.seen == false).length
   })
   window.Echo.private(`notifications.${user}`).listen('LikeNotification', (data) => {
@@ -144,7 +144,8 @@ onMounted(async () => {
 
     if (!existingLike && data.notification.user_id !== user) {
       let fullData = data.notification
-      fullData.id = notification.value[0][0].id + 1
+      console.log(notification.value)
+      fullData.id = notification.value[0][0]?.id + 1
       notification.value[0].unshift(fullData)
       notificationCount.value++
     }
@@ -152,7 +153,7 @@ onMounted(async () => {
   window.Echo.private(`commentNotifications.${user}`).listen('CommentNotification', (data) => {
     if (data.notification.user_id !== user) {
       let fullData = data.notification
-      fullData.id = notification.value[0][0].id + 1
+      fullData.id = notification.value[0][0]?.id + 1
       notification.value[0].unshift(fullData)
       notificationCount.value++
     }
@@ -160,10 +161,11 @@ onMounted(async () => {
 })
 const readNotification = async (id) => {
   if (id !== 'all') {
-    await seenNotifications({ id }).then((response) => response.data)
-    const seenNotification = notification.value[0].find((item) => item.id === id)
-    seenNotification.seen = true
-    notificationCount.value--
+    await seenNotifications({ id }).then(() => {
+      const seenNotification = notification.value[0].find((item) => item.id === id)
+      seenNotification.seen = true
+      notificationCount.value--
+    })
   } else {
     await seenNotifications({ all: 'all' }).then((response) => response.data)
     notification.value[0].map((val) => {

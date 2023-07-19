@@ -84,16 +84,19 @@ const props = defineProps({
     required: true
   }
 })
+const likeId = ref(null)
 const likeCount = ref(props.likes.length)
 const commentCount = ref(props.comment.length)
 onMounted(async () => {
   const data = {
     quote_id: String(props.id)
   }
-  const response = await getLikes(data)
-  if (response) {
+  try {
+    const response = await getLikes(data)
     liked.value = true
-  } else {
+    console.log(response.data)
+    likeId.value = response.data.like.id
+  } catch (error) {
     liked.value = false
   }
   instantiatePusher()
@@ -102,6 +105,7 @@ onMounted(async () => {
       likeCount.value += 1
       if (data.message.user_id == store.authUser[0].id) {
         liked.value = true
+        likeId.value = data.message.id
       }
     }
   })
@@ -110,6 +114,7 @@ onMounted(async () => {
       likeCount.value -= 1
       if (data.message.user_id == store.authUser[0].id) {
         liked.value = false
+        likeId.value = data.message.id
       }
     }
   })
@@ -128,14 +133,15 @@ const newLike = async () => {
   }
   if (!liked.value) {
     try {
-      await like(data)
+      const response = await like(data)
+      likeId.value = response.data.like.id
       liked.value = true
     } catch (error) {
       console.error(error)
     }
   } else {
     try {
-      await removeLike(data)
+      await removeLike(likeId.value)
       liked.value = false
     } catch (error) {
       console.error(error)

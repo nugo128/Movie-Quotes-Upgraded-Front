@@ -17,7 +17,7 @@ configure({
         english: '{field} must only have english characters',
         num: 'Only numbers are allowed'
       },
-      names: {}
+      names: { quote_en: 'english quote', quote_ka: 'georgian quote' }
     },
     ka: {
       messages: {
@@ -33,6 +33,8 @@ configure({
         num: 'შეიყვანეთ მხოლოდ ციფრები'
       },
       names: {
+        quote_en: 'ინგლისური ციტატა',
+        quote_ka: 'ქართული ციტატა',
         username: 'მომხმარებლის სახელი',
         name: 'სახელი',
         email: 'იმეილი',

@@ -53,12 +53,7 @@ export async function newPassword(data) {
 }
 
 export async function like(data) {
-  const response = await axios.post('api/like', data)
-  if (response.statusText === 'OK') {
-    return true
-  }
-
-  return response
+  return await axios.post('api/like', data)
 }
 export async function removeLike(data) {
   const response = await axios.delete(`/api/likes/${data}`)
@@ -69,12 +64,7 @@ export async function removeLike(data) {
   return response
 }
 export async function getLikes(data) {
-  const response = await axios.post('/api/get-likes', data)
-  if (response.status === 200) {
-    return true
-  }
-
-  return false
+  return await axios.post('/api/get-likes', data)
 }
 export async function comments(data) {
   const response = await axios.post('api/comment', data)

@@ -139,17 +139,31 @@ const liked = ref(false)
 const route = useRoute()
 const commentCount = ref(data.value.comments?.length)
 const likeCount = ref(0)
+const likeId = ref(null)
 const store = useUsersStore()
 if (!store.authUser.length) {
   store.getAuthUser()
 }
-onMounted(() => {
+onMounted(async () => {
   instantiatePusher()
+  const likeData = {
+    quote_id: String(route.query.id),
+    user_id: store.authUser[0].id
+  }
+  try {
+    const response = await getLikes(likeData)
+    liked.value = true
+    console.log(response.data)
+    likeId.value = response.data.like.id
+  } catch (error) {
+    liked.value = false
+  }
   window.Echo.channel('likes').listen('LikeEvent', (data) => {
     if (data.message.quote_id == route.query.id) {
       likeCount.value += 1
       if (data.message.user_id == store.authUser[0].id) {
         liked.value = true
+        likeId.value = data.message.id
       }
     }
   })
@@ -157,6 +171,7 @@ onMounted(() => {
     if (data.message.quote_id == route.query.id) {
       if (data.message.user_id == store.authUser[0].id) {
         liked.value = false
+        likeId.value = data.message.id
       }
       likeCount.value -= 1
     }
@@ -224,14 +239,15 @@ const newLike = async () => {
   }
   if (!liked.value) {
     try {
-      await like(likeData)
+      const response = await like(likeData)
+      likeId.value = response.data.like.id
       liked.value = true
     } catch (error) {
       console.error(error)
     }
   } else {
     try {
-      await removeLike(likeData)
+      await removeLike(likeId.value)
       liked.value = false
     } catch (error) {
       console.error(error)
