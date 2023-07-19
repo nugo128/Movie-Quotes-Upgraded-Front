@@ -1,6 +1,6 @@
 <template>
-  <div class="md:hidden absolute h-full bg-black left-0 top-32 w-screen z-[998]">
-    <div v-if="youSure" class="w-full h-full flex justify-center z-[999] -mt-40">
+  <div class="md:hidden fixed h-full bg-black left-0 top-32 w-screen z-40">
+    <div v-if="youSure" class="w-full h-full flex justify-center z-50 -mt-40">
       <div
         class="relative bg-[#11101A] h-max z-[999] flex flex-col md:justify-center justify-start text-white gap-6 mt-32 rounded-lg"
       >

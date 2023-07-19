@@ -33,7 +33,10 @@
           userInfo[0]?.profile_picture ? userInfo[0]?.profile_picture : user?.profile_picture
         "
       ></user-navbar>
-      <div class="bg-black w-full mt-10 h-16 md:hidden flex items-center pl-8">
+      <div
+        class="bg-black w-full mt-10 h-16 md:hidden flex items-center pl-8"
+        :class="editPassword || editUsername || editEmail ? 'fixed' : 'static'"
+      >
         <img src="../assets/images/back.svg" class="w-5" alt="" @click="cancel" />
       </div>
       <Form
@@ -205,7 +208,7 @@
               <AuthInput
                 name="password"
                 type="password"
-                class="bg-[#24222F] px-8 mt-10 py-10"
+                class="bg-[#24222F] px-8 mt-4 py-8"
                 :label="$t('profile.new_password')"
                 :placeholder="$t('profile.password_placeholder')"
                 rule="required|min:8|max:15|lowercase_num"
@@ -215,7 +218,7 @@
               <AuthInput
                 name="password_confirmation"
                 type="password"
-                class="bg-[#24222F] px-8 py-10"
+                class="bg-[#24222F] px-8 py-8"
                 :label="$t('profile.confirm_password')"
                 :placeholder="$t('profile.confirm_password')"
                 rule="required|confirmed:@password"
