@@ -17,7 +17,7 @@ configure({
         english: '{field} must only have english characters',
         num: 'Only numbers are allowed'
       },
-      names: { quote_en: 'english quote', quote_ka: 'georgian quote' }
+      names: { quote_en: 'English quote', quote_ka: 'Georgian quote' }
     },
     ka: {
       messages: {
