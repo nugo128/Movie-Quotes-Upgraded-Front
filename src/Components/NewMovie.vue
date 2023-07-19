@@ -58,13 +58,13 @@
         </div>
         <ul
           v-if="isDropdownOpen"
-          class="dropdown-menu absolute bg-white border border-gray-300 mt-2 py-2 rounded z-50"
+          class="dropdown-menu absolute text-white bg-black border border-gray-300 mt-2 py-2 w-full rounded z-50"
         >
           <li
             v-for="item in categories"
             :key="item.id"
             @click="selectItems(item)"
-            class="px-4 py-2 cursor-pointer hover:bg-gray-100 text-black"
+            class="px-4 py-2 cursor-pointer hover:bg-gray-500"
           >
             {{ item?.category ? JSON.parse(item?.category)[localeStore.lang] : '' }}
           </li>
