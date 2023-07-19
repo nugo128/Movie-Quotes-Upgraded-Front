@@ -133,7 +133,7 @@ onMounted(async () => {
     .then((response) => (user = response.data.id))
     .catch((err) => console.log(err))
 
-  await getNotification(user).then((response) => {
+  await getNotification().then((response) => {
     notification.value.push(response.data)
     notificationCount.value = notification.value[0].filter((item) => item.seen == false).length
   })

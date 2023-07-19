@@ -191,7 +191,7 @@ const submit = async (val) => {
       formData.set('thumbnail', movieStore.file)
     }
     formData.set('id', props.quote.id)
-    const response = await editQuote(formData)
+    const response = await editQuote(formData, props.quote.id)
     emits('updated', response.data)
   }
 }

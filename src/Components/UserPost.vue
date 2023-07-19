@@ -207,7 +207,7 @@ const newLike = async () => {
     }
   } else {
     try {
-      await removeLike(data)
+      await removeLike(data.quote_id)
       liked.value = false
     } catch (error) {
       console.error(error)

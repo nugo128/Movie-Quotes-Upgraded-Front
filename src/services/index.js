@@ -61,7 +61,7 @@ export async function like(data) {
   return response
 }
 export async function removeLike(data) {
-  const response = await axios.post('/api/remove-like', data)
+  const response = await axios.delete(`/api/likes/${data}`)
   if (response.statusText === 'OK') {
     return true
   }
@@ -90,20 +90,20 @@ export async function deleteQuotes(id) {
 export async function addMovie(data) {
   return await axios.post('/api/add-movie', data)
 }
-export async function editMovie(data) {
-  return await axios.post('/api/update-movie', data)
+export async function editMovie(data, id) {
+  return await axios.post(`/api/update-movie/${id}`, data)
 }
 export async function newPost(data) {
   return await axios.post('/api/newPost', data)
 }
-export async function editQuote(data) {
-  return await axios.post('/api/edit-quote', data)
+export async function editQuote(data, id) {
+  return await axios.post(`/api/edit-quote/${id}`, data)
 }
 export async function getUser() {
   return await axios.get('/api/user')
 }
-export async function getNotification(user) {
-  return await axios.get(`/api/get-notifications/${user}`)
+export async function getNotification() {
+  return await axios.get(`/api/get-notifications`)
 }
 export async function seenNotifications(data) {
   return await axios.post('/api/read-notifications', data)
@@ -113,11 +113,7 @@ export async function verifyUser(token) {
   return await axios.get(`/api/verify/${token}`)
 }
 export async function movieDescription(id) {
-  return await axios.get('/api/movie-description', {
-    params: {
-      id
-    }
-  })
+  return await axios.get(`/api/movie-description/${id}`)
 }
 export async function deleteMovies(id) {
   return await axios.delete(`/api/delete-movie/${id}`)
@@ -132,9 +128,5 @@ export async function editProfile(data) {
   return await axios.post('/api/editProfile', data)
 }
 export async function viewQuote(id) {
-  return await axios.get('/api/view-quote', {
-    params: {
-      id
-    }
-  })
+  return await axios.get(`/api/view-quote/${id}`)
 }
