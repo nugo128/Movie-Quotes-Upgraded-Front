@@ -3,7 +3,6 @@ import { defineStore } from 'pinia'
 import axios from '@/config/axios/index.js'
 export const usePostsStore = defineStore('post', () => {
   const posts = ref([])
-
   const getPosts = async () => {
     await axios
       .get('/api/post')

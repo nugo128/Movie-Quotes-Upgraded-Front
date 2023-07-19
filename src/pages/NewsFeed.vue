@@ -75,7 +75,10 @@ const updatePosts = async () => {
   router.replace({ path: '/newsfeed' })
   postData.value = store.posts
 }
-const searchPosts = () => {
+const searchPosts = (event = false) => {
+  if (!store.posts.length && event) {
+    store.getPosts()
+  }
   postData.value = store.posts
 }
 </script>

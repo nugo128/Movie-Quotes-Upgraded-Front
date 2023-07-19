@@ -90,12 +90,10 @@ const submit = async (e) => {
       movieStore.searchedMovies(resp.data)
       emits('movieSearched')
     }
+  } else if (props.movie) {
+    emits('movieSearched')
   } else {
-    if (!props.movie) {
-      store.getPosts()
-    } else {
-      emits('movieSearched')
-    }
+    emits('searched', true)
   }
 }
 const appearSearch = () => {
