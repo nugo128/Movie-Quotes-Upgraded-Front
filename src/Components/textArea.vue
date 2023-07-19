@@ -3,10 +3,10 @@
     <textarea
       v-bind="field"
       :name="name"
-      class="md:h-14 h-20 w-full bg-transparent border border-[#6C757D] p-2 rounded"
+      class="h-20 w-full bg-transparent border border-[#6C757D] p-2 rounded md:text-xl md:my-2"
       :placeholder="placeholder"
     />
-    <span class="absolute right-12 mt-2">{{ language }}</span>
+    <span class="absolute right-12 mt-2 text-lg">{{ language }}</span>
   </Field>
   <div class="mb-3">
     <ErrorMessage class="text-red-400 text-sm pl-5 md:w-[400px]" :name="name" />

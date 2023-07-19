@@ -81,12 +81,13 @@
 
       <photo-upload v-if="!movie || quote" :thumbnail="quote?.thumbnail"></photo-upload>
       <h2 class="-mt-3 text-sm text-red-500">{{ errors }}</h2>
-      <div v-if="!movie && !quote" class="flex pl-3">
-        <img src="../assets/images/movieCamera.svg" class="absolute z-0 mt-4" alt="" />
+      <div v-if="!movie && !quote" class="flex pl-3 justify-between relative cursor-pointer my-6">
+        <img src="@/assets/images/movieCamera.svg" class="absolute z-0 mt-4" alt="" />
+        <img src="@/assets/images/arrow-down.svg" alt="" class="absolute right-6 top-8 w-5" />
         <Field
           id=""
           as="select"
-          class="z-50 select w-full focus:appearance-none focus:outline-none text-white bg-transparent mt-2 py-5 px-12 mb-0"
+          class="z-50 select w-full focus:appearance-none focus:outline-none text-white bg-transparent mt-2 py-5 px-12 mb-0 cursor-pointer"
           name="movie_id"
           :rules="!quote ? 'required' : ''"
         >
@@ -105,7 +106,7 @@
       </div>
       <ErrorMessage class="text-red-400 text-sm px-5 md:w-[400px]" name="movie_id" />
       <button
-        class="w-full bg-[#E31221] py-3 rounded mb-1"
+        class="w-full bg-[#E31221] py-3 rounded mb-1 md:text-xl text-lg"
         :class="{ ['pointer-events-none']: !meta.valid }"
         @click="submit"
       >
