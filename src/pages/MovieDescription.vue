@@ -27,7 +27,7 @@
     </newitem-modal>
     <div class="px-9">
       <user-navbar class="md:block hidden"></user-navbar>
-      <div class="md:pl-440 pt-28 md:pr-16 flex flex-col gap-8">
+      <div class="md:pl-440 pt-28 pb-12 md:pr-16 flex flex-col gap-8">
         <h2 class="text-white text-lg md:block hidden">Movie description</h2>
         <div class="flex flex-col md:flex-row gap-2">
           <img

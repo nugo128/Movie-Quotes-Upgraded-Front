@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed w-full h-screen flex justify-center md:z-[60] z-[999] overflow-y-auto">
+  <div class="fixed w-full h-screen flex justify-center z-[999] overflow-y-auto pb-10">
     <div
       class="relative w-900 md:mt-24 bg-[#11101A] h-max z-[999] flex flex-col md:justify-center justify-start text-white gap-6"
     >
@@ -10,7 +10,7 @@
       />
       <slot></slot>
     </div>
-    <div class="bg-black bg-opacity-20 absolute w-full h-full" @click="clickHandler"></div>
+    <div class="bg-black bg-opacity-20 fixed w-full h-full" @click="clickHandler"></div>
   </div>
 </template>
 
