@@ -26,7 +26,7 @@
               'border-2 border-red-500': !!errors?.length,
               'border-2 border-green-500': !errors?.length && value?.length > 0
             }"
-            type="text"
+            :type="name === 'year' ? 'number' : 'text'"
             :placeholder="placeholderValue"
             @input="inputValue"
           />
@@ -71,3 +71,15 @@ defineProps({
   }
 })
 </script>
+<style>
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+</style>

@@ -28,8 +28,9 @@
             </button>
           </div>
         </div>
-        <div class="h-max flex flex-wrap gap-6 justify-center md:px-0">
+        <div class="h-max flex flex-wrap gap-6 md:justify-normal justify-center md:px-0">
           <user-movie
+            class="cursor-pointer"
             v-for="movie in movies"
             :key="movie?.id"
             :title="movie.title"
