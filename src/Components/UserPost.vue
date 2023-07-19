@@ -129,6 +129,7 @@ const props = defineProps({
   }
 })
 const likeId = ref(null)
+const pusherActive = ref(false)
 onMounted(async () => {
   instantiatePusher()
   const data = {
@@ -144,6 +145,7 @@ onMounted(async () => {
   }
   window.Echo.channel('likes').listen('LikeEvent', (data) => {
     if (data.message.quote_id == props.quoteID) {
+      pusherActive.value = true
       likeCount.value += 1
       if (data.message.user_id == store.authUser[0].id) {
         liked.value = true
@@ -153,6 +155,7 @@ onMounted(async () => {
   })
   window.Echo.channel('removeLikes').listen('RemoveLike', (data) => {
     if (data.message.quote_id == props.quoteID) {
+      pusherActive.value = true
       likeCount.value -= 1
       if (data.message.user_id == store.authUser[0].id) {
         liked.value = false
@@ -207,6 +210,7 @@ const newLike = async () => {
       const response = await like(data)
       likeId.value = response.data.like.id
       liked.value = true
+      pusherActive.value ? '' : likeCount.value++
     } catch (error) {
       console.error(error)
     }
@@ -214,6 +218,7 @@ const newLike = async () => {
     try {
       await removeLike(likeId.value)
       liked.value = false
+      pusherActive.value ? '' : likeCount.value--
     } catch (error) {
       console.error(error)
     }

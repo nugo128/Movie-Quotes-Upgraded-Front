@@ -6,7 +6,7 @@
     <newitem-modal v-if="addNewPost || route.query.newPost" :click="newPostHandler"
       ><new-post @posted="updatePosts" />
     </newitem-modal>
-    <div class="pt-8">
+    <div class="py-8 min-h-screen">
       <user-navbar class="hidden md:flex"></user-navbar>
       <div class="md:w-900 md:ml-500 mx-7 md:mt-28 mt-20">
         <div class="flex justify-between gap-10 w-full mb-11">

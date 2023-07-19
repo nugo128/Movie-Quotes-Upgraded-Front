@@ -10,7 +10,7 @@
           <input
             id="search"
             v-bind="field"
-            class="md:w-[34.375rem] w-15 bg-black placeholder-white text-white outline-none"
+            class="md:w-[34.375rem] w-15 bg-transparent placeholder-white text-white outline-none"
             type="text"
             @input="submit"
             :placeholder="
