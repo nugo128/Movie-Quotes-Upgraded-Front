@@ -5,6 +5,8 @@
       :name="name"
       class="h-20 w-full bg-transparent border border-[#6C757D] p-2 rounded md:text-xl md:my-2"
       :placeholder="placeholder"
+      :value="inputData"
+      @input="inputHandler"
     />
     <span class="absolute right-12 mt-2 text-lg">{{ language }}</span>
   </Field>
@@ -14,8 +16,8 @@
 </template>
 <script setup>
 import { Field, ErrorMessage } from 'vee-validate'
-import { defineProps } from 'vue'
-defineProps({
+import { defineProps, ref } from 'vue'
+const props = defineProps({
   name: {
     type: String,
     required: true
@@ -31,6 +33,14 @@ defineProps({
   rule: {
     type: String,
     required: true
+  },
+  value: {
+    type: String,
+    required: false
   }
 })
+const inputData = ref(props.value)
+const inputHandler = (e) => {
+  inputData.value = e.target.value
+}
 </script>

@@ -62,14 +62,16 @@
       ></photo-upload>
       <text-area
         name="quote_en"
-        :placeholder="quote ? JSON.parse(quote.title)['en'] : 'Start create new quote'"
+        placeholder="Start create new quote"
+        :value="quote ? JSON.parse(quote.title)['en'] : null"
         language="eng"
         :rule="!quote ? 'required|english' : 'english'"
       ></text-area>
       <text-area
         name="quote_ka"
-        :placeholder="quote ? JSON.parse(quote.title)['ka'] : 'ახალი ციტატა'"
+        placeholder="ახალი ციტატა"
         language="ქარ"
+        :value="quote ? JSON.parse(quote.title)['ka'] : null"
         :rule="!quote ? 'required|georgian' : 'georgian'"
       ></text-area>
       <photo-upload

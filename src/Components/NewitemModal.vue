@@ -1,7 +1,9 @@
 <template>
-  <div class="fixed w-full h-screen flex justify-center z-[999] overflow-y-auto pb-10">
+  <div
+    class="fixed w-full h-full bg-[#11101A] md:bg-transparent md:h-screen flex justify-center z-[999] overflow-y-auto pb-20"
+  >
     <div
-      class="relative w-900 md:mt-24 bg-[#11101A] h-max z-[999] flex flex-col md:justify-center justify-start text-white gap-6"
+      class="relative w-900 md:mt-24 bg-[#11101A] md:h-max h-full z-[999] flex flex-col md:justify-center justify-start text-white gap-6"
     >
       <img
         class="absolute right-8 top-8 cursor-pointer"
