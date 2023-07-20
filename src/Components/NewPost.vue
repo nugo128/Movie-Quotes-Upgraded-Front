@@ -1,7 +1,7 @@
 <template>
-  <div class="absolute top-8 flex left-8" @click="deleteQuote" v-if="type">
+  <div class="absolute top-8 flex left-8 cursor-pointer" @click="deleteQuote" v-if="type">
     <img src="../assets/images/delete.svg" class="w-5" alt="" />
-    <h2 class="hidden md:block">delete</h2>
+    <h2 class="hidden md:block px-3">{{ $t('movies.delete') }}</h2>
   </div>
   <div>
     <h2 class="text-center pt-8">

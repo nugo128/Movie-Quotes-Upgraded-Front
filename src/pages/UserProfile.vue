@@ -284,7 +284,8 @@ const uploadImage = () => {
 }
 if (route.path === '/user-profile' && route?.query?.email) {
   await verifyEmail(route.query.email)
-    .then(() => {
+    .then((response) => {
+      userInfo.value[0] = response.data.user
       router.replace('/user-profile')
       showSuccess.value = true
     })
