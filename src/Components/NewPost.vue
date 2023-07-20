@@ -164,6 +164,7 @@ const deleteQuote = async () => {
     })
 }
 const submit = async (val) => {
+  console.log(val.image)
   for (let value in val) {
     if (val[value]) {
       formData.set(value, val[value])
@@ -205,8 +206,8 @@ onBeforeMount(async () => {
   if (!userStore.authUser.length) {
     userStore.getAuthUser
   }
-  if (!movieStore.movies.length) {
-    movieStore.getMovie()
+  if (!movieStore.movies?.length) {
+    movieStore.getMovie
   }
   if (!user.value) {
     const response = await getUser()
