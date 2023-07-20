@@ -91,3 +91,6 @@ export async function editProfile(data) {
 export async function viewQuote(id) {
   return await axios.get(`/api/view-quote/${id}`)
 }
+export async function getPosts() {
+  return await axios.get('/api/post')
+}

@@ -45,6 +45,7 @@ import { onBeforeMount, ref } from 'vue'
 import NewitemModal from '../Components/NewitemModal.vue'
 import { useUsersStore } from '../stores/userStore'
 import { useRoute, useRouter } from 'vue-router'
+import { getPosts } from '../services/index'
 const route = useRoute()
 const router = useRouter()
 const userStore = useUsersStore()
@@ -74,6 +75,10 @@ const updatePosts = async () => {
   addNewPost.value = !addNewPost.value
   router.replace({ path: '/newsfeed' })
   postData.value = store.posts
+  if (!store.posts.length) {
+    const response = await getPosts()
+    postData.value = response.data
+  }
 }
 const searchPosts = (event = false) => {
   if (!store.posts.length && event) {
