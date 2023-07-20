@@ -164,7 +164,6 @@ const deleteQuote = async () => {
     })
 }
 const submit = async (val) => {
-  console.log(val.image)
   for (let value in val) {
     if (val[value]) {
       formData.set(value, val[value])

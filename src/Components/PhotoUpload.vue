@@ -5,7 +5,7 @@
     @dragover.prevent=""
     @drop.prevent="dragPhoto"
   >
-    <img v-if="placeholderValue" :src="picture" alt="" class="w-440 h-36 p-1" />
+    <img v-if="placeholderValue" :src="picture" alt="" class="md:w-440 md:h-36 w-40 h-24 p-1" />
     <img
       v-if="thumbnail"
       :src="userStore.getUrl(picture)"
@@ -38,15 +38,18 @@
         Choose file</label
       >
     </div>
-    <div v-if="placeholderValue" class="flex flex-col gap-6 justify-between items-center mx-auto">
-      <h2 class="text-[#DDCCAA]">REPLACE PHOTO</h2>
-      <div class="flex items-center gap-3">
+    <div
+      v-if="placeholderValue"
+      class="flex flex-col gap-6 justify-between items-center mx-auto pr-2"
+    >
+      <h2 class="text-[#DDCCAA] text-xs md:text-md">REPLACE PHOTO</h2>
+      <div class="md:flex items-center gap-3 hidden">
         <img src="../assets/images/camera.svg" alt="" />
         <p>Drag & drop your image here or</p>
       </div>
       <Field id="file" type="file" class="hidden" name="image" @input="changePhoto" />
       <label
-        class="w-max rounded px-3 py-1 bg-[#9747FF66] cursor-pointer text-center ml-2"
+        class="w-max rounded px-3 py-1 bg-[#9747FF66] cursor-pointer text-center ml-2 text-sm md:text-md"
         for="file"
         >{{ $t('movies.add_photo') }}</label
       >

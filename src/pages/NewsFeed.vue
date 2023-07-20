@@ -59,10 +59,9 @@ onBeforeMount(async () => {
     const response = await getUser()
     userStore.setUser(response.data)
   }
-  if (!store.posts.length) {
-    store.getPosts
-    postData.value = store.posts
-  }
+
+  const response = await getPosts()
+  postData.value = response.data
 })
 
 const addNewPost = ref(route.query.newPost)

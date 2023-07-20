@@ -99,6 +99,7 @@ onBeforeMount(async () => {
   user.value.profile_picture = store.getUrl(store.authUser.profile_picture)
 })
 const logoutHandler = async () => {
+  store.clearUser()
   try {
     await userLogOut()
     router.replace({ name: 'home' })

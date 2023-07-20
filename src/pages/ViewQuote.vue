@@ -153,7 +153,6 @@ onMounted(async () => {
   try {
     const response = await getLikes(likeData)
     liked.value = true
-    console.log(response.data)
     likeId.value = response.data.like.id
   } catch (error) {
     liked.value = false

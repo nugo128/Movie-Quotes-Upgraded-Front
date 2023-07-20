@@ -143,10 +143,8 @@ onMounted(async () => {
     const existingLike = notification.value[0].find((obj) =>
       obj.type === 'like' ? obj.user_id === data.notification.user_id : false
     )
-
     if (!existingLike && data.notification.user_id !== user) {
       let fullData = data.notification
-      console.log(notification.value)
       fullData.id = notification.value[0][0]?.id + 1
       notification.value[0].unshift(fullData)
       notificationCount.value++

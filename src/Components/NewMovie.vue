@@ -181,7 +181,6 @@ const submit = async (val) => {
           : 'გთხოვთ აირჩიოთ მინიმუმ 1 ჟანრი'
     }
   } else {
-    console.log(props.description)
     formData.set('id', props.description.id)
     const response = await editMovie(formData, props.description.id)
     emits('editMovie', {
@@ -198,7 +197,6 @@ onBeforeMount(async () => {
   }
   if (!movieStore.categories.length) {
     movieStore.getCategories
-    console.log(movieStore)
   }
   if (props?.description?.category) {
     selectedItems.value = props?.description?.category

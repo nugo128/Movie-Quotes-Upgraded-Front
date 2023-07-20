@@ -45,7 +45,7 @@
                 }}
                 <span>({{ description?.year }})</span>
               </h2>
-              <div class="hidden md:flex gap-4 bg-default-bg py-2 px-7 rounded-xl">
+              <div class="flex gap-4 bg-default-bg py-2 px-7 rounded-xl">
                 <img
                   src="../assets/images/edit.svg"
                   class="w-5 h-5 cursor-pointer"
@@ -144,6 +144,8 @@ import { useMovieStore } from '@/stores/movieStore'
 import { useRoute, useRouter } from 'vue-router'
 import { onBeforeMount, ref } from 'vue'
 import { movieDescription, deleteMovies } from '@/services/index'
+import { usePostsStore } from '../stores/postStore'
+const postsStore = usePostsStore()
 const editMovie = ref(false)
 const edit = ref(false)
 const movieStore = useMovieStore()
@@ -187,6 +189,7 @@ const deleteQuote = (id) => {
 const updateQuotes = async () => {
   router.replace({ name: 'movie-description', query: { id: route.query.id } })
   const resp = await movieDescription(route.query.id)
+  postsStore.getPosts
   addQuote.value = false
   description.value = resp.data
   edit.value = false
@@ -201,12 +204,8 @@ const deleteMovie = async () => {
     })
 }
 onBeforeMount(async () => {
-  if (!movieStore.movieDescription.id) {
-    const resp = await movieDescription(route.query.id)
-    movieStore.getDesctiption(resp.data)
-    description.value = resp.data
-  } else {
-    description.value = movieStore.movieDescription
-  }
+  const resp = await movieDescription(route.query.id)
+  movieStore.getDesctiption(resp.data)
+  description.value = resp.data
 })
 </script>
