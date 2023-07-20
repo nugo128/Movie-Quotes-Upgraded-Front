@@ -7,7 +7,7 @@
       </p>
     </div>
     <slot></slot>
-    <p v-if="errors" class="text-red-500 text-sm">{{ errors }}</p>
+    <p v-if="errors && meta.valid" class="text-red-500 text-sm -mt-4">{{ errors }}</p>
     <button
       class="bg-[#E31221] md:py-2 py-1 md:mt-3 mt-1 mb-1 rounded-sm"
       :class="{ ['pointer-events-none']: !meta.valid }"

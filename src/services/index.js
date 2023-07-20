@@ -2,30 +2,15 @@ import axios from '@/config/axios/index.js'
 
 export async function userLogin(data) {
   await axios.get('/sanctum/csrf-cookie')
-  const response = await axios.post('api/login', data)
-  if (response.statusText === 'OK') {
-    return true
-  }
-
-  return response
+  return await axios.post('api/login', data)
 }
 export async function userLogOut() {
-  const response = await axios.get('/api/logout')
-  if (response.statusText === 'OK') {
-    return true
-  }
-
-  return response
+  return await axios.get('/api/logout')
 }
 
 export async function register(data) {
   await axios.get('/sanctum/csrf-cookie')
-  const response = await axios.post('api/register', data)
-  if (response.statusText === 'OK') {
-    return true
-  }
-
-  return response
+  return await axios.post('api/register', data)
 }
 
 export async function googleLogin() {
@@ -35,19 +20,11 @@ export async function googleLogin() {
   return response
 }
 export async function resetPassword(data) {
-  const response = await axios.post('/api/forgot-password', data)
-  if (response.statusText === 'OK') {
-    return true
-  }
-
-  return response
+  return await axios.post('/api/forgot-password', data)
 }
 
 export async function newPassword(data) {
   const response = await axios.post('/api/reset-password', data)
-  if (response.statusText === 'OK') {
-    return true
-  }
 
   return response
 }
@@ -57,9 +34,6 @@ export async function like(data) {
 }
 export async function removeLike(data) {
   const response = await axios.delete(`/api/likes/${data}`)
-  if (response.statusText === 'OK') {
-    return true
-  }
 
   return response
 }
@@ -68,9 +42,6 @@ export async function getLikes(data) {
 }
 export async function comments(data) {
   const response = await axios.post('api/comment', data)
-  if (response.statusText === 'OK') {
-    return true
-  }
 
   return response
 }

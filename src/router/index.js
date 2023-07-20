@@ -74,6 +74,8 @@ router.beforeEach(async (to, from, next) => {
       to.path === '/view-quote')
   ) {
     next({ name: 'no-permission' })
+  } else if (to.name === 'home' && store.authUser.length) {
+    next({ name: 'news_feed' })
   } else {
     next()
   }
