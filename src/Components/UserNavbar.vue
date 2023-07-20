@@ -67,9 +67,9 @@ import HomeButton from './HomeButton.vue'
 import LanguageSelect from './LanguageSelect.vue'
 import MovieIcon from './MovieIcon.vue'
 import { useRoute } from 'vue-router'
-import { useUsersStore } from '../stores/user'
+import { useUsersStore } from '@/stores/userStore'
 import { useRouter } from 'vue-router'
-import { userLogOut } from '../services/index'
+import { userLogOut } from '@/services/index'
 const router = useRouter()
 
 defineProps({
@@ -99,6 +99,7 @@ onBeforeMount(async () => {
   user.value.profile_picture = store.getUrl(store.authUser.profile_picture)
 })
 const logoutHandler = async () => {
+  store.clearUser()
   try {
     await userLogOut()
     router.replace({ name: 'home' })

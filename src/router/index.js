@@ -7,7 +7,7 @@ import MovieDescription from '../pages/MovieDescription.vue'
 import ViewQuote from '../pages/ViewQuote.vue'
 import NotFound from '../pages/NotFound.vue'
 import NoPermission from '../pages/NoPermission.vue'
-import { useUsersStore } from '../stores/user'
+import { useUsersStore } from '../stores/userStore'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -64,16 +64,18 @@ router.beforeEach(async (to, from, next) => {
   if (!store.authUser.length) {
     await store.getAuthUser()
   }
-
   if (
     !store.authUser.length &&
-    (to.path === '/newsfeed' ||
-      to.path === '/user-profile' ||
-      to.path === '/my-movies' ||
-      to.path === '/movie-description' ||
-      to.path === '/view-quote')
+    (to.name === 'news_feed' ||
+      to.name === 'user_profile' ||
+      to.name === 'my-movies' ||
+      to.name === 'movie-description' ||
+      to.name === 'view-quote')
   ) {
+    await store.getAuthUser()
     next({ name: 'no-permission' })
+  } else if (to.name === 'home' && store.authUser.length) {
+    next({ name: 'news_feed' })
   } else {
     next()
   }

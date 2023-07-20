@@ -9,6 +9,6 @@
 </template>
 
 <script setup>
-import { useLocaleStore } from '../stores/locale'
+import { useLocaleStore } from '@/stores/localeStore'
 const localeStore = useLocaleStore()
 </script>

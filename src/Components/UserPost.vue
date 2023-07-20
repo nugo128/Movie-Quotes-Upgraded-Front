@@ -60,7 +60,7 @@
             @input="changeInput"
             type="text"
             :placeholder="$t('newsfeed.comment')"
-            class="bg-[#24222F] w-full h-14 p-7 outline-none rounded-md"
+            class="bg-default-bg w-full h-14 p-7 outline-none rounded-md"
           />
         </Field>
       </Form>
@@ -73,10 +73,10 @@ import UserComment from './UserComment.vue'
 import LikeButton from './LikeButton.vue'
 import { defineProps, ref, onBeforeMount, onMounted } from 'vue'
 import { Form, Field } from 'vee-validate'
-import { useUsersStore } from '../stores/user'
-import { useLocaleStore } from '../stores/locale'
-import { like, removeLike, getLikes, comments } from '../services/index'
-import instantiatePusher from '../helpers/instantiatePusher'
+import { useUsersStore } from '@/stores/userStore'
+import { useLocaleStore } from '@/stores/localeStore'
+import { like, removeLike, getLikes, comments } from '@/services/index'
+import instantiatePusher from '@/helpers/instantiatePusher'
 const localeStore = useLocaleStore()
 const liked = ref(false)
 const likeCount = ref(props.numOfLikes)
@@ -128,30 +128,37 @@ const props = defineProps({
     required: true
   }
 })
+const likeId = ref(null)
+const pusherActive = ref(false)
 onMounted(async () => {
   instantiatePusher()
   const data = {
     quote_id: String(props.quoteID)
   }
-  const response = await getLikes(data)
-  if (response) {
+  try {
+    const response = await getLikes(data)
+    likeId.value = response.data.like.id
     liked.value = true
-  } else {
+  } catch (error) {
     liked.value = false
   }
   window.Echo.channel('likes').listen('LikeEvent', (data) => {
     if (data.message.quote_id == props.quoteID) {
+      pusherActive.value = true
       likeCount.value += 1
       if (data.message.user_id == store.authUser[0].id) {
         liked.value = true
+        likeId.value = data.message.id
       }
     }
   })
   window.Echo.channel('removeLikes').listen('RemoveLike', (data) => {
     if (data.message.quote_id == props.quoteID) {
+      pusherActive.value = true
       likeCount.value -= 1
       if (data.message.user_id == store.authUser[0].id) {
         liked.value = false
+        likeId.value = data.message.id
       }
     }
   })
@@ -199,16 +206,18 @@ const newLike = async () => {
   }
   if (!liked.value) {
     try {
-      await like(data)
-
+      const response = await like(data)
+      likeId.value = response.data.like.id
       liked.value = true
+      pusherActive.value ? '' : likeCount.value++
     } catch (error) {
       console.error(error)
     }
   } else {
     try {
-      await removeLike(data)
+      await removeLike(likeId.value)
       liked.value = false
+      pusherActive.value ? '' : likeCount.value--
     } catch (error) {
       console.error(error)
     }

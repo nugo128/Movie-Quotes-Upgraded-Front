@@ -17,12 +17,12 @@
         <div class="flex justify-between w-7/12 md:pt-7 mb-12">
           <div class="flex gap-5 items-center">
             <img src="../assets/images/edit.svg" class="w-5" alt="" @click="editQuote" />
-            <div class="h-4 w-[1px] bg-[#EFEFEF33]"></div>
+            <div class="h-4 w-[1px] bg-medium-gray"></div>
             <img src="../assets/images/delete.svg" class="w-5" alt="" @click="deleteQuote" />
           </div>
           <h2 class="md:block hidden">{{ $t('movies.view') }}</h2>
         </div>
-        <div class="h-px w-full bg-[#EFEFEF33] absolute right-0 md:top-28 top-20"></div>
+        <div class="h-px w-full bg-medium-gray absolute right-0 md:top-28 top-20"></div>
         <div class="flex items-center gap-5">
           <img
             :src="store.getUrl(data?.user?.profile_picture)"
@@ -33,7 +33,7 @@
         </div>
         <div class="flex flex-col gap-4">
           <div
-            class="border rounded p-2 px-4 md:h-fit h-20 border-[#6C757DB2] flex justify-between relative"
+            class="border rounded p-2 px-4 md:h-fit h-20 border-border-gray flex justify-between relative"
           >
             <img
               src="../assets/images/textarea-resizer.svg"
@@ -41,10 +41,10 @@
               class="md:hidden absolute right-2 bottom-2"
             />
             <h2>"{{ data?.quote ? JSON.parse(data?.quote)['en'] : '' }}"</h2>
-            <span class="text-[#6C757D]">Eng</span>
+            <span class="text-text-gray">Eng</span>
           </div>
           <div
-            class="border rounded p-2 px-4 md:h-fit h-20 border-[#6C757DB2] flex justify-between relative"
+            class="border rounded p-2 px-4 md:h-fit h-20 border-border-gray flex justify-between relative"
           >
             <img
               src="../assets/images/textarea-resizer.svg"
@@ -52,7 +52,7 @@
               class="md:hidden absolute right-2 bottom-2"
             />
             <h2>"{{ data?.quote ? JSON.parse(data?.quote)['ka'] : '' }}"</h2>
-            <span class="text-[#6C757D]">ქარ</span>
+            <span class="text-text-gray">ქარ</span>
           </div>
         </div>
         <div>
@@ -108,7 +108,7 @@
                 @input="changeInput"
                 type="text"
                 :placeholder="$t('newsfeed.comment')"
-                class="bg-[#24222F] w-full h-14 p-7 outline-none rounded-2xl"
+                class="bg-default-bg w-full h-14 p-7 outline-none rounded-2xl"
               />
             </Field>
           </Form>
@@ -119,18 +119,18 @@
 </template>
 
 <script setup>
-import UserNavbar from '../Components/UserNavbar.vue'
+import UserNavbar from '@/Components/UserNavbar.vue'
 import { onBeforeMount, ref, onMounted } from 'vue'
-import instantiatePusher from '../helpers/instantiatePusher'
+import instantiatePusher from '@/helpers/instantiatePusher'
 import { useRoute, useRouter } from 'vue-router'
-import { useUsersStore } from '../stores/user'
+import { useUsersStore } from '@/stores/userStore'
 import { Form, Field } from 'vee-validate'
-import UserComment from '../Components/UserComment.vue'
-import NewitemModal from '../Components/NewitemModal.vue'
-import LikeButton from '../Components/LikeButton.vue'
-import NewPost from '../Components/NewPost.vue'
-import { like, removeLike, getLikes, comments, deleteQuotes, viewQuote } from '../services/index'
-import { useQuoteStore } from '../stores/quote'
+import UserComment from '@/Components/UserComment.vue'
+import NewitemModal from '@/Components/NewitemModal.vue'
+import LikeButton from '@/Components/LikeButton.vue'
+import NewPost from '@/Components/NewPost.vue'
+import { like, removeLike, getLikes, comments, deleteQuotes, viewQuote } from '@/services/index'
+import { useQuoteStore } from '@/stores/quoteStore'
 const quoteStore = useQuoteStore()
 const edit = ref(false)
 const data = ref({})
@@ -139,17 +139,30 @@ const liked = ref(false)
 const route = useRoute()
 const commentCount = ref(data.value.comments?.length)
 const likeCount = ref(0)
+const likeId = ref(null)
 const store = useUsersStore()
 if (!store.authUser.length) {
   store.getAuthUser()
 }
-onMounted(() => {
+onMounted(async () => {
   instantiatePusher()
+  const likeData = {
+    quote_id: String(route.query.id),
+    user_id: store.authUser[0].id
+  }
+  try {
+    const response = await getLikes(likeData)
+    liked.value = true
+    likeId.value = response.data.like.id
+  } catch (error) {
+    liked.value = false
+  }
   window.Echo.channel('likes').listen('LikeEvent', (data) => {
     if (data.message.quote_id == route.query.id) {
       likeCount.value += 1
       if (data.message.user_id == store.authUser[0].id) {
         liked.value = true
+        likeId.value = data.message.id
       }
     }
   })
@@ -157,6 +170,7 @@ onMounted(() => {
     if (data.message.quote_id == route.query.id) {
       if (data.message.user_id == store.authUser[0].id) {
         liked.value = false
+        likeId.value = data.message.id
       }
       likeCount.value -= 1
     }
@@ -192,7 +206,7 @@ const allComments = ref(data.value.comments)
 const visibleComments = ref([])
 const input = ref('')
 const back = () => {
-  router.replace({ path: '/movie-description', query: { id: data.value.movie.id } })
+  router.replace({ name: 'movie-description', query: { id: data.value.movie.id } })
 }
 const updateQuotes = (e) => {
   data.value.quote = e.quote
@@ -224,14 +238,15 @@ const newLike = async () => {
   }
   if (!liked.value) {
     try {
-      await like(likeData)
+      const response = await like(likeData)
+      likeId.value = response.data.like.id
       liked.value = true
     } catch (error) {
       console.error(error)
     }
   } else {
     try {
-      await removeLike(likeData)
+      await removeLike(likeId.value)
       liked.value = false
     } catch (error) {
       console.error(error)

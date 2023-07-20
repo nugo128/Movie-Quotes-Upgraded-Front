@@ -10,7 +10,7 @@
         <div class="text-white flex items-center justify-between md:mb-16 mb-10">
           <h2 class="text-lg flex md-flex-row flex-col md:gap-0 gap-3">
             <span>{{ $t('movies.my_list') }} </span>
-            <span class="text-sm">({{ $t('movies.total') }} {{ movies.length }})</span>
+            <span class="text-sm">({{ $t('movies.total') }} {{ movies?.length }})</span>
           </h2>
           <div class="flex items-center gap-4">
             <search-bar
@@ -20,7 +20,7 @@
             ></search-bar>
             <button
               @click="newMovieHandler"
-              class="py-2 px-2 md:px-4 bg-[#E31221] rounded-lg flex gap-2 items-center -mt-4 md:mt-0 text-sm md:text-base"
+              class="py-2 px-2 md:px-4 bg-light-red rounded-lg flex gap-2 items-center -mt-4 md:mt-0 text-sm md:text-base"
             >
               <img src="../assets/images/plus.svg" alt="" />
               <span class="hidden md:block">{{ $t('movies.add_movie') }}</span>
@@ -28,8 +28,9 @@
             </button>
           </div>
         </div>
-        <div class="h-max flex flex-wrap gap-6 justify-center md:px-0">
+        <div class="h-max flex flex-wrap gap-6 md:justify-normal justify-center md:px-0">
           <user-movie
+            class="cursor-pointer"
             v-for="movie in movies"
             :key="movie?.id"
             :title="movie.title"
@@ -45,14 +46,14 @@
 </template>
 
 <script setup>
-import UserNavbar from '../Components/UserNavbar.vue'
-import profileHeader from '../Components/profileHeader.vue'
-import NewitemModal from '../Components/NewitemModal.vue'
-import NewMovie from '../Components/NewMovie.vue'
-import SearchBar from '../Components/SearchBar.vue'
-import UserMovie from '../Components/UserMovie.vue'
-import { getUMovies } from '../services/index'
-import { useMovieStore } from '../stores/movie'
+import UserNavbar from '@/Components/UserNavbar.vue'
+import profileHeader from '@/Components/profileHeader.vue'
+import NewitemModal from '@/Components/NewitemModal.vue'
+import NewMovie from '@/Components/NewMovie.vue'
+import SearchBar from '@/Components/SearchBar.vue'
+import UserMovie from '@/Components/UserMovie.vue'
+import { getUMovies } from '@/services/index'
+import { useMovieStore } from '@/stores/movieStore'
 import { onBeforeMount, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 const route = useRoute()
@@ -60,36 +61,36 @@ const store = useMovieStore()
 const movies = ref(store.userMovies)
 const displayNewMovie = (val) => {
   addNewMovie.value = false
-  router.replace({ path: '/my-movies' })
+  router.replace({ name: 'my-movies' })
   movies.value.unshift(val.data)
 }
 const router = useRouter()
 const addNewMovie = ref(route.query.addMovie)
 const newMovieHandler = () => {
   addNewMovie.value
-    ? router.replace({ path: '/my-movies' })
-    : router.replace({ path: '/my-movies', query: { addMovie: true } })
+    ? router.replace({ name: 'my-movies' })
+    : router.replace({ name: 'my-movies', query: { addMovie: true } })
   addNewMovie.value = !addNewMovie.value
 }
 const seeDescription = (movie) => {
-  router.replace({ path: '/movie-description', query: { id: movie.id } })
+  router.replace({ name: 'movie-description', query: { id: movie.id } })
 }
 const searchHandler = () => {
-  store.getUserMovies()
+  store.getUserMovies
   movies.value = store.userMovies
 }
 onBeforeMount(async () => {
-  if (!store.userMovies.length) {
-    store.getUserMovies()
+  if (!store.userMovies?.length) {
+    store.getUserMovies
     const response = await getUMovies()
     movies.value = response.data
   }
   movies.value = store.userMovies
-  if (!store.categories.length) {
-    store.getCategories()
+  if (!store.categories?.length) {
+    store.getCategories
   }
   if (route?.query.delete) {
-    let index = movies.value.find((movie) => movie.id == route?.query.delete)
+    let index = movies.value.find((movie) => movie.id === Number(route?.query.delete))
 
     if (index) {
       let values = movies.value

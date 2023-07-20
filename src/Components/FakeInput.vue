@@ -5,11 +5,11 @@
       <input
         :type="type"
         :value="value"
-        class="md:text-black w-600 h-10 md:bg-[#CED4DA] bg-transparent p-4 text-[#CED4DA] md:rounded-md border-b-[1px] md:border-none rounded-none outline-none px-0 md:px-4 text-sm"
+        class="md:text-black w-600 h-10 md:bg-[#CED4DA] bg-transparent p-4 text-light-gray md:rounded-md border-b-[1px] md:border-none rounded-none outline-none px-0 md:px-4 text-sm"
         disabled
       />
       <h2
-        class="text-[#CED4DA] cursor-pointer absolute md:static right-0"
+        class="text-light-gray cursor-pointer absolute md:static right-0"
         @click="edit"
         v-if="name === 'Username' || name === 'სახელი' || !user[0]?.gauth_id"
       >
@@ -20,7 +20,7 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-import { useUsersStore } from '../stores/user'
+import { useUsersStore } from '@/stores/userStore'
 defineProps({
   name: { type: String, required: true },
   type: { type: String, required: true },

@@ -10,7 +10,7 @@
           <input
             id="search"
             v-bind="field"
-            class="md:w-[34.375rem] w-15 bg-black placeholder-white text-white outline-none"
+            class="md:w-[34.375rem] w-15 bg-transparent placeholder-white text-white outline-none"
             type="text"
             @input="submit"
             :placeholder="
@@ -56,8 +56,8 @@
 import { ref, defineEmits } from 'vue'
 import { Form, Field } from 'vee-validate'
 import axios from '@/config/axios/index.js'
-import { usePostsStore } from '../stores/post'
-import { useMovieStore } from '../stores/movie'
+import { usePostsStore } from '../stores/postStore'
+import { useMovieStore } from '../stores/movieStore'
 const props = defineProps({
   movie: {
     type: String,
@@ -90,12 +90,10 @@ const submit = async (e) => {
       movieStore.searchedMovies(resp.data)
       emits('movieSearched')
     }
+  } else if (props.movie) {
+    emits('movieSearched')
   } else {
-    if (!props.movie) {
-      store.getPosts()
-    } else {
-      emits('movieSearched')
-    }
+    emits('searched', true)
   }
 }
 const appearSearch = () => {

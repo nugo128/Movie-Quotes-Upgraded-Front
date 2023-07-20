@@ -14,7 +14,7 @@
     <p class="text-white md:text-xl text-md text-center">{{ $t('error.cant_find') }}</p>
     <router-link
       :to="url"
-      class="text-white py-2 px-3 bg-[#E31221] rounded-md my-10 text-sm lg:text-base"
+      class="text-white py-2 px-3 bg-light-red rounded-md my-10 text-sm lg:text-base"
     >
       {{ $t('error.return') }}
     </router-link>
@@ -22,7 +22,7 @@
 </template>
 <script setup>
 import { computed, onBeforeMount } from 'vue'
-import { useUsersStore } from '../stores/user'
+import { useUsersStore } from '../stores/userStore'
 const store = useUsersStore()
 const url = computed(() => {
   if (store.authUser.length) return { name: 'news_feed' }

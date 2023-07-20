@@ -21,7 +21,7 @@
 
 <script setup>
 import { defineProps } from 'vue'
-import { useUsersStore } from '../stores/user'
+import { useUsersStore } from '@/stores/userStore'
 defineProps({
   comment: {
     type: String,

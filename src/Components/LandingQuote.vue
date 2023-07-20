@@ -1,14 +1,14 @@
 <template>
   <div class="relative full h-screen">
     <div
-      class="absolute top-0 left-0 md:h-[1000px] h-full w-full z-40 bg-gradient-to-b from-black via-transparent"
+      class="absolute top-0 left-0 md:h-1000 h-full w-full z-40 bg-gradient-to-b from-black via-transparent"
     ></div>
     <div
-      class="absolute top-0 left-0 h-full md:w-[1000px] z-40 bg-gradient-to-r from-black via-transparent"
+      class="absolute top-0 left-0 h-full md:w-1000 z-40 bg-gradient-to-r from-black via-transparent"
     ></div>
     <div
       :class="handleScroll"
-      class="h-screen md:pt-[50%] pt-40 md:pl-[10%] pl-5 lg:pt-[200px] lg:pl-44 full"
+      class="h-screen md:pt-[50%] pt-40 md:pl-[10%] pl-5 lg:pt-[12.5rem] lg:pl-44 full"
     >
       <div class="flex text-white mt-20">
         <p class="mr-10 text-white text-3xl z-50 hidden md:inline-block">____</p>

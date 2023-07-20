@@ -10,13 +10,13 @@
     <router-link
       v-if="linkText"
       :to="{ name: 'news_feed' }"
-      class="bg-[#E31221] md:w-full md:px-0 text-center py-2 px-4 rounded-md md:text-base text-xs"
+      class="bg-light-red md:w-full md:px-0 text-center py-2 px-4 rounded-md md:text-base text-xs"
     >
       {{ linkText }}
     </router-link>
     <button
       v-if="login"
-      class="bg-[#E31221] md:w-full md:px-0 text-center py-2 px-4 rounded-md md:text-base text-xs"
+      class="bg-light-red md:w-full md:px-0 text-center py-2 px-4 rounded-md md:text-base text-xs"
       @click="showLogin"
     >
       {{ login }}

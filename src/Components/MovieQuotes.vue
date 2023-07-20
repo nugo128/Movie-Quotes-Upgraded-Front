@@ -4,7 +4,7 @@
   >
     <div class="flex justify-between relative flex-col md:flex-row gap-6 md:gap-0">
       <img :src="store.getUrl(thumbnail)" class="md:w-56 w-full h-36 rounded-sm mr-8" alt="" />
-      <h2 class="my-auto text-lg text-[#CED4DA] break-words">
+      <h2 class="my-auto text-lg text-light-gr@ break-words">
         "{{ JSON.parse(quote)[localeStore.lang] }}"
       </h2>
       <span class="text-white text-lg cursor-pointer hidden md:block" @click="toggleQuote"
@@ -12,7 +12,7 @@
       >
       <div
         v-if="viewQuote"
-        class="absolute bg-[#24222F] md:left-[44.5rem] right-0 top-12 md:top-8 md:px-10 py-8 px-8 rounded-lg flex flex-col gap-8 text-white w-60"
+        class="absolute bg-default-bg md:left-[44.5rem] right-0 top-12 md:top-8 md:px-10 py-8 px-8 rounded-lg flex flex-col gap-8 text-white w-60"
       >
         <div class="flex items-center gap-4 cursor-pointer" @click="view">
           <img src="../assets/images/view.svg" class="w-5" alt="" />
@@ -28,7 +28,7 @@
         </div>
       </div>
     </div>
-    <div class="w-full h-px bg-[#EFEFEF33]"></div>
+    <div class="w-full h-px bg-medium-gray"></div>
     <div class="flex justify-between">
       <div class="flex gap-5">
         <div class="flex gap-3 items-center text-white">
@@ -50,9 +50,9 @@
 <script setup>
 import LikeButton from './LikeButton.vue'
 import { ref, onBeforeMount, onMounted } from 'vue'
-import instantiatePusher from '../helpers/instantiatePusher'
-import { useUsersStore } from '../stores/user'
-import { useLocaleStore } from '../stores/locale'
+import instantiatePusher from '@/helpers/instantiatePusher'
+import { useUsersStore } from '@/stores/userStore'
+import { useLocaleStore } from '@/stores/localeStore'
 import { like, removeLike, getLikes, deleteQuotes } from '../services/index'
 const localeStore = useLocaleStore()
 const store = useUsersStore()
@@ -84,16 +84,18 @@ const props = defineProps({
     required: true
   }
 })
+const likeId = ref(null)
 const likeCount = ref(props.likes.length)
 const commentCount = ref(props.comment.length)
 onMounted(async () => {
   const data = {
     quote_id: String(props.id)
   }
-  const response = await getLikes(data)
-  if (response) {
+  try {
+    const response = await getLikes(data)
     liked.value = true
-  } else {
+    likeId.value = response.data.like.id
+  } catch (error) {
     liked.value = false
   }
   instantiatePusher()
@@ -102,6 +104,7 @@ onMounted(async () => {
       likeCount.value += 1
       if (data.message.user_id == store.authUser[0].id) {
         liked.value = true
+        likeId.value = data.message.id
       }
     }
   })
@@ -110,6 +113,7 @@ onMounted(async () => {
       likeCount.value -= 1
       if (data.message.user_id == store.authUser[0].id) {
         liked.value = false
+        likeId.value = data.message.id
       }
     }
   })
@@ -128,14 +132,15 @@ const newLike = async () => {
   }
   if (!liked.value) {
     try {
-      await like(data)
+      const response = await like(data)
+      likeId.value = response.data.like.id
       liked.value = true
     } catch (error) {
       console.error(error)
     }
   } else {
     try {
-      await removeLike(data)
+      await removeLike(likeId.value)
       liked.value = false
     } catch (error) {
       console.error(error)

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="border border-[#6C757D] rounded-sm flex items-center px-4 gap-2"
+      class="border border-text-gray rounded-sm flex items-center px-4 gap-2"
       @click="activeLabelHandler"
     >
       <Field
@@ -9,10 +9,10 @@
         :name="name"
         :rules="!placeholderValue ? 'required|' + rule : rule"
         :validate-on-input="true"
-        class="border border-[#6C757D] rounded-sm"
+        class="border border-text-gray rounded-sm"
       >
         <label
-          :class="active ? 'text-white' : 'text-[#6C757D]'"
+          :class="active ? 'text-white' : 'text-text-gray'"
           class="text-lg whitespace-nowrap"
           :for="name"
           >{{ label }}:</label
@@ -26,7 +26,7 @@
               'border-2 border-red-500': !!errors?.length,
               'border-2 border-green-500': !errors?.length && value?.length > 0
             }"
-            type="text"
+            :type="name === 'year' ? 'number' : 'text'"
             :placeholder="placeholderValue"
             @input="inputValue"
           />
@@ -44,7 +44,7 @@
           />
         </div>
       </Field>
-      <h3 class="text-[#6C757D] w-8">{{ lang ? lang : '' }}</h3>
+      <h3 class="text-text-gray w-8">{{ lang ? lang : '' }}</h3>
     </div>
     <ErrorMessage class="text-red-400 text-sm px-5 w-[400px]" :name="name" />
   </div>
@@ -71,3 +71,15 @@ defineProps({
   }
 })
 </script>
+<style>
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+</style>

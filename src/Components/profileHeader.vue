@@ -1,5 +1,7 @@
 <template>
-  <header class="md:px-16 px-9 py-6 bg-[#24222F] flex justify-between fixed right-0 w-full z-[990]">
+  <header
+    class="md:px-16 px-9 py-6 bg-default-bg flex justify-between fixed right-0 w-full z-[990]"
+  >
     <img src="../assets/images/burger.svg" class="w-5 md:hidden" alt="" @click="toggleMenu" />
     <h2 class="text-[#DDCCAA] md:block hidden">MOVIE QUOTES</h2>
     <div class="flex gap-10 items-center">
@@ -9,7 +11,7 @@
       <div class="md:relative cursor-pointer">
         <img src="../assets/images/bell.svg" class="w-6" alt="bell" @click="toggleNotification" />
         <span
-          v-if="notificationCount"
+          v-if="notificationCount > 0"
           class="absolute md:left-3 md:-top-3 top-3 bg-[#E33812] md:w-7 md:h-7 w-6 h-6 text-center rounded-full text-white md:text-lg right-6"
           @click="toggleNotification"
           >{{ notificationCount }}</span
@@ -34,7 +36,7 @@
             v-for="notify in notification[0]"
             :key="notify.id"
             class="flex justify-between border border-[#6C757D80] mx-8 md:px-6 px-3 py-5 mb-4 rounded-md flex-col md:flex-row"
-            @click="readNotification(notify.id)"
+            @click="!notify.seen ? readNotification(notify.id) : ''"
           >
             <div class="flex gap-3 md:gap-6 text-white text-lg md:justify-between">
               <div class="min-w-fit flex flex-col justify-between items-center">
@@ -42,9 +44,9 @@
                   :src="store.getUrl(notify?.picture)"
                   alt=""
                   class="rounded-full md:w-20 md:h-20 w-15 h-15"
-                  :class="!notify.seen ? 'border-[#198754] border-2' : ''"
+                  :class="!notify.seen ? 'border-light-green border-2' : ''"
                 />
-                <h3 class="text-[#198754] text-sm md:hidden">
+                <h3 class="text-light-green text-sm md:hidden">
                   {{ notify.seen ? '' : $t('notifications.new') }}
                 </h3>
               </div>
@@ -81,7 +83,7 @@
               <h3 class="text-white hidden md:block">
                 {{ getTimeAgo(notify.createdAt) }}
               </h3>
-              <h3 class="text-[#198754] hidden md:block">
+              <h3 class="text-light-green hidden md:block">
                 {{ notify.seen ? '' : $t('notifications.new') }}
               </h3>
             </div>
@@ -104,11 +106,11 @@
 <script setup>
 import LanguageSelect from './LanguageSelect.vue'
 import { useRouter } from 'vue-router'
-import { userLogOut } from '../services/index'
+import { userLogOut } from '@/services/index'
 import { onMounted, ref } from 'vue'
-import { useUsersStore } from '../stores/user'
-import { useLocaleStore } from '../stores/locale'
-import instantiatePusher from '../helpers/instantiatePusher'
+import { useUsersStore } from '@/stores/userStore'
+import { useLocaleStore } from '@/stores/localeStore'
+import instantiatePusher from '@/helpers/instantiatePusher'
 import userNavbar from './UserNavbar.vue'
 import { getUser, getNotification, seenNotifications } from '../services/index'
 const locale = useLocaleStore()
@@ -133,18 +135,17 @@ onMounted(async () => {
     .then((response) => (user = response.data.id))
     .catch((err) => console.log(err))
 
-  await getNotification(user).then((response) => {
-    notification.value.push(response.data)
+  await getNotification().then((response) => {
+    notification.value.push(response.data.filter((item) => item.user_id !== user))
     notificationCount.value = notification.value[0].filter((item) => item.seen == false).length
   })
   window.Echo.private(`notifications.${user}`).listen('LikeNotification', (data) => {
     const existingLike = notification.value[0].find((obj) =>
       obj.type === 'like' ? obj.user_id === data.notification.user_id : false
     )
-
     if (!existingLike && data.notification.user_id !== user) {
       let fullData = data.notification
-      fullData.id = notification.value[0][0].id + 1
+      fullData.id = notification.value[0][0]?.id + 1
       notification.value[0].unshift(fullData)
       notificationCount.value++
     }
@@ -152,7 +153,7 @@ onMounted(async () => {
   window.Echo.private(`commentNotifications.${user}`).listen('CommentNotification', (data) => {
     if (data.notification.user_id !== user) {
       let fullData = data.notification
-      fullData.id = notification.value[0][0].id + 1
+      fullData.id = notification.value[0][0]?.id + 1
       notification.value[0].unshift(fullData)
       notificationCount.value++
     }
@@ -160,10 +161,11 @@ onMounted(async () => {
 })
 const readNotification = async (id) => {
   if (id !== 'all') {
-    await seenNotifications({ id }).then((response) => response.data)
-    const seenNotification = notification.value[0].find((item) => item.id === id)
-    seenNotification.seen = true
-    notificationCount.value--
+    await seenNotifications({ id }).then(() => {
+      const seenNotification = notification.value[0].find((item) => item.id === id)
+      seenNotification.seen = true
+      notificationCount.value--
+    })
   } else {
     await seenNotifications({ all: 'all' }).then((response) => response.data)
     notification.value[0].map((val) => {

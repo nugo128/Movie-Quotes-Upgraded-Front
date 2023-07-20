@@ -3,10 +3,12 @@
     <textarea
       v-bind="field"
       :name="name"
-      class="md:h-14 h-20 w-full bg-transparent border border-[#6C757D] p-2 rounded"
+      class="h-20 w-full bg-transparent border border-text-gray p-2 rounded md:text-xl md:my-2"
       :placeholder="placeholder"
+      :value="inputData"
+      @input="inputHandler"
     />
-    <span class="absolute right-12 mt-2">{{ language }}</span>
+    <span class="absolute right-12 mt-2 text-lg">{{ language }}</span>
   </Field>
   <div class="mb-3">
     <ErrorMessage class="text-red-400 text-sm pl-5 md:w-[400px]" :name="name" />
@@ -14,8 +16,8 @@
 </template>
 <script setup>
 import { Field, ErrorMessage } from 'vee-validate'
-import { defineProps } from 'vue'
-defineProps({
+import { defineProps, ref } from 'vue'
+const props = defineProps({
   name: {
     type: String,
     required: true
@@ -31,6 +33,14 @@ defineProps({
   rule: {
     type: String,
     required: true
+  },
+  value: {
+    type: String,
+    required: false
   }
 })
+const inputData = ref(props.value)
+const inputHandler = (e) => {
+  inputData.value = e.target.value
+}
 </script>

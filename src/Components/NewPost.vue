@@ -1,7 +1,7 @@
 <template>
-  <div class="absolute top-8 flex left-8" @click="deleteQuote" v-if="type">
+  <div class="absolute top-8 flex left-8 cursor-pointer" @click="deleteQuote" v-if="type">
     <img src="../assets/images/delete.svg" class="w-5" alt="" />
-    <h2 class="hidden md:block">delete</h2>
+    <h2 class="hidden md:block px-3">{{ $t('movies.delete') }}</h2>
   </div>
   <div>
     <h2 class="text-center pt-8">
@@ -13,7 +13,7 @@
           : $t('newsfeed.add_new_quote')
       }}
     </h2>
-    <div class="w-full h-[1px] bg-[#EFEFEF33] mt-4 bg-opacity-20"></div>
+    <div class="w-full h-[1px] bg-medium-gray mt-4 bg-opacity-20"></div>
   </div>
   <div class="flex flex-col gap-10 px-8 pb-20">
     <div class="flex gap-5 items-center">
@@ -37,7 +37,7 @@
         </h2>
         <div class="flex gap-4 flex-wrap order-3 md:order-2 text-sm md:text-lg">
           <h3
-            class="bg-[#6C757D] w-max md:px-3 py-1 px-2 md:text-base text-xs rounded-md text-white"
+            class="bg-text-gray w-max md:px-3 py-1 px-2 md:text-base text-xs rounded-md text-white"
             v-for="genre in movie.category"
             :key="genre.id"
           >
@@ -62,14 +62,16 @@
       ></photo-upload>
       <text-area
         name="quote_en"
-        :placeholder="quote ? JSON.parse(quote.title)['en'] : 'Start create new quote'"
+        placeholder="Start create new quote"
+        :value="quote ? JSON.parse(quote.title)['en'] : null"
         language="eng"
         :rule="!quote ? 'required|english' : 'english'"
       ></text-area>
       <text-area
         name="quote_ka"
-        :placeholder="quote ? JSON.parse(quote.title)['ka'] : 'ახალი ციტატა'"
+        placeholder="ახალი ციტატა"
         language="ქარ"
+        :value="quote ? JSON.parse(quote.title)['ka'] : null"
         :rule="!quote ? 'required|georgian' : 'georgian'"
       ></text-area>
       <photo-upload
@@ -81,12 +83,13 @@
 
       <photo-upload v-if="!movie || quote" :thumbnail="quote?.thumbnail"></photo-upload>
       <h2 class="-mt-3 text-sm text-red-500">{{ errors }}</h2>
-      <div v-if="!movie && !quote" class="flex pl-3">
-        <img src="../assets/images/movieCamera.svg" class="absolute z-0 mt-4" alt="" />
+      <div v-if="!movie && !quote" class="flex pl-3 justify-between relative cursor-pointer my-6">
+        <img src="@/assets/images/movieCamera.svg" class="absolute z-0 mt-4" alt="" />
+        <img src="@/assets/images/arrow-down.svg" alt="" class="absolute right-6 top-8 w-5" />
         <Field
           id=""
           as="select"
-          class="z-50 select w-full focus:appearance-none focus:outline-none text-white bg-transparent mt-2 py-5 px-12 mb-0"
+          class="z-50 select w-full focus:appearance-none focus:outline-none text-white bg-transparent mt-2 py-5 px-12 mb-0 cursor-pointer"
           name="movie_id"
           :rules="!quote ? 'required' : ''"
         >
@@ -105,7 +108,7 @@
       </div>
       <ErrorMessage class="text-red-400 text-sm px-5 md:w-[400px]" name="movie_id" />
       <button
-        class="w-full bg-[#E31221] py-3 rounded mb-1"
+        class="w-full bg-light-red py-3 rounded mb-1 md:text-xl text-lg"
         :class="{ ['pointer-events-none']: !meta.valid }"
         @click="submit"
       >
@@ -121,11 +124,11 @@
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import textArea from './textArea.vue'
 import PhotoUpload from './PhotoUpload.vue'
-import { useMovieStore } from '../stores/movie'
-import { useUsersStore } from '../stores/user'
+import { useMovieStore } from '@/stores/movieStore'
+import { useUsersStore } from '@/stores/userStore'
 import { onBeforeMount, ref, defineEmits } from 'vue'
-import { useLocaleStore } from '../stores/locale'
-import { deleteQuotes, newPost, editQuote, getUser } from '../services/index'
+import { useLocaleStore } from '@/stores/localeStore'
+import { deleteQuotes, newPost, editQuote, getUser } from '@/services/index'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 const errors = ref('')
@@ -191,7 +194,7 @@ const submit = async (val) => {
       formData.set('thumbnail', movieStore.file)
     }
     formData.set('id', props.quote.id)
-    const response = await editQuote(formData)
+    const response = await editQuote(formData, props.quote.id)
     emits('updated', response.data)
   }
 }
@@ -202,8 +205,8 @@ onBeforeMount(async () => {
   if (!userStore.authUser.length) {
     userStore.getAuthUser()
   }
-  if (!movieStore.movies.length) {
-    movieStore.getMovie()
+  if (!movieStore.movies?.length) {
+    movieStore.getMovie
   }
   if (!user.value) {
     const response = await getUser()

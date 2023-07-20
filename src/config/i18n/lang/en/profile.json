@@ -4,24 +4,24 @@
         "upload_photo": "Upload new photo",
         "edit": "Edit",
         "username": "Username",
-        "new_username": "New username",
-        "username_placeholder": "Enter new usarname",
+        "new_username": "New Username",
+        "username_placeholder": "Enter new Username",
         "email": "Email",
-        "new_email": "New email",
-        "email_placeholder": "Enter new email",
+        "new_email": "New Email",
+        "email_placeholder": "Enter new Email",
         "password_validation": "Passwords should contain:",
         "min_characters": "8 or more characters",
         "max_characters": "15 lowercase character",
         "password": "Password",
-        "password_placeholder": "enter new password",
-        "new_password": "New password",
-        "confirm_password": "Confirm new password",
+        "password_placeholder": "Enter new Password",
+        "new_password": "New Password",
+        "confirm_password": "Confirm new Password",
         "cancel": "Cancel",
         "save_changes": "Save changes",
         "changes_updated": "Changes updated succsessfully",
-        "check_email": "Please check your email and follow the instructions to activate your new email.",
+        "check_email": "Please check your Email and follow the instructions to activate your new Email.",
         "confirm": "Confirm",
-        "you_sure": "are you sure to make changes?"
+        "you_sure": "Are you sure to make changes?"
 
     }
 }

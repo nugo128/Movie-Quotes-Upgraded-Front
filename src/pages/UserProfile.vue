@@ -33,13 +33,16 @@
           userInfo[0]?.profile_picture ? userInfo[0]?.profile_picture : user?.profile_picture
         "
       ></user-navbar>
-      <div class="bg-black w-full mt-10 h-16 md:hidden flex items-center pl-8">
+      <div
+        class="bg-black w-full mt-10 h-16 md:hidden flex items-center pl-8"
+        :class="editPassword || editUsername || editEmail ? 'fixed' : 'static'"
+      >
         <img src="../assets/images/back.svg" class="w-5" alt="" @click="cancel" />
       </div>
       <Form
         @submit="submit"
         v-slot="{ meta }"
-        class="md:w-1000 md:ml-500 md:mt-24 text-black flex flex-col gap-16 px-8 pb-40 md:pb-5 md:px-0 bg-[#24222F] md:bg-transparent"
+        class="md:w-1000 md:ml-500 md:mt-24 text-black flex flex-col gap-16 px-8 pb-40 md:pb-5 md:px-0 bg-default-bg md:bg-transparent"
       >
         <h2 class="text-white text-lg hidden md:block">{{ $t('profile.my_profile') }}</h2>
         <div class="flex flex-col md:pl-40">
@@ -93,7 +96,7 @@
               :valid="meta.dirty && meta.valid ? true : false"
               :submit="submit"
               ><AuthInput
-                class="bg-[#24222F] px-8 mt-10 py-10"
+                class="bg-default-bg px-8 mt-10 py-10"
                 name="username"
                 type="text"
                 :label="$t('profile.username_placeholder')"
@@ -130,7 +133,7 @@
               <AuthInput
                 name="email"
                 type="email"
-                class="bg-[#24222F] px-8 mt-10 py-10"
+                class="bg-default-bg px-8 mt-10 py-10"
                 :label="$t('profile.email_placeholder')"
                 :placeholder="$t('profile.email_placeholder')"
                 rule="required|email"
@@ -150,16 +153,16 @@
               class="hidden md:flex flex-col gap-12 w-600"
               v-if="editPassword || route.query.editPassword"
             >
-              <div class="border-[1px] border-[#CED4DA33] p-6 flex flex-col gap-5">
+              <div class="border-[1px] border-modal-border p-6 flex flex-col gap-5">
                 <h2 class="text-white">{{ $t('profile.password_validation') }}</h2>
 
-                <div class="text-[#9C9A9A] flex flex-col gap-1">
+                <div class="text-modal-text flex flex-col gap-1">
                   <h3 :class="moreThan8 ? 'text-white' : ''">
-                    <span :class="moreThan8 ? 'text-[#198754]' : ''">•</span>
+                    <span :class="moreThan8 ? 'text-light-green' : ''">•</span>
                     {{ $t('profile.min_characters') }}
                   </h3>
                   <h3 :class="lessThanLowercase15 ? 'text-white' : ''">
-                    <span :class="lessThanLowercase15 ? 'text-[#198754]' : ''">•</span>
+                    <span :class="lessThanLowercase15 ? 'text-light-green' : ''">•</span>
                     {{ $t('profile.max_characters') }}
                   </h3>
                 </div>
@@ -188,16 +191,16 @@
               :valid="meta.dirty && meta.valid ? true : false"
               :submit="submit"
             >
-              <div class="border-[1px] border-[#CED4DA33] p-6 flex flex-col gap-5">
+              <div class="border-[1px] border-modal-border p-6 flex flex-col gap-5">
                 <h2 class="text-white">{{ $t('profile.password_validation') }}</h2>
 
-                <div class="text-[#9C9A9A] flex flex-col gap-1">
+                <div class="text-text flex flex-col gap-1">
                   <h3 :class="moreThan8 ? 'text-white' : ''">
-                    <span :class="moreThan8 ? 'text-[#198754]' : ''">•</span>
+                    <span :class="moreThan8 ? 'text-light-green' : ''">•</span>
                     {{ $t('profile.min_characters') }}
                   </h3>
                   <h3 :class="lessThanLowercase15 ? 'text-white' : ''">
-                    <span :class="lessThanLowercase15 ? 'text-[#198754]' : ''">•</span>
+                    <span :class="lessThanLowercase15 ? 'text-light-green' : ''">•</span>
                     {{ $t('profile.max_characters') }}
                   </h3>
                 </div>
@@ -205,7 +208,7 @@
               <AuthInput
                 name="password"
                 type="password"
-                class="bg-[#24222F] px-8 mt-10 py-10"
+                class="bg-default-bg px-8 mt-4 py-8"
                 :label="$t('profile.new_password')"
                 :placeholder="$t('profile.password_placeholder')"
                 rule="required|min:8|max:15|lowercase_num"
@@ -215,7 +218,7 @@
               <AuthInput
                 name="password_confirmation"
                 type="password"
-                class="bg-[#24222F] px-8 py-10"
+                class="bg-default-bg px-8 py-8"
                 :label="$t('profile.confirm_password')"
                 :placeholder="$t('profile.confirm_password')"
                 rule="required|confirmed:@password"
@@ -225,13 +228,13 @@
           </div>
         </div>
         <div class="text-white ml-auto mt-16 md:flex gap-4 hidden">
-          <button type="button" class="px-4 py-2 cursor-pointer text-[#CED4DA]" @click="cancel">
+          <button type="button" class="px-4 py-2 cursor-pointer text-light-gray" @click="cancel">
             {{ $t('profile.cancel') }}
           </button>
           <button
             type="submit"
-            class="bg-[#E31221] px-4 py-2 rounded cursor-pointer"
-            :class="meta.dirty && meta.valid ? 'bg-[#E31221]' : 'bg-[#EC4C57] pointer-events-none'"
+            class="bg-light-red px-4 py-2 rounded cursor-pointer"
+            :class="meta.dirty && meta.valid ? 'bg-light-red' : 'bg-[#EC4C57] pointer-events-none'"
           >
             {{ $t('profile.save_changes') }}
           </button>
@@ -242,18 +245,18 @@
 </template>
 
 <script setup>
-import EditprofileModal from '../Components/EditprofileModal.vue'
-import ModalWindow from '../Components/ModalWindow.vue'
-import EmailSent from '../Components/EmailSent.vue'
-import profileHeader from '../Components/profileHeader.vue'
-import UserNavbar from '../Components/UserNavbar.vue'
+import EditprofileModal from '@/Components/EditprofileModal.vue'
+import ModalWindow from '@/Components/ModalWindow.vue'
+import EmailSent from '@/Components/EmailSent.vue'
+import profileHeader from '@/Components/profileHeader.vue'
+import UserNavbar from '@/Components/UserNavbar.vue'
 import { Form, Field } from 'vee-validate'
 import { onBeforeMount, ref } from 'vue'
-import { verifyEmail, editProfile, getUser } from '../services/index'
-import AuthInput from '../Components/AuthInput.vue'
-import FakeInput from '../Components/FakeInput.vue'
-import { useUsersStore } from '../stores/user'
-import { usePostsStore } from '../stores/post'
+import { verifyEmail, editProfile, getUser } from '@/services/index'
+import AuthInput from '@/Components/AuthInput.vue'
+import FakeInput from '@/Components/FakeInput.vue'
+import { useUsersStore } from '@/stores/userStore'
+import { usePostsStore } from '@/stores/postStore'
 import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
@@ -281,7 +284,8 @@ const uploadImage = () => {
 }
 if (route.path === '/user-profile' && route?.query?.email) {
   await verifyEmail(route.query.email)
-    .then(() => {
+    .then((response) => {
+      userInfo.value[0] = response.data.user
       router.replace('/user-profile')
       showSuccess.value = true
     })
@@ -307,7 +311,7 @@ const cancel = () => {
   if (!editPassword.value && !editUsername.value && !editEmail.value) {
     router.go(-1)
   } else {
-    router.replace({ path: '/user-profile' })
+    router.replace({ name: 'user_profile' })
   }
   editPassword.value = false
   editUsername.value = false
@@ -324,10 +328,10 @@ const submit = async (val) => {
   for (let value in val) {
     formData.set(value, val[value])
   }
-  await editProfile(formData)
-  store.clearUser()
+  const response = await editProfile(formData)
   store.getAuthUser()
-  userInfo.value = store.authUser
+  userInfo.value = [response.data]
+
   editPassword.value = false
   editUsername.value = false
   editEmail.value = false
@@ -337,11 +341,11 @@ const submit = async (val) => {
     showSuccess.value = false
     showConfirmation.value = true
   }
-  router.replace({ path: '/user-profile' })
+  router.replace({ name: 'user_profile' })
 }
 const showEditPasswordField = () => {
   router.replace({
-    path: '/user-profile',
+    name: 'user_profile',
     query: {
       editPassword: true,
       editEmail: route.query.editEmail,
@@ -352,7 +356,7 @@ const showEditPasswordField = () => {
 }
 const showEditUsernameField = () => {
   router.replace({
-    path: '/user-profile',
+    name: 'user_profile',
     query: {
       editPassword: route.query.editPassword,
       editEmail: route.query.editEmail,
@@ -363,7 +367,7 @@ const showEditUsernameField = () => {
 }
 const showEditEmailField = () => {
   router.replace({
-    path: '/user-profile',
+    name: 'user_profile',
     query: {
       editPassword: route.query.editPassword,
       editEmail: true,
@@ -376,7 +380,6 @@ const changePhoto = async (event) => {
   const file = event.target.files[0]
   formData.set('image', file)
   await editProfile(formData)
-  store.clearUser()
   store.getAuthUser()
   userInfo.value = store.authUser
   showSuccess.value = true

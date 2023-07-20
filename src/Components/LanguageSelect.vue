@@ -9,7 +9,7 @@
 </template>
 <script setup>
 import { setLocale } from '@vee-validate/i18n'
-import { useLocaleStore } from '../stores/locale'
+import { useLocaleStore } from '@/stores/localeStore'
 const store = useLocaleStore()
 const localeChangeHandler = (event) => {
   localStorage.setItem('lang', event.target.value)

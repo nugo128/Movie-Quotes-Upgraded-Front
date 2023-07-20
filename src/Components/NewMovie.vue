@@ -3,7 +3,7 @@
     <h2 class="text-center pt-8">
       {{ description ? $t('movies.edit_movie') : $t('movies.add_movie') }}
     </h2>
-    <div class="w-full h-[1px] bg-[#EFEFEF33] mt-4 bg-opacity-20"></div>
+    <div class="w-full h-[1px] bg-medium-gray mt-4 bg-opacity-20"></div>
   </div>
   <div class="flex flex-col gap-6 px-8 pb-10">
     <div class="flex gap-5 items-center">
@@ -31,7 +31,7 @@
       ></movie-input>
       <div class="relative">
         <div
-          class="dropdown-container p-2 border border-[#6C757D] cursor-pointer rounded"
+          class="dropdown-container p-2 border border-text-gray cursor-pointer rounded"
           @click="toggleDropdown"
         >
           <span v-if="selectedItems.length === 0" class="pl-2">{{ $t('movies.genres') }}</span>
@@ -39,7 +39,7 @@
             <span
               v-for="item in selectedItems"
               :key="item.id"
-              class="inline-flex items-center space-x-2 px-2 py-1 bg-[#6C757D] text-white rounded mr-2 my-1"
+              class="inline-flex items-center space-x-2 px-2 py-1 bg-text-gray text-white rounded mr-2 my-1"
             >
               {{ JSON.parse(item.category)[localeStore.lang] }}
               <button @click.stop="removeItem(item.id)" class="focus:outline-none">
@@ -58,13 +58,13 @@
         </div>
         <ul
           v-if="isDropdownOpen"
-          class="dropdown-menu absolute bg-white border border-gray-300 mt-2 py-2 rounded z-50"
+          class="dropdown-menu absolute text-white bg-black border border-gray-300 mt-2 py-2 w-full rounded z-50"
         >
           <li
             v-for="item in categories"
             :key="item.id"
             @click="selectItems(item)"
-            class="px-4 py-2 cursor-pointer hover:bg-gray-100 text-black"
+            class="px-4 py-2 cursor-pointer hover:bg-gray-500"
           >
             {{ item?.category ? JSON.parse(item?.category)[localeStore.lang] : '' }}
           </li>
@@ -109,7 +109,7 @@
       ></movie-textarea>
       <photo-upload :placeholderValue="store.getUrl(description?.thumbnail)"></photo-upload>
       <h2 v-if="imageError" class="text-sm -mt-6 text-red-500">{{ imageError }}</h2>
-      <button type="submit" class="bg-[#E31221] rounded py-2">
+      <button type="submit" class="bg-light-red rounded py-2">
         {{ description ? $t('movies.edit_movie') : $t('movies.add_movie') }}
       </button>
     </Form>
@@ -117,14 +117,14 @@
 </template>
 
 <script setup>
-import { useUsersStore } from '../stores/user'
-import { useMovieStore } from '../stores/movie'
+import { useUsersStore } from '@/stores/userStore'
+import { useMovieStore } from '@/stores/movieStore'
 import MovieInput from './MovieInput.vue'
 import MovieTextarea from './MovieTextarea.vue'
 import { ref, onBeforeMount, defineEmits } from 'vue'
-import { useLocaleStore } from '../stores/locale'
+import { useLocaleStore } from '@/stores/localeStore'
 import { Form } from 'vee-validate'
-import { addMovie, editMovie } from '../services/index'
+import { addMovie, editMovie } from '@/services/index'
 import PhotoUpload from './PhotoUpload.vue'
 const emits = defineEmits(['newMovie', 'editMovie'])
 const localeStore = useLocaleStore()
@@ -182,7 +182,7 @@ const submit = async (val) => {
     }
   } else {
     formData.set('id', props.description.id)
-    const response = await editMovie(formData)
+    const response = await editMovie(formData, props.description.id)
     emits('editMovie', {
       response: response,
       category: selectedItems.value
@@ -196,7 +196,7 @@ onBeforeMount(async () => {
     user.value = store.authUser
   }
   if (!movieStore.categories.length) {
-    movieStore.getCategories()
+    movieStore.getCategories
   }
   if (props?.description?.category) {
     selectedItems.value = props?.description?.category

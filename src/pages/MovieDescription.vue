@@ -27,7 +27,7 @@
     </newitem-modal>
     <div class="px-9">
       <user-navbar class="md:block hidden"></user-navbar>
-      <div class="md:pl-440 pt-28 md:pr-16 flex flex-col gap-8">
+      <div class="md:pl-440 pt-28 pb-12 md:pr-16 flex flex-col gap-8">
         <h2 class="text-white text-lg md:block hidden">Movie description</h2>
         <div class="flex flex-col md:flex-row gap-2">
           <img
@@ -45,14 +45,14 @@
                 }}
                 <span>({{ description?.year }})</span>
               </h2>
-              <div class="hidden md:flex gap-4 bg-[#24222F] py-2 px-7 rounded-xl">
+              <div class="flex gap-4 bg-default-bg py-2 px-7 rounded-xl">
                 <img
                   src="../assets/images/edit.svg"
                   class="w-5 h-5 cursor-pointer"
                   alt=""
                   @click="editMovieHandler"
                 />
-                <div class="h-full w-[1px] bg-[#EFEFEF33]"></div>
+                <div class="h-full w-[1px] bg-medium-gray"></div>
                 <img
                   src="../assets/images/delete.svg"
                   class="w-5 h-5 cursor-pointer"
@@ -63,7 +63,7 @@
             </div>
             <div class="flex gap-4 flex-wrap">
               <h3
-                class="bg-[#6C757D] w-max px-3 py-1 rounded-md text-sm md:text-base text-white"
+                class="bg-text-gray w-max px-3 py-1 rounded-md text-sm md:text-base text-white"
                 v-for="genre in description?.category"
                 :key="genre.id"
               >
@@ -75,7 +75,7 @@
               </h3>
             </div>
             <div>
-              <h2 class="text-[#CED4DA] text-sm md:text-base">
+              <h2 class="text-light-gray text-sm md:text-base">
                 {{ $t('movies.director') }}:
                 <span class="text-white">
                   {{
@@ -104,10 +104,10 @@
             <span>{{ $t('movies.all_quotes') }}</span>
             <span class="text-sm">({{ $t('movies.total') }} {{ description?.quote?.length }})</span>
           </h2>
-          <div class="md:h-7 md:w-px h-px w-full md:mb-0 mb-4 bg-[#EFEFEF33]"></div>
+          <div class="md:h-7 md:w-px h-px w-full md:mb-0 mb-4 bg-medium-gray"></div>
           <button
             @click="newQuoteHandler"
-            class="py-2 px-4 bg-[#E31221] rounded-md flex gap-2 items-center text-sm md:text-base text-white"
+            class="py-2 px-4 bg-light-red rounded-md flex gap-2 items-center text-sm md:text-base text-white"
           >
             <img src="../assets/images/plus.svg" alt="" />{{ $t('movies.add_quote') }}
           </button>
@@ -132,18 +132,20 @@
 </template>
 
 <script setup>
-import profileHeader from '../Components/profileHeader.vue'
-import UserNavbar from '../Components/UserNavbar.vue'
-import MovieQuotes from '../Components/MovieQuotes.vue'
-import NewitemModal from '../Components/NewitemModal.vue'
-import NewMovie from '../Components/NewMovie.vue'
-import NewPost from '../Components/NewPost.vue'
-import { useUsersStore } from '../stores/user'
-import { useLocaleStore } from '../stores/locale'
-import { useMovieStore } from '../stores/movie'
+import profileHeader from '@/Components/profileHeader.vue'
+import UserNavbar from '@/Components/UserNavbar.vue'
+import MovieQuotes from '@/Components/MovieQuotes.vue'
+import NewitemModal from '@/Components/NewitemModal.vue'
+import NewMovie from '@/Components/NewMovie.vue'
+import NewPost from '@/Components/NewPost.vue'
+import { useUsersStore } from '@/stores/userStore'
+import { useLocaleStore } from '@/stores/localeStore'
+import { useMovieStore } from '@/stores/movieStore'
 import { useRoute, useRouter } from 'vue-router'
 import { onBeforeMount, ref } from 'vue'
-import { movieDescription, deleteMovies } from '../services/index'
+import { movieDescription, deleteMovies } from '@/services/index'
+import { usePostsStore } from '../stores/postStore'
+const postsStore = usePostsStore()
 const editMovie = ref(false)
 const edit = ref(false)
 const movieStore = useMovieStore()
@@ -163,8 +165,8 @@ const router = useRouter()
 const addQuote = ref(route.query.addQuote)
 const newQuoteHandler = () => {
   addQuote.value
-    ? router.replace({ path: '/movie-description', query: { id: route.query.id } })
-    : router.replace({ path: '/movie-description', query: { addQuote: true, id: route.query.id } })
+    ? router.replace({ name: 'movie-description', query: { id: route.query.id } })
+    : router.replace({ name: 'movie-description', query: { addQuote: true, id: route.query.id } })
   addQuote.value = !addQuote.value
 }
 const update = (val) => {
@@ -185,8 +187,9 @@ const deleteQuote = (id) => {
   }
 }
 const updateQuotes = async () => {
-  router.replace({ path: '/movie-description', query: { id: route.query.id } })
+  router.replace({ name: 'movie-description', query: { id: route.query.id } })
   const resp = await movieDescription(route.query.id)
+  postsStore.getPosts
   addQuote.value = false
   description.value = resp.data
   edit.value = false
@@ -194,19 +197,15 @@ const updateQuotes = async () => {
 const deleteMovie = async () => {
   await deleteMovies(route.query.id)
     .then(() => {
-      router.replace({ path: '/my-movies', query: { delete: route.query.id } })
+      router.replace({ name: 'my-movies', query: { delete: route.query.id } })
     })
     .catch((error) => {
       console.error(error)
     })
 }
 onBeforeMount(async () => {
-  if (!movieStore.movieDescription.id) {
-    const resp = await movieDescription(route.query.id)
-    movieStore.getDesctiption(resp.data)
-    description.value = resp.data
-  } else {
-    description.value = movieStore.movieDescription
-  }
+  const resp = await movieDescription(route.query.id)
+  movieStore.getDesctiption(resp.data)
+  description.value = resp.data
 })
 </script>
