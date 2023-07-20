@@ -46,6 +46,7 @@ import NewitemModal from '@/Components/NewitemModal.vue'
 import { useUsersStore } from '@/stores/userStore'
 import { useRoute, useRouter } from 'vue-router'
 import { getPosts } from '@/services/index'
+import { getUser } from '../services'
 const route = useRoute()
 const router = useRouter()
 const userStore = useUsersStore()
@@ -54,7 +55,9 @@ const postData = ref(store.posts)
 const showSearch = ref(false)
 onBeforeMount(async () => {
   if (!userStore.authUser.length) {
-    userStore.getAuthUser
+    userStore.getAuthUser()
+    const response = await getUser()
+    userStore.setUser(response.data)
   }
   if (!store.posts.length) {
     store.getPosts

@@ -328,10 +328,10 @@ const submit = async (val) => {
   for (let value in val) {
     formData.set(value, val[value])
   }
-  await editProfile(formData)
-  store.clearUser()
-  store.getAuthUser
-  userInfo.value = store.authUser
+  const response = await editProfile(formData)
+  store.getAuthUser()
+  userInfo.value = [response.data]
+
   editPassword.value = false
   editUsername.value = false
   editEmail.value = false
@@ -380,8 +380,7 @@ const changePhoto = async (event) => {
   const file = event.target.files[0]
   formData.set('image', file)
   await editProfile(formData)
-  store.clearUser()
-  store.getAuthUser
+  store.getAuthUser()
   userInfo.value = store.authUser
   showSuccess.value = true
   const reader = new FileReader()
@@ -393,12 +392,12 @@ const changePhoto = async (event) => {
   }
 }
 if (!store.authUser.length) {
-  store.getAuthUser
+  store.getAuthUser()
 }
 onBeforeMount(async () => {
   const response = await getUser()
   if (!store.authUser.length) {
-    store.getAuthUser
+    store.getAuthUser()
     user.value = response?.data
     user.value.profile_picture = store.getUrl(response?.data.profile_picture)
     profilePicture.value = store.getUrl(response?.data.profile_picture)

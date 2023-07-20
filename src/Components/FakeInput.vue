@@ -28,6 +28,6 @@ defineProps({
   edit: { type: Function, required: true }
 })
 const store = useUsersStore()
-store.getAuthUser
+store.getAuthUser()
 const user = ref(store.authUser)
 </script>

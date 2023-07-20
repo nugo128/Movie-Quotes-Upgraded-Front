@@ -193,7 +193,7 @@ const submit = async (val) => {
 
 onBeforeMount(async () => {
   if (!user.value.length) {
-    store.getAuthUser
+    store.getAuthUser()
     user.value = store.authUser
   }
   if (!movieStore.categories.length) {

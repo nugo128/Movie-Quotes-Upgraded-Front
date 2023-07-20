@@ -89,7 +89,7 @@ const googleAuth = async () => {
 const submit = async (value) => {
   try {
     await userLogin(value)
-    router.replace({ name: 'news_feed' })
+    router.replace({ path: '/newsfeed' })
   } catch (error) {
     console.error(JSON.parse(error.request.response).message[localeStore.lang])
     errors.value = JSON.parse(error.request.response).message[localeStore.lang]

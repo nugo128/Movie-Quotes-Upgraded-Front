@@ -129,7 +129,7 @@ onMounted(async () => {
   instantiatePusher()
   let user = 0
   if (!store.authUser[0]) {
-    store.getAuthUser
+    store.getAuthUser()
   }
   await getUser()
     .then((response) => (user = response.data.id))

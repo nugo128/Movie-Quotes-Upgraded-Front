@@ -231,13 +231,9 @@ const emailIsSent = (showEmail) => {
   showPasswordResetEmail.value
     ? (showResetEmailSent.value = showEmail)
     : (showResetEmailSent.value = false)
-  !showPasswordResetEmail.value
-    ? ''
-    : router.replace({ path: '/', query: { resetEmailSent: true } })
   saveModal(!showPasswordResetEmail.value, { resetEmailSent: true })
 
   showRegistration.value ? (showEmailSent.value = showEmail) : (showEmailSent.value = false)
-  !showRegistration.value ? '' : router.replace({ path: '/', query: { emailSent: true } })
   saveModal(!showRegistration.value, { emailSent: true })
   showRegistration.value = false
   showPasswordResetEmail.value = false
@@ -248,9 +244,6 @@ const resetSuccessfull = () => {
   showPasswordResetForm.value = false
 }
 const toggleLogin = (login) => {
-  showLogin.value
-    ? router.replace({ path: '/' })
-    : router.replace({ path: '/', query: { login: true } })
   saveModal(showLogin.value, { login: true })
   showRegistration.value = false
   showPasswordResetEmail.value = false

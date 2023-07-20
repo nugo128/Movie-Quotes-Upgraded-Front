@@ -174,7 +174,7 @@ const toggleQuote = () => {
 }
 onBeforeMount(async () => {
   if (!store.authUser.length) {
-    store.getAuthUser
+    store.getAuthUser()
   }
 })
 </script>

@@ -195,7 +195,7 @@ const changeInput = (e) => {
 }
 onBeforeMount(async () => {
   if (!store.authUser[0]) {
-    store.getAuthUser
+    store.getAuthUser()
   }
   visibleComments.value = allComments.value.slice(-2)
 })
@@ -226,7 +226,7 @@ const newLike = async () => {
 }
 const submit = async (value) => {
   if (!store.authUser[0]) {
-    store.getAuthUser
+    store.getAuthUser()
   }
   const data = {
     quote_id: String(props.quoteID),

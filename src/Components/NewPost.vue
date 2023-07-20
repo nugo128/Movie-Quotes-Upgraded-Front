@@ -204,7 +204,7 @@ const movieStore = useMovieStore()
 const user = ref(userStore.authUser[0])
 onBeforeMount(async () => {
   if (!userStore.authUser.length) {
-    userStore.getAuthUser
+    userStore.getAuthUser()
   }
   if (!movieStore.movies?.length) {
     movieStore.getMovie

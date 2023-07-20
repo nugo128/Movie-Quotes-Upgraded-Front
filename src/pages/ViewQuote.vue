@@ -142,7 +142,7 @@ const likeCount = ref(0)
 const likeId = ref(null)
 const store = useUsersStore()
 if (!store.authUser.length) {
-  store.getAuthUser
+  store.getAuthUser()
 }
 onMounted(async () => {
   instantiatePusher()
@@ -256,7 +256,7 @@ const newLike = async () => {
 }
 onBeforeMount(async () => {
   if (!store.authUser[0]) {
-    store.getAuthUser
+    store.getAuthUser()
   }
   if (!quoteStore.quote.length) {
     quoteStore.getQuote(route.query.id)

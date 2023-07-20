@@ -30,7 +30,7 @@ const url = computed(() => {
 })
 onBeforeMount(() => {
   if (!store.authUser.length) {
-    store.getAuthUser
+    store.getAuthUser()
   }
 })
 </script>

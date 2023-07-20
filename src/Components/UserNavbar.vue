@@ -93,7 +93,7 @@ const editedUser = ref(store.authUser)
 const user = ref([])
 onBeforeMount(async () => {
   if (!store.authUser[0]) {
-    store.getAuthUser
+    store.getAuthUser()
   }
   user.value = store.authUser
   user.value.profile_picture = store.getUrl(store.authUser.profile_picture)
