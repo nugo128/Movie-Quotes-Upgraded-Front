@@ -3,7 +3,7 @@
     <textarea
       v-bind="field"
       :name="name"
-      class="h-20 w-full bg-transparent border border-[#6C757D] p-2 rounded md:text-xl md:my-2"
+      class="h-20 w-full bg-transparent border border-text-gray p-2 rounded md:text-xl md:my-2"
       :placeholder="placeholder"
       :value="inputData"
       @input="inputHandler"

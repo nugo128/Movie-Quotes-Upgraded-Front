@@ -6,13 +6,13 @@
       >
         <div class="pt-10 pb-4 flex flex-col gap-6">
           <h2 class="px-12 text-sm text-center">{{ $t('profile.you_sure') }}</h2>
-          <div class="w-full h-px bg-[#CED4DA33] mt-5"></div>
+          <div class="w-full h-px bg-modal-border mt-5"></div>
           <div class="text-white flex justify-between px-8 text-xs">
-            <button type="button" class="px-4 py-2 cursor-pointer text-[#CED4DA]" @click="cancel">
+            <button type="button" class="px-4 py-2 cursor-pointer text-light-gray" @click="cancel">
               {{ $t('profile.cancel') }}
             </button>
             <button
-              class="bg-[#E31221] px-4 py-2 rounded cursor-pointer"
+              class="bg-light-red px-4 py-2 rounded cursor-pointer"
               :class="!valid && 'pointer-events-none'"
               @click="submit"
             >
@@ -25,11 +25,11 @@
     </div>
     <slot v-if="!youSure"></slot>
     <div v-if="!youSure" class="text-white ml-auto mt-16 flex justify-between px-8 text-xs">
-      <button type="button" class="px-4 py-2 cursor-pointer text-[#CED4DA]" @click="cancel">
+      <button type="button" class="px-4 py-2 cursor-pointer text-light-gray" @click="cancel">
         {{ $t('profile.cancel') }}
       </button>
       <div
-        class="bg-[#E31221] px-4 py-2 rounded cursor-pointer"
+        class="bg-light-red px-4 py-2 rounded cursor-pointer"
         :class="!valid && 'pointer-events-none'"
         @click="edit"
       >

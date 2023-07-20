@@ -1,5 +1,7 @@
 <template>
-  <header class="md:px-16 px-9 py-6 bg-[#24222F] flex justify-between fixed right-0 w-full z-[990]">
+  <header
+    class="md:px-16 px-9 py-6 bg-default-bg flex justify-between fixed right-0 w-full z-[990]"
+  >
     <img src="../assets/images/burger.svg" class="w-5 md:hidden" alt="" @click="toggleMenu" />
     <h2 class="text-[#DDCCAA] md:block hidden">MOVIE QUOTES</h2>
     <div class="flex gap-10 items-center">
@@ -42,9 +44,9 @@
                   :src="store.getUrl(notify?.picture)"
                   alt=""
                   class="rounded-full md:w-20 md:h-20 w-15 h-15"
-                  :class="!notify.seen ? 'border-[#198754] border-2' : ''"
+                  :class="!notify.seen ? 'border-light-green border-2' : ''"
                 />
-                <h3 class="text-[#198754] text-sm md:hidden">
+                <h3 class="text-light-green text-sm md:hidden">
                   {{ notify.seen ? '' : $t('notifications.new') }}
                 </h3>
               </div>
@@ -81,7 +83,7 @@
               <h3 class="text-white hidden md:block">
                 {{ getTimeAgo(notify.createdAt) }}
               </h3>
-              <h3 class="text-[#198754] hidden md:block">
+              <h3 class="text-light-green hidden md:block">
                 {{ notify.seen ? '' : $t('notifications.new') }}
               </h3>
             </div>

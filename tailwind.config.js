@@ -1,4 +1,5 @@
 /* eslint-env node */
+const { colors: defaultColors } = require('tailwindcss/defaultTheme')
 module.exports = {
   purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   darkMode: false, // or 'media' or 'class'
@@ -22,6 +23,20 @@ module.exports = {
       },
       padding: {
         440: '440px'
+      },
+      colors: {
+        ...defaultColors,
+        ...{
+          'light-gray': '#CED4DA',
+          'default-bg': '#24222F',
+          'medium-gray': '#EFEFEF33',
+          'text-gray': '#6C757D',
+          'border-gray': '#6C757DB2',
+          'light-red': '#E31221',
+          'light-green': '#198754',
+          'modal-text': '#9c9a9a',
+          'modal-border': '#CED4DA33'
+        }
       }
     }
   },

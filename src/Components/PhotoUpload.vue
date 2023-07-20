@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex justify-between md:justify-start items-center border md:pr-2 border-[#6C757D] rounded py-5 mb-5 md:mb-7"
+    class="flex justify-between md:justify-start items-center border md:pr-2 border-text-gray rounded py-5 mb-5 md:mb-7"
     :class="thumbnail ? 'border-0' : ''"
     @dragover.prevent=""
     @drop.prevent="dragPhoto"

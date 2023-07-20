@@ -101,7 +101,7 @@
           {{ $t('header.log_in') }}
         </button>
         <button
-          class="bg-[#E31221] text-white md:text-base text-[0.625rem] px-2 py-1 md:px-7 rounded"
+          class="bg-light-red text-white md:text-base text-[0.625rem] px-2 py-1 md:px-7 rounded"
           @click="registrationHandler"
         >
           {{ $t('header.sign_up') }}
@@ -118,7 +118,7 @@
         {{ $t('main_text.find_any_quote') }}
       </h2>
       <button
-        class="bg-[#E31221] text-white md:p-3 py-1 px-3 rounded mt-5"
+        class="bg-light-red text-white md:p-3 py-1 px-3 rounded mt-5"
         @click="registrationHandler"
       >
         {{ $t('main_text.get_started') }}

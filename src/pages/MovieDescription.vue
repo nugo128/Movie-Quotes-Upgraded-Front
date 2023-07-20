@@ -45,14 +45,14 @@
                 }}
                 <span>({{ description?.year }})</span>
               </h2>
-              <div class="hidden md:flex gap-4 bg-[#24222F] py-2 px-7 rounded-xl">
+              <div class="hidden md:flex gap-4 bg-default-bg py-2 px-7 rounded-xl">
                 <img
                   src="../assets/images/edit.svg"
                   class="w-5 h-5 cursor-pointer"
                   alt=""
                   @click="editMovieHandler"
                 />
-                <div class="h-full w-[1px] bg-[#EFEFEF33]"></div>
+                <div class="h-full w-[1px] bg-medium-gray"></div>
                 <img
                   src="../assets/images/delete.svg"
                   class="w-5 h-5 cursor-pointer"
@@ -63,7 +63,7 @@
             </div>
             <div class="flex gap-4 flex-wrap">
               <h3
-                class="bg-[#6C757D] w-max px-3 py-1 rounded-md text-sm md:text-base text-white"
+                class="bg-text-gray w-max px-3 py-1 rounded-md text-sm md:text-base text-white"
                 v-for="genre in description?.category"
                 :key="genre.id"
               >
@@ -75,7 +75,7 @@
               </h3>
             </div>
             <div>
-              <h2 class="text-[#CED4DA] text-sm md:text-base">
+              <h2 class="text-light-gray text-sm md:text-base">
                 {{ $t('movies.director') }}:
                 <span class="text-white">
                   {{
@@ -104,10 +104,10 @@
             <span>{{ $t('movies.all_quotes') }}</span>
             <span class="text-sm">({{ $t('movies.total') }} {{ description?.quote?.length }})</span>
           </h2>
-          <div class="md:h-7 md:w-px h-px w-full md:mb-0 mb-4 bg-[#EFEFEF33]"></div>
+          <div class="md:h-7 md:w-px h-px w-full md:mb-0 mb-4 bg-medium-gray"></div>
           <button
             @click="newQuoteHandler"
-            class="py-2 px-4 bg-[#E31221] rounded-md flex gap-2 items-center text-sm md:text-base text-white"
+            class="py-2 px-4 bg-light-red rounded-md flex gap-2 items-center text-sm md:text-base text-white"
           >
             <img src="../assets/images/plus.svg" alt="" />{{ $t('movies.add_quote') }}
           </button>

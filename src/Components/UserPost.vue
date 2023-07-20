@@ -60,7 +60,7 @@
             @input="changeInput"
             type="text"
             :placeholder="$t('newsfeed.comment')"
-            class="bg-[#24222F] w-full h-14 p-7 outline-none rounded-md"
+            class="bg-default-bg w-full h-14 p-7 outline-none rounded-md"
           />
         </Field>
       </Form>

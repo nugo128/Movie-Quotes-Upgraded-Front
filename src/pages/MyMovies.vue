@@ -20,7 +20,7 @@
             ></search-bar>
             <button
               @click="newMovieHandler"
-              class="py-2 px-2 md:px-4 bg-[#E31221] rounded-lg flex gap-2 items-center -mt-4 md:mt-0 text-sm md:text-base"
+              class="py-2 px-2 md:px-4 bg-light-red rounded-lg flex gap-2 items-center -mt-4 md:mt-0 text-sm md:text-base"
             >
               <img src="../assets/images/plus.svg" alt="" />
               <span class="hidden md:block">{{ $t('movies.add_movie') }}</span>

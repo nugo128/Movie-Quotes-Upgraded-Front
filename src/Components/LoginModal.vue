@@ -2,7 +2,7 @@
   <Form @submit="submit" v-slot="{ meta }" class="flex flex-col gap-3 px-20 rounded z-[100]">
     <div class="flex flex-col justify-center items-center md:gap-4 gap-2">
       <h2 class="text-white text-base md:text-3xl">{{ $t('login') }}</h2>
-      <p class="text-[#6C757D] text-xs md:text-base [400px] text-center">
+      <p class="text-text-gray text-xs md:text-base [400px] text-center">
         {{ $t('welcome_back') }}
       </p>
     </div>
@@ -36,7 +36,7 @@
       </h3>
     </div>
     <button
-      class="bg-[#E31221] py-2 md:mt-3 mt-1 mb-1 rounded-sm"
+      class="bg-light-red py-2 md:mt-3 mt-1 mb-1 rounded-sm"
       :class="{ ['pointer-events-none']: !meta.valid }"
     >
       <p class="text-white md:text-base text-xs">{{ $t('sign_in') }}</p>
@@ -51,7 +51,7 @@
     </button>
 
     <div class="flex justify-center md:mt-5 mt-2">
-      <h2 class="text-[#6C757D] md:text-sm text-xs">
+      <h2 class="text-text-gray md:text-sm text-xs">
         {{ $t('dont_have_account') }}
         <span class="underline text-[#0D6EFD] cursor-pointer" @click="toggleRegistration">{{
           $t('sign_up')

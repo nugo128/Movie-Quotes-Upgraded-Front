@@ -3,7 +3,7 @@
     <h2 class="text-center pt-8">
       {{ description ? $t('movies.edit_movie') : $t('movies.add_movie') }}
     </h2>
-    <div class="w-full h-[1px] bg-[#EFEFEF33] mt-4 bg-opacity-20"></div>
+    <div class="w-full h-[1px] bg-medium-gray mt-4 bg-opacity-20"></div>
   </div>
   <div class="flex flex-col gap-6 px-8 pb-10">
     <div class="flex gap-5 items-center">
@@ -31,7 +31,7 @@
       ></movie-input>
       <div class="relative">
         <div
-          class="dropdown-container p-2 border border-[#6C757D] cursor-pointer rounded"
+          class="dropdown-container p-2 border border-text-gray cursor-pointer rounded"
           @click="toggleDropdown"
         >
           <span v-if="selectedItems.length === 0" class="pl-2">{{ $t('movies.genres') }}</span>
@@ -39,7 +39,7 @@
             <span
               v-for="item in selectedItems"
               :key="item.id"
-              class="inline-flex items-center space-x-2 px-2 py-1 bg-[#6C757D] text-white rounded mr-2 my-1"
+              class="inline-flex items-center space-x-2 px-2 py-1 bg-text-gray text-white rounded mr-2 my-1"
             >
               {{ JSON.parse(item.category)[localeStore.lang] }}
               <button @click.stop="removeItem(item.id)" class="focus:outline-none">
@@ -109,7 +109,7 @@
       ></movie-textarea>
       <photo-upload :placeholderValue="store.getUrl(description?.thumbnail)"></photo-upload>
       <h2 v-if="imageError" class="text-sm -mt-6 text-red-500">{{ imageError }}</h2>
-      <button type="submit" class="bg-[#E31221] rounded py-2">
+      <button type="submit" class="bg-light-red rounded py-2">
         {{ description ? $t('movies.edit_movie') : $t('movies.add_movie') }}
       </button>
     </Form>

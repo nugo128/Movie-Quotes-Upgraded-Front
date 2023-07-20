@@ -10,11 +10,11 @@
     <a
       href="https://mail.google.com/mail"
       target="_blank"
-      class="bg-[#E31221] md:w-full text-center py-2 rounded-md"
+      class="bg-light-red md:w-full text-center py-2 rounded-md"
       :class="skip ? 'w-64' : 'w-48 '"
       >{{ visitEmail }}</a
     >
-    <h3 v-if="skip" @click="skipReset" class="cursor-pointer text-[#6C757D]">{{ skip }}</h3>
+    <h3 v-if="skip" @click="skipReset" class="cursor-pointer text-text-gray">{{ skip }}</h3>
   </div>
 </template>
 <script setup>

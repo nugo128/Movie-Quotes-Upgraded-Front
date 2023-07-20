@@ -13,7 +13,7 @@
           : $t('newsfeed.add_new_quote')
       }}
     </h2>
-    <div class="w-full h-[1px] bg-[#EFEFEF33] mt-4 bg-opacity-20"></div>
+    <div class="w-full h-[1px] bg-medium-gray mt-4 bg-opacity-20"></div>
   </div>
   <div class="flex flex-col gap-10 px-8 pb-20">
     <div class="flex gap-5 items-center">
@@ -37,7 +37,7 @@
         </h2>
         <div class="flex gap-4 flex-wrap order-3 md:order-2 text-sm md:text-lg">
           <h3
-            class="bg-[#6C757D] w-max md:px-3 py-1 px-2 md:text-base text-xs rounded-md text-white"
+            class="bg-text-gray w-max md:px-3 py-1 px-2 md:text-base text-xs rounded-md text-white"
             v-for="genre in movie.category"
             :key="genre.id"
           >
@@ -108,7 +108,7 @@
       </div>
       <ErrorMessage class="text-red-400 text-sm px-5 md:w-[400px]" name="movie_id" />
       <button
-        class="w-full bg-[#E31221] py-3 rounded mb-1 md:text-xl text-lg"
+        class="w-full bg-light-red py-3 rounded mb-1 md:text-xl text-lg"
         :class="{ ['pointer-events-none']: !meta.valid }"
         @click="submit"
       >

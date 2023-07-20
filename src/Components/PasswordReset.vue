@@ -2,14 +2,14 @@
   <Form @submit="submit" v-slot="{ meta }" class="flex flex-col gap-5 px-20 rounded z-[100]">
     <div class="flex flex-col justify-center items-center gap-3">
       <h2 class="text-white md:text-3xl text-2xl">{{ header }}</h2>
-      <p class="text-[#6C757D] max-w-[25rem] text-center md:text-sm text-xs">
+      <p class="text-text-gray max-w-[25rem] text-center md:text-sm text-xs">
         {{ secondaryText }}
       </p>
     </div>
     <slot></slot>
     <p v-if="errors && meta.valid" class="text-red-500 text-sm -mt-4">{{ errors }}</p>
     <button
-      class="bg-[#E31221] md:py-2 py-1 md:mt-3 mt-1 mb-1 rounded-sm"
+      class="bg-light-red md:py-2 py-1 md:mt-3 mt-1 mb-1 rounded-sm"
       :class="{ ['pointer-events-none']: !meta.valid }"
     >
       <p class="text-white">{{ buttonText }}</p>
@@ -17,7 +17,7 @@
 
     <div class="flex justify-center mt-5 gap-2 cursor-pointer" @click="toggleLogin">
       <img src="@/assets/images/back.svg" alt="" />
-      <p class="text-[#6C757D]">{{ $t('send_email.back') }}</p>
+      <p class="text-text-gray">{{ $t('send_email.back') }}</p>
     </div>
   </Form>
 </template>

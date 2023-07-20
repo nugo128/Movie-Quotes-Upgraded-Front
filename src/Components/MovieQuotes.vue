@@ -4,7 +4,7 @@
   >
     <div class="flex justify-between relative flex-col md:flex-row gap-6 md:gap-0">
       <img :src="store.getUrl(thumbnail)" class="md:w-56 w-full h-36 rounded-sm mr-8" alt="" />
-      <h2 class="my-auto text-lg text-[#CED4DA] break-words">
+      <h2 class="my-auto text-lg text-light-gray break-words">
         "{{ JSON.parse(quote)[localeStore.lang] }}"
       </h2>
       <span class="text-white text-lg cursor-pointer hidden md:block" @click="toggleQuote"
@@ -12,7 +12,7 @@
       >
       <div
         v-if="viewQuote"
-        class="absolute bg-[#24222F] md:left-[44.5rem] right-0 top-12 md:top-8 md:px-10 py-8 px-8 rounded-lg flex flex-col gap-8 text-white w-60"
+        class="absolute bg-default-bg md:left-[44.5rem] right-0 top-12 md:top-8 md:px-10 py-8 px-8 rounded-lg flex flex-col gap-8 text-white w-60"
       >
         <div class="flex items-center gap-4 cursor-pointer" @click="view">
           <img src="../assets/images/view.svg" class="w-5" alt="" />
@@ -28,7 +28,7 @@
         </div>
       </div>
     </div>
-    <div class="w-full h-px bg-[#EFEFEF33]"></div>
+    <div class="w-full h-px bg-medium-gray"></div>
     <div class="flex justify-between">
       <div class="flex gap-5">
         <div class="flex gap-3 items-center text-white">
