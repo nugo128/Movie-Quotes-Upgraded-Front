@@ -163,8 +163,8 @@ const router = useRouter()
 const addQuote = ref(route.query.addQuote)
 const newQuoteHandler = () => {
   addQuote.value
-    ? router.replace({ path: '/movie-description', query: { id: route.query.id } })
-    : router.replace({ path: '/movie-description', query: { addQuote: true, id: route.query.id } })
+    ? router.replace({ name: 'movie-description', query: { id: route.query.id } })
+    : router.replace({ name: 'movie-description', query: { addQuote: true, id: route.query.id } })
   addQuote.value = !addQuote.value
 }
 const update = (val) => {
@@ -185,7 +185,7 @@ const deleteQuote = (id) => {
   }
 }
 const updateQuotes = async () => {
-  router.replace({ path: '/movie-description', query: { id: route.query.id } })
+  router.replace({ name: 'movie-description', query: { id: route.query.id } })
   const resp = await movieDescription(route.query.id)
   addQuote.value = false
   description.value = resp.data
@@ -194,7 +194,7 @@ const updateQuotes = async () => {
 const deleteMovie = async () => {
   await deleteMovies(route.query.id)
     .then(() => {
-      router.replace({ path: '/my-movies', query: { delete: route.query.id } })
+      router.replace({ name: 'my-movies', query: { delete: route.query.id } })
     })
     .catch((error) => {
       console.error(error)

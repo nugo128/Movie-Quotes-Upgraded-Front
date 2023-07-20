@@ -195,37 +195,35 @@ if (route.path === '/verify' && route.query.token.length === 128) {
 if (route.path === '/reset' && route.query.token.length === 128) {
   showPasswordResetForm.value = true
 }
+
+const saveModal = (modalState, queryName) => {
+  modalState ? router.replace({ name: 'home' }) : router.replace({ name: 'home', query: queryName })
+}
 const togglePasswordResetEmail = (reset) => {
-  showPasswordResetEmail.value
-    ? router.replace({ path: '/' })
-    : router.replace({ path: '/', query: { resetEmail: true } })
+  saveModal(showPasswordResetEmail.value, { resetEmail: true })
   showPasswordResetEmail.value = reset
   showLogin.value = !reset
 }
 const loginModalHandler = () => {
-  showLogin.value
-    ? router.replace({ path: '/' })
-    : router.replace({ path: '/', query: { login: true } })
+  saveModal(showLogin.value, { login: true })
   showLogin.value = !showLogin.value
 }
 const resetModalHandler = () => {
-  router.replace({ path: '/' })
+  router.replace({ name: 'home' })
   showPasswordResetEmail.value = false
   showPasswordResetForm.value = false
 }
 const registrationHandler = () => {
-  showRegistration.value
-    ? router.replace({ path: '/' })
-    : router.replace({ path: '/', query: { registration: true } })
+  saveModal(showRegistration.value, { registration: true })
   showRegistration.value = !showRegistration.value
 }
 const emailSentHandler = () => {
-  router.replace({ path: '/' })
+  router.replace({ name: 'home' })
   showEmailSent.value = false
   showResetEmailSent.value = false
 }
 const successModalHandler = () => {
-  router.replace({ path: '/' })
+  router.replace({ name: 'home' })
   showSuccess.value = false
   showSuccessPassword.value = false
 }
@@ -236,14 +234,16 @@ const emailIsSent = (showEmail) => {
   !showPasswordResetEmail.value
     ? ''
     : router.replace({ path: '/', query: { resetEmailSent: true } })
+  saveModal(!showPasswordResetEmail.value, { resetEmailSent: true })
 
   showRegistration.value ? (showEmailSent.value = showEmail) : (showEmailSent.value = false)
   !showRegistration.value ? '' : router.replace({ path: '/', query: { emailSent: true } })
+  saveModal(!showRegistration.value, { emailSent: true })
   showRegistration.value = false
   showPasswordResetEmail.value = false
 }
 const resetSuccessfull = () => {
-  router.replace({ path: '/', query: { successPassword: true } })
+  router.replace({ name: 'home', query: { successPassword: true } })
   showSuccessPassword.value = true
   showPasswordResetForm.value = false
 }
@@ -251,6 +251,7 @@ const toggleLogin = (login) => {
   showLogin.value
     ? router.replace({ path: '/' })
     : router.replace({ path: '/', query: { login: true } })
+  saveModal(showLogin.value, { login: true })
   showRegistration.value = false
   showPasswordResetEmail.value = false
   showPasswordResetForm.value = false
@@ -259,9 +260,7 @@ const toggleLogin = (login) => {
   showLogin.value = login
 }
 const toggleRegistration = (registration) => {
-  showRegistration.value
-    ? router.replace({ path: '/' })
-    : router.replace({ path: '/', query: { registration: true } })
+  saveModal(showRegistration.value, { registration: true })
   showRegistration.value = registration
   showLogin.value = !registration
 }

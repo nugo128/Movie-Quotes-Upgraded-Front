@@ -61,19 +61,19 @@ const store = useMovieStore()
 const movies = ref(store.userMovies)
 const displayNewMovie = (val) => {
   addNewMovie.value = false
-  router.replace({ path: '/my-movies' })
+  router.replace({ name: 'my-movies' })
   movies.value.unshift(val.data)
 }
 const router = useRouter()
 const addNewMovie = ref(route.query.addMovie)
 const newMovieHandler = () => {
   addNewMovie.value
-    ? router.replace({ path: '/my-movies' })
-    : router.replace({ path: '/my-movies', query: { addMovie: true } })
+    ? router.replace({ name: 'my-movies' })
+    : router.replace({ name: 'my-movies', query: { addMovie: true } })
   addNewMovie.value = !addNewMovie.value
 }
 const seeDescription = (movie) => {
-  router.replace({ path: '/movie-description', query: { id: movie.id } })
+  router.replace({ name: 'movie-description', query: { id: movie.id } })
 }
 const searchHandler = () => {
   store.getUserMovies

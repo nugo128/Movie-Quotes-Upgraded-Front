@@ -311,7 +311,7 @@ const cancel = () => {
   if (!editPassword.value && !editUsername.value && !editEmail.value) {
     router.go(-1)
   } else {
-    router.replace({ path: '/user-profile' })
+    router.replace({ name: 'user_profile' })
   }
   editPassword.value = false
   editUsername.value = false
@@ -341,11 +341,11 @@ const submit = async (val) => {
     showSuccess.value = false
     showConfirmation.value = true
   }
-  router.replace({ path: '/user-profile' })
+  router.replace({ name: 'user_profile' })
 }
 const showEditPasswordField = () => {
   router.replace({
-    path: '/user-profile',
+    name: 'user_profile',
     query: {
       editPassword: true,
       editEmail: route.query.editEmail,
@@ -356,7 +356,7 @@ const showEditPasswordField = () => {
 }
 const showEditUsernameField = () => {
   router.replace({
-    path: '/user-profile',
+    name: 'user_profile',
     query: {
       editPassword: route.query.editPassword,
       editEmail: route.query.editEmail,
@@ -367,7 +367,7 @@ const showEditUsernameField = () => {
 }
 const showEditEmailField = () => {
   router.replace({
-    path: '/user-profile',
+    name: 'user_profile',
     query: {
       editPassword: route.query.editPassword,
       editEmail: true,

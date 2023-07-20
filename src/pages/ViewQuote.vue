@@ -207,7 +207,7 @@ const allComments = ref(data.value.comments)
 const visibleComments = ref([])
 const input = ref('')
 const back = () => {
-  router.replace({ path: '/movie-description', query: { id: data.value.movie.id } })
+  router.replace({ name: 'movie-description', query: { id: data.value.movie.id } })
 }
 const updateQuotes = (e) => {
   data.value.quote = e.quote

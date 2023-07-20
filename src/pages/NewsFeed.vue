@@ -65,15 +65,15 @@ onBeforeMount(async () => {
 const addNewPost = ref(route.query.newPost)
 const newPostHandler = () => {
   addNewPost.value
-    ? router.replace({ path: '/newsfeed' })
-    : router.replace({ path: '/newsfeed', query: { newPost: true } })
+    ? router.replace({ name: 'news_feed' })
+    : router.replace({ name: 'news_feed', query: { newPost: true } })
   addNewPost.value = !addNewPost.value
 }
 const updatePosts = async () => {
   store.clear()
   store.getPosts
   addNewPost.value = !addNewPost.value
-  router.replace({ path: '/newsfeed' })
+  router.replace({ name: 'news_feed' })
   postData.value = store.posts
   if (!store.posts.length) {
     const response = await getPosts()
