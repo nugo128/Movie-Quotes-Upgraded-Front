@@ -66,8 +66,8 @@ import { Form, Field } from 'vee-validate'
 import AuthInput from './AuthInput.vue'
 import { useRouter } from 'vue-router'
 import { defineEmits, ref } from 'vue'
-import { userLogin, googleLogin } from '../services/index'
-import { useLocaleStore } from '../stores/localeStore'
+import { userLogin, googleLogin } from '@/services/index'
+import { useLocaleStore } from '@/stores/localeStore'
 const errors = ref('')
 const localeStore = useLocaleStore()
 const router = useRouter()

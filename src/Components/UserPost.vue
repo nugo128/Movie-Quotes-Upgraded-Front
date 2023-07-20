@@ -73,10 +73,10 @@ import UserComment from './UserComment.vue'
 import LikeButton from './LikeButton.vue'
 import { defineProps, ref, onBeforeMount, onMounted } from 'vue'
 import { Form, Field } from 'vee-validate'
-import { useUsersStore } from '../stores/userStore'
-import { useLocaleStore } from '../stores/localeStore'
-import { like, removeLike, getLikes, comments } from '../services/index'
-import instantiatePusher from '../helpers/instantiatePusher'
+import { useUsersStore } from '@/stores/userStore'
+import { useLocaleStore } from '@/stores/localeStore'
+import { like, removeLike, getLikes, comments } from '@/services/index'
+import instantiatePusher from '@/helpers/instantiatePusher'
 const localeStore = useLocaleStore()
 const liked = ref(false)
 const likeCount = ref(props.numOfLikes)

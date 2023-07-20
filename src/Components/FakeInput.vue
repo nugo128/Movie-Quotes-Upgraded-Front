@@ -20,7 +20,7 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-import { useUsersStore } from '../stores/userStore'
+import { useUsersStore } from '@/stores/userStore'
 defineProps({
   name: { type: String, required: true },
   type: { type: String, required: true },

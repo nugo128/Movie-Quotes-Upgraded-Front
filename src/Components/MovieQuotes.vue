@@ -4,7 +4,7 @@
   >
     <div class="flex justify-between relative flex-col md:flex-row gap-6 md:gap-0">
       <img :src="store.getUrl(thumbnail)" class="md:w-56 w-full h-36 rounded-sm mr-8" alt="" />
-      <h2 class="my-auto text-lg text-light-gray break-words">
+      <h2 class="my-auto text-lg text-light-gr@ break-words">
         "{{ JSON.parse(quote)[localeStore.lang] }}"
       </h2>
       <span class="text-white text-lg cursor-pointer hidden md:block" @click="toggleQuote"
@@ -50,9 +50,9 @@
 <script setup>
 import LikeButton from './LikeButton.vue'
 import { ref, onBeforeMount, onMounted } from 'vue'
-import instantiatePusher from '../helpers/instantiatePusher'
-import { useUsersStore } from '../stores/userStore'
-import { useLocaleStore } from '../stores/localeStore'
+import instantiatePusher from '@/helpers/instantiatePusher'
+import { useUsersStore } from '@/stores/userStore'
+import { useLocaleStore } from '@/stores/localeStore'
 import { like, removeLike, getLikes, deleteQuotes } from '../services/index'
 const localeStore = useLocaleStore()
 const store = useUsersStore()

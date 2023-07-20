@@ -119,18 +119,18 @@
 </template>
 
 <script setup>
-import UserNavbar from '../Components/UserNavbar.vue'
+import UserNavbar from '@/Components/UserNavbar.vue'
 import { onBeforeMount, ref, onMounted } from 'vue'
-import instantiatePusher from '../helpers/instantiatePusher'
+import instantiatePusher from '@/helpers/instantiatePusher'
 import { useRoute, useRouter } from 'vue-router'
-import { useUsersStore } from '../stores/userStore'
+import { useUsersStore } from '@/stores/userStore'
 import { Form, Field } from 'vee-validate'
-import UserComment from '../Components/UserComment.vue'
-import NewitemModal from '../Components/NewitemModal.vue'
-import LikeButton from '../Components/LikeButton.vue'
-import NewPost from '../Components/NewPost.vue'
-import { like, removeLike, getLikes, comments, deleteQuotes, viewQuote } from '../services/index'
-import { useQuoteStore } from '../stores/quoteStore'
+import UserComment from '@/Components/UserComment.vue'
+import NewitemModal from '@/Components/NewitemModal.vue'
+import LikeButton from '@/Components/LikeButton.vue'
+import NewPost from '@/Components/NewPost.vue'
+import { like, removeLike, getLikes, comments, deleteQuotes, viewQuote } from '@/services/index'
+import { useQuoteStore } from '@/stores/quoteStore'
 const quoteStore = useQuoteStore()
 const edit = ref(false)
 const data = ref({})

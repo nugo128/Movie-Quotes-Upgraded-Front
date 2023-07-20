@@ -117,14 +117,14 @@
 </template>
 
 <script setup>
-import { useUsersStore } from '../stores/userStore'
-import { useMovieStore } from '../stores/movieStore'
+import { useUsersStore } from '@/stores/userStore'
+import { useMovieStore } from '@/stores/movieStore'
 import MovieInput from './MovieInput.vue'
 import MovieTextarea from './MovieTextarea.vue'
 import { ref, onBeforeMount, defineEmits } from 'vue'
-import { useLocaleStore } from '../stores/localeStore'
+import { useLocaleStore } from '@/stores/localeStore'
 import { Form } from 'vee-validate'
-import { addMovie, editMovie } from '../services/index'
+import { addMovie, editMovie } from '@/services/index'
 import PhotoUpload from './PhotoUpload.vue'
 const emits = defineEmits(['newMovie', 'editMovie'])
 const localeStore = useLocaleStore()

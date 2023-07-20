@@ -124,11 +124,11 @@
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import textArea from './textArea.vue'
 import PhotoUpload from './PhotoUpload.vue'
-import { useMovieStore } from '../stores/movieStore'
-import { useUsersStore } from '../stores/userStore'
+import { useMovieStore } from '@/stores/movieStore'
+import { useUsersStore } from '@/stores/userStore'
 import { onBeforeMount, ref, defineEmits } from 'vue'
-import { useLocaleStore } from '../stores/localeStore'
-import { deleteQuotes, newPost, editQuote, getUser } from '../services/index'
+import { useLocaleStore } from '@/stores/localeStore'
+import { deleteQuotes, newPost, editQuote, getUser } from '@/services/index'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 const errors = ref('')

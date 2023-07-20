@@ -106,11 +106,11 @@
 <script setup>
 import LanguageSelect from './LanguageSelect.vue'
 import { useRouter } from 'vue-router'
-import { userLogOut } from '../services/index'
+import { userLogOut } from '@/services/index'
 import { onMounted, ref } from 'vue'
-import { useUsersStore } from '../stores/userStore'
-import { useLocaleStore } from '../stores/localeStore'
-import instantiatePusher from '../helpers/instantiatePusher'
+import { useUsersStore } from '@/stores/userStore'
+import { useLocaleStore } from '@/stores/localeStore'
+import instantiatePusher from '@/helpers/instantiatePusher'
 import userNavbar from './UserNavbar.vue'
 import { getUser, getNotification, seenNotifications } from '../services/index'
 const locale = useLocaleStore()

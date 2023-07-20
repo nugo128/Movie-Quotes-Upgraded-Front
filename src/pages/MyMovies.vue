@@ -46,14 +46,14 @@
 </template>
 
 <script setup>
-import UserNavbar from '../Components/UserNavbar.vue'
-import profileHeader from '../Components/profileHeader.vue'
-import NewitemModal from '../Components/NewitemModal.vue'
-import NewMovie from '../Components/NewMovie.vue'
-import SearchBar from '../Components/SearchBar.vue'
-import UserMovie from '../Components/UserMovie.vue'
-import { getUMovies } from '../services/index'
-import { useMovieStore } from '../stores/movieStore'
+import UserNavbar from '@/Components/UserNavbar.vue'
+import profileHeader from '@/Components/profileHeader.vue'
+import NewitemModal from '@/Components/NewitemModal.vue'
+import NewMovie from '@/Components/NewMovie.vue'
+import SearchBar from '@/Components/SearchBar.vue'
+import UserMovie from '@/Components/UserMovie.vue'
+import { getUMovies } from '@/services/index'
+import { useMovieStore } from '@/stores/movieStore'
 import { onBeforeMount, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 const route = useRoute()
@@ -90,7 +90,7 @@ onBeforeMount(async () => {
     store.getCategories
   }
   if (route?.query.delete) {
-    let index = movies.value.find((movie) => movie.id == route?.query.delete)
+    let index = movies.value.find((movie) => movie.id === Number(route?.query.delete))
 
     if (index) {
       let values = movies.value

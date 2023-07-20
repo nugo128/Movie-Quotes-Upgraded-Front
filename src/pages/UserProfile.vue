@@ -245,18 +245,18 @@
 </template>
 
 <script setup>
-import EditprofileModal from '../Components/EditprofileModal.vue'
-import ModalWindow from '../Components/ModalWindow.vue'
-import EmailSent from '../Components/EmailSent.vue'
-import profileHeader from '../Components/profileHeader.vue'
-import UserNavbar from '../Components/UserNavbar.vue'
+import EditprofileModal from '@/Components/EditprofileModal.vue'
+import ModalWindow from '@/Components/ModalWindow.vue'
+import EmailSent from '@/Components/EmailSent.vue'
+import profileHeader from '@/Components/profileHeader.vue'
+import UserNavbar from '@/Components/UserNavbar.vue'
 import { Form, Field } from 'vee-validate'
 import { onBeforeMount, ref } from 'vue'
-import { verifyEmail, editProfile, getUser } from '../services/index'
-import AuthInput from '../Components/AuthInput.vue'
-import FakeInput from '../Components/FakeInput.vue'
-import { useUsersStore } from '../stores/userStore'
-import { usePostsStore } from '../stores/postStore'
+import { verifyEmail, editProfile, getUser } from '@/services/index'
+import AuthInput from '@/Components/AuthInput.vue'
+import FakeInput from '@/Components/FakeInput.vue'
+import { useUsersStore } from '@/stores/userStore'
+import { usePostsStore } from '@/stores/postStore'
 import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()

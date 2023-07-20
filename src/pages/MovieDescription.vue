@@ -132,18 +132,18 @@
 </template>
 
 <script setup>
-import profileHeader from '../Components/profileHeader.vue'
-import UserNavbar from '../Components/UserNavbar.vue'
-import MovieQuotes from '../Components/MovieQuotes.vue'
-import NewitemModal from '../Components/NewitemModal.vue'
-import NewMovie from '../Components/NewMovie.vue'
-import NewPost from '../Components/NewPost.vue'
-import { useUsersStore } from '../stores/userStore'
-import { useLocaleStore } from '../stores/localeStore'
-import { useMovieStore } from '../stores/movieStore'
+import profileHeader from '@/Components/profileHeader.vue'
+import UserNavbar from '@/Components/UserNavbar.vue'
+import MovieQuotes from '@/Components/MovieQuotes.vue'
+import NewitemModal from '@/Components/NewitemModal.vue'
+import NewMovie from '@/Components/NewMovie.vue'
+import NewPost from '@/Components/NewPost.vue'
+import { useUsersStore } from '@/stores/userStore'
+import { useLocaleStore } from '@/stores/localeStore'
+import { useMovieStore } from '@/stores/movieStore'
 import { useRoute, useRouter } from 'vue-router'
 import { onBeforeMount, ref } from 'vue'
-import { movieDescription, deleteMovies } from '../services/index'
+import { movieDescription, deleteMovies } from '@/services/index'
 const editMovie = ref(false)
 const edit = ref(false)
 const movieStore = useMovieStore()

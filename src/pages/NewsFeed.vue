@@ -35,17 +35,17 @@
   </div>
 </template>
 <script setup>
-import NewPost from '../Components/NewPost.vue'
-import profileHeader from '../Components/profileHeader.vue'
-import UserNavbar from '../Components/UserNavbar.vue'
-import SearchBar from '../Components/SearchBar.vue'
-import UserPost from '../Components/UserPost.vue'
-import { usePostsStore } from '../stores/postStore'
+import NewPost from '@/Components/NewPost.vue'
+import profileHeader from '@/Components/profileHeader.vue'
+import UserNavbar from '@/Components/UserNavbar.vue'
+import SearchBar from '@/Components/SearchBar.vue'
+import UserPost from '@/Components/UserPost.vue'
+import { usePostsStore } from '@/stores/postStore'
 import { onBeforeMount, ref } from 'vue'
-import NewitemModal from '../Components/NewitemModal.vue'
-import { useUsersStore } from '../stores/userStore'
+import NewitemModal from '@/Components/NewitemModal.vue'
+import { useUsersStore } from '@/stores/userStore'
 import { useRoute, useRouter } from 'vue-router'
-import { getPosts } from '../services/index'
+import { getPosts } from '@/services/index'
 const route = useRoute()
 const router = useRouter()
 const userStore = useUsersStore()
