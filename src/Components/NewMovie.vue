@@ -117,12 +117,12 @@
 </template>
 
 <script setup>
-import { useUsersStore } from '../stores/user'
-import { useMovieStore } from '../stores/movie'
+import { useUsersStore } from '../stores/userStore'
+import { useMovieStore } from '../stores/movieStore'
 import MovieInput from './MovieInput.vue'
 import MovieTextarea from './MovieTextarea.vue'
 import { ref, onBeforeMount, defineEmits } from 'vue'
-import { useLocaleStore } from '../stores/locale'
+import { useLocaleStore } from '../stores/localeStore'
 import { Form } from 'vee-validate'
 import { addMovie, editMovie } from '../services/index'
 import PhotoUpload from './PhotoUpload.vue'
@@ -193,11 +193,12 @@ const submit = async (val) => {
 
 onBeforeMount(async () => {
   if (!user.value.length) {
-    store.getAuthUser()
+    store.getAuthUser
     user.value = store.authUser
   }
   if (!movieStore.categories.length) {
-    movieStore.getCategories()
+    movieStore.getCategories
+    console.log(movieStore)
   }
   if (props?.description?.category) {
     selectedItems.value = props?.description?.category

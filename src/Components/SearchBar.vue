@@ -56,8 +56,8 @@
 import { ref, defineEmits } from 'vue'
 import { Form, Field } from 'vee-validate'
 import axios from '@/config/axios/index.js'
-import { usePostsStore } from '../stores/post'
-import { useMovieStore } from '../stores/movie'
+import { usePostsStore } from '../stores/postStore'
+import { useMovieStore } from '../stores/movieStore'
 const props = defineProps({
   movie: {
     type: String,

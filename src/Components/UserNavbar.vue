@@ -67,7 +67,7 @@ import HomeButton from './HomeButton.vue'
 import LanguageSelect from './LanguageSelect.vue'
 import MovieIcon from './MovieIcon.vue'
 import { useRoute } from 'vue-router'
-import { useUsersStore } from '../stores/user'
+import { useUsersStore } from '../stores/userStore'
 import { useRouter } from 'vue-router'
 import { userLogOut } from '../services/index'
 const router = useRouter()
@@ -93,7 +93,7 @@ const editedUser = ref(store.authUser)
 const user = ref([])
 onBeforeMount(async () => {
   if (!store.authUser[0]) {
-    store.getAuthUser()
+    store.getAuthUser
   }
   user.value = store.authUser
   user.value.profile_picture = store.getUrl(store.authUser.profile_picture)

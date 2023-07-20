@@ -124,10 +124,10 @@
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import textArea from './textArea.vue'
 import PhotoUpload from './PhotoUpload.vue'
-import { useMovieStore } from '../stores/movie'
-import { useUsersStore } from '../stores/user'
+import { useMovieStore } from '../stores/movieStore'
+import { useUsersStore } from '../stores/userStore'
 import { onBeforeMount, ref, defineEmits } from 'vue'
-import { useLocaleStore } from '../stores/locale'
+import { useLocaleStore } from '../stores/localeStore'
 import { deleteQuotes, newPost, editQuote, getUser } from '../services/index'
 import { useRouter } from 'vue-router'
 const router = useRouter()
@@ -203,7 +203,7 @@ const movieStore = useMovieStore()
 const user = ref(userStore.authUser[0])
 onBeforeMount(async () => {
   if (!userStore.authUser.length) {
-    userStore.getAuthUser()
+    userStore.getAuthUser
   }
   if (!movieStore.movies.length) {
     movieStore.getMovie()

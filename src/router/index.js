@@ -7,7 +7,7 @@ import MovieDescription from '../pages/MovieDescription.vue'
 import ViewQuote from '../pages/ViewQuote.vue'
 import NotFound from '../pages/NotFound.vue'
 import NoPermission from '../pages/NoPermission.vue'
-import { useUsersStore } from '../stores/user'
+import { useUsersStore } from '../stores/userStore'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -62,7 +62,7 @@ router.beforeEach(async (to, from, next) => {
   const store = useUsersStore()
 
   if (!store.authUser.length) {
-    await store.getAuthUser()
+    await store.getAuthUser
   }
 
   if (

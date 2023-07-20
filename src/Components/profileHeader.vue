@@ -106,8 +106,8 @@ import LanguageSelect from './LanguageSelect.vue'
 import { useRouter } from 'vue-router'
 import { userLogOut } from '../services/index'
 import { onMounted, ref } from 'vue'
-import { useUsersStore } from '../stores/user'
-import { useLocaleStore } from '../stores/locale'
+import { useUsersStore } from '../stores/userStore'
+import { useLocaleStore } from '../stores/localeStore'
 import instantiatePusher from '../helpers/instantiatePusher'
 import userNavbar from './UserNavbar.vue'
 import { getUser, getNotification, seenNotifications } from '../services/index'
@@ -127,7 +127,7 @@ onMounted(async () => {
   instantiatePusher()
   let user = 0
   if (!store.authUser[0]) {
-    store.getAuthUser()
+    store.getAuthUser
   }
   await getUser()
     .then((response) => (user = response.data.id))

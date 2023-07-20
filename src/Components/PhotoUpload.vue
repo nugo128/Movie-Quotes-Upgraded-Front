@@ -56,9 +56,9 @@
 
 <script setup>
 import { Field } from 'vee-validate'
-import { useMovieStore } from '../stores/movie'
+import { useMovieStore } from '../stores/movieStore'
 import { ref } from 'vue'
-import { useUsersStore } from '../stores/user'
+import { useUsersStore } from '../stores/userStore'
 const props = defineProps({
   placeholderValue: {
     type: String,

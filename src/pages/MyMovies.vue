@@ -10,7 +10,7 @@
         <div class="text-white flex items-center justify-between md:mb-16 mb-10">
           <h2 class="text-lg flex md-flex-row flex-col md:gap-0 gap-3">
             <span>{{ $t('movies.my_list') }} </span>
-            <span class="text-sm">({{ $t('movies.total') }} {{ movies.length }})</span>
+            <span class="text-sm">({{ $t('movies.total') }} {{ movies?.length }})</span>
           </h2>
           <div class="flex items-center gap-4">
             <search-bar
@@ -53,7 +53,7 @@ import NewMovie from '../Components/NewMovie.vue'
 import SearchBar from '../Components/SearchBar.vue'
 import UserMovie from '../Components/UserMovie.vue'
 import { getUMovies } from '../services/index'
-import { useMovieStore } from '../stores/movie'
+import { useMovieStore } from '../stores/movieStore'
 import { onBeforeMount, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 const route = useRoute()
@@ -76,18 +76,18 @@ const seeDescription = (movie) => {
   router.replace({ path: '/movie-description', query: { id: movie.id } })
 }
 const searchHandler = () => {
-  store.getUserMovies()
+  store.getUserMovies
   movies.value = store.userMovies
 }
 onBeforeMount(async () => {
-  if (!store.userMovies.length) {
-    store.getUserMovies()
+  if (!store.userMovies?.length) {
+    store.getUserMovies
     const response = await getUMovies()
     movies.value = response.data
   }
   movies.value = store.userMovies
-  if (!store.categories.length) {
-    store.getCategories()
+  if (!store.categories?.length) {
+    store.getCategories
   }
   if (route?.query.delete) {
     let index = movies.value.find((movie) => movie.id == route?.query.delete)

@@ -123,14 +123,14 @@ import UserNavbar from '../Components/UserNavbar.vue'
 import { onBeforeMount, ref, onMounted } from 'vue'
 import instantiatePusher from '../helpers/instantiatePusher'
 import { useRoute, useRouter } from 'vue-router'
-import { useUsersStore } from '../stores/user'
+import { useUsersStore } from '../stores/userStore'
 import { Form, Field } from 'vee-validate'
 import UserComment from '../Components/UserComment.vue'
 import NewitemModal from '../Components/NewitemModal.vue'
 import LikeButton from '../Components/LikeButton.vue'
 import NewPost from '../Components/NewPost.vue'
 import { like, removeLike, getLikes, comments, deleteQuotes, viewQuote } from '../services/index'
-import { useQuoteStore } from '../stores/quote'
+import { useQuoteStore } from '../stores/quoteStore'
 const quoteStore = useQuoteStore()
 const edit = ref(false)
 const data = ref({})
@@ -142,7 +142,7 @@ const likeCount = ref(0)
 const likeId = ref(null)
 const store = useUsersStore()
 if (!store.authUser.length) {
-  store.getAuthUser()
+  store.getAuthUser
 }
 onMounted(async () => {
   instantiatePusher()
@@ -256,7 +256,7 @@ const newLike = async () => {
 }
 onBeforeMount(async () => {
   if (!store.authUser[0]) {
-    store.getAuthUser()
+    store.getAuthUser
   }
   if (!quoteStore.quote.length) {
     quoteStore.getQuote(route.query.id)

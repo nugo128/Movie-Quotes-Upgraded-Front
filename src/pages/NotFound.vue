@@ -22,7 +22,7 @@
 </template>
 <script setup>
 import { computed, onBeforeMount } from 'vue'
-import { useUsersStore } from '../stores/user'
+import { useUsersStore } from '../stores/userStore'
 const store = useUsersStore()
 const url = computed(() => {
   if (store.authUser.length) return { name: 'news_feed' }
@@ -30,7 +30,7 @@ const url = computed(() => {
 })
 onBeforeMount(() => {
   if (!store.authUser.length) {
-    store.getAuthUser()
+    store.getAuthUser
   }
 })
 </script>

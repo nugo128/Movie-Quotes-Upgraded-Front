@@ -169,7 +169,7 @@ import { verifyUser } from '../services/index'
 import PasswordReset from '../Components/PasswordReset.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ref } from 'vue'
-import { useLocaleStore } from '../stores/locale'
+import { useLocaleStore } from '../stores/localeStore'
 const router = useRouter()
 const route = useRoute()
 const localeStore = useLocaleStore()

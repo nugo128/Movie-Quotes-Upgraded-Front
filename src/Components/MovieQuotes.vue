@@ -51,8 +51,8 @@
 import LikeButton from './LikeButton.vue'
 import { ref, onBeforeMount, onMounted } from 'vue'
 import instantiatePusher from '../helpers/instantiatePusher'
-import { useUsersStore } from '../stores/user'
-import { useLocaleStore } from '../stores/locale'
+import { useUsersStore } from '../stores/userStore'
+import { useLocaleStore } from '../stores/localeStore'
 import { like, removeLike, getLikes, deleteQuotes } from '../services/index'
 const localeStore = useLocaleStore()
 const store = useUsersStore()
@@ -174,7 +174,7 @@ const toggleQuote = () => {
 }
 onBeforeMount(async () => {
   if (!store.authUser.length) {
-    store.getAuthUser()
+    store.getAuthUser
   }
 })
 </script>

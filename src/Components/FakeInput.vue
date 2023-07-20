@@ -20,7 +20,7 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-import { useUsersStore } from '../stores/user'
+import { useUsersStore } from '../stores/userStore'
 defineProps({
   name: { type: String, required: true },
   type: { type: String, required: true },
@@ -28,6 +28,6 @@ defineProps({
   edit: { type: Function, required: true }
 })
 const store = useUsersStore()
-store.getAuthUser()
+store.getAuthUser
 const user = ref(store.authUser)
 </script>

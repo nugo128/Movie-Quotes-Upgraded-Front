@@ -67,7 +67,7 @@ import AuthInput from './AuthInput.vue'
 import { useRouter } from 'vue-router'
 import { defineEmits, ref } from 'vue'
 import { userLogin, googleLogin } from '../services/index'
-import { useLocaleStore } from '../stores/locale'
+import { useLocaleStore } from '../stores/localeStore'
 const errors = ref('')
 const localeStore = useLocaleStore()
 const router = useRouter()

@@ -40,10 +40,10 @@ import profileHeader from '../Components/profileHeader.vue'
 import UserNavbar from '../Components/UserNavbar.vue'
 import SearchBar from '../Components/SearchBar.vue'
 import UserPost from '../Components/UserPost.vue'
-import { usePostsStore } from '../stores/post'
+import { usePostsStore } from '../stores/postStore'
 import { onBeforeMount, ref } from 'vue'
 import NewitemModal from '../Components/NewitemModal.vue'
-import { useUsersStore } from '../stores/user'
+import { useUsersStore } from '../stores/userStore'
 import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
@@ -53,10 +53,10 @@ const postData = ref(store.posts)
 const showSearch = ref(false)
 onBeforeMount(async () => {
   if (!userStore.authUser.length) {
-    userStore.getAuthUser()
+    userStore.getAuthUser
   }
   if (!store.posts.length) {
-    store.getPosts()
+    store.getPosts
     postData.value = store.posts
   }
 })
@@ -70,14 +70,14 @@ const newPostHandler = () => {
 }
 const updatePosts = async () => {
   store.clear()
-  store.getPosts()
+  store.getPosts
   addNewPost.value = !addNewPost.value
   router.replace({ path: '/newsfeed' })
   postData.value = store.posts
 }
 const searchPosts = (event = false) => {
   if (!store.posts.length && event) {
-    store.getPosts()
+    store.getPosts
   }
   postData.value = store.posts
 }

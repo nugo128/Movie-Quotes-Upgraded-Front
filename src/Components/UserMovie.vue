@@ -13,8 +13,8 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-import { useUsersStore } from '../stores/user'
-import { useLocaleStore } from '../stores/locale'
+import { useUsersStore } from '../stores/userStore'
+import { useLocaleStore } from '../stores/localeStore'
 const localeStore = useLocaleStore()
 const store = useUsersStore()
 const props = defineProps({

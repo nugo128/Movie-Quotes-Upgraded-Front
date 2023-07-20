@@ -73,8 +73,8 @@ import UserComment from './UserComment.vue'
 import LikeButton from './LikeButton.vue'
 import { defineProps, ref, onBeforeMount, onMounted } from 'vue'
 import { Form, Field } from 'vee-validate'
-import { useUsersStore } from '../stores/user'
-import { useLocaleStore } from '../stores/locale'
+import { useUsersStore } from '../stores/userStore'
+import { useLocaleStore } from '../stores/localeStore'
 import { like, removeLike, getLikes, comments } from '../services/index'
 import instantiatePusher from '../helpers/instantiatePusher'
 const localeStore = useLocaleStore()
@@ -195,7 +195,7 @@ const changeInput = (e) => {
 }
 onBeforeMount(async () => {
   if (!store.authUser[0]) {
-    store.getAuthUser()
+    store.getAuthUser
   }
   visibleComments.value = allComments.value.slice(-2)
 })
@@ -226,7 +226,7 @@ const newLike = async () => {
 }
 const submit = async (value) => {
   if (!store.authUser[0]) {
-    store.getAuthUser()
+    store.getAuthUser
   }
   const data = {
     quote_id: String(props.quoteID),

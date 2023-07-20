@@ -255,8 +255,8 @@ import { onBeforeMount, ref } from 'vue'
 import { verifyEmail, editProfile, getUser } from '../services/index'
 import AuthInput from '../Components/AuthInput.vue'
 import FakeInput from '../Components/FakeInput.vue'
-import { useUsersStore } from '../stores/user'
-import { usePostsStore } from '../stores/post'
+import { useUsersStore } from '../stores/userStore'
+import { usePostsStore } from '../stores/postStore'
 import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
@@ -330,7 +330,7 @@ const submit = async (val) => {
   }
   await editProfile(formData)
   store.clearUser()
-  store.getAuthUser()
+  store.getAuthUser
   userInfo.value = store.authUser
   editPassword.value = false
   editUsername.value = false
@@ -381,7 +381,7 @@ const changePhoto = async (event) => {
   formData.set('image', file)
   await editProfile(formData)
   store.clearUser()
-  store.getAuthUser()
+  store.getAuthUser
   userInfo.value = store.authUser
   showSuccess.value = true
   const reader = new FileReader()
@@ -393,12 +393,12 @@ const changePhoto = async (event) => {
   }
 }
 if (!store.authUser.length) {
-  store.getAuthUser()
+  store.getAuthUser
 }
 onBeforeMount(async () => {
   const response = await getUser()
   if (!store.authUser.length) {
-    store.getAuthUser()
+    store.getAuthUser
     user.value = response?.data
     user.value.profile_picture = store.getUrl(response?.data.profile_picture)
     profilePicture.value = store.getUrl(response?.data.profile_picture)

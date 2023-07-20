@@ -13,7 +13,7 @@
 </template>
 <script setup>
 import { computed } from 'vue'
-import { useUsersStore } from '../stores/user'
+import { useUsersStore } from '../stores/userStore'
 const store = useUsersStore()
 const url = computed(() => {
   if (store.authUser.length) return { name: 'news_feed' }
